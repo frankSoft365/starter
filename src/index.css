@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+.write-btn-sidebar-bg {
+    background-color: var(--color-info);
+}
