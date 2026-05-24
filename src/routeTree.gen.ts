@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as NeedLoginRouteImport } from './routes/needLogin'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as EditorRouteImport } from './routes/editor'
 import { Route as EmailnameRouteImport } from './routes/$emailname'
@@ -19,6 +20,11 @@ import { Route as MeSettingsRouteImport } from './routes/me/settings'
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NeedLoginRoute = NeedLoginRouteImport.update({
+  id: '/needLogin',
+  path: '/needLogin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/$emailname': typeof EmailnameRoute
   '/editor': typeof EditorRoute
   '/login': typeof LoginRoute
+  '/needLogin': typeof NeedLoginRoute
   '/register': typeof RegisterRoute
   '/me/settings': typeof MeSettingsRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/$emailname': typeof EmailnameRoute
   '/editor': typeof EditorRoute
   '/login': typeof LoginRoute
+  '/needLogin': typeof NeedLoginRoute
   '/register': typeof RegisterRoute
   '/me/settings': typeof MeSettingsRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/$emailname': typeof EmailnameRoute
   '/editor': typeof EditorRoute
   '/login': typeof LoginRoute
+  '/needLogin': typeof NeedLoginRoute
   '/register': typeof RegisterRoute
   '/me/settings': typeof MeSettingsRoute
 }
@@ -79,16 +88,25 @@ export interface FileRouteTypes {
     | '/$emailname'
     | '/editor'
     | '/login'
+    | '/needLogin'
     | '/register'
     | '/me/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$emailname' | '/editor' | '/login' | '/register' | '/me/settings'
+  to:
+    | '/'
+    | '/$emailname'
+    | '/editor'
+    | '/login'
+    | '/needLogin'
+    | '/register'
+    | '/me/settings'
   id:
     | '__root__'
     | '/'
     | '/$emailname'
     | '/editor'
     | '/login'
+    | '/needLogin'
     | '/register'
     | '/me/settings'
   fileRoutesById: FileRoutesById
@@ -98,6 +116,7 @@ export interface RootRouteChildren {
   EmailnameRoute: typeof EmailnameRoute
   EditorRoute: typeof EditorRoute
   LoginRoute: typeof LoginRoute
+  NeedLoginRoute: typeof NeedLoginRoute
   RegisterRoute: typeof RegisterRoute
   MeSettingsRoute: typeof MeSettingsRoute
 }
@@ -109,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/needLogin': {
+      id: '/needLogin'
+      path: '/needLogin'
+      fullPath: '/needLogin'
+      preLoaderRoute: typeof NeedLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -154,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmailnameRoute: EmailnameRoute,
   EditorRoute: EditorRoute,
   LoginRoute: LoginRoute,
+  NeedLoginRoute: NeedLoginRoute,
   RegisterRoute: RegisterRoute,
   MeSettingsRoute: MeSettingsRoute,
 }

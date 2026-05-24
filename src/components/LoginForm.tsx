@@ -17,11 +17,9 @@ export default function LoginForm() {
 
         // 模拟登录接口
         const res = await request.post('/user/login', { email, password })
-        login(res.data.data.token)
         if (res.data.code === 0) {
+            login(res.data.data.token);
             navigate({ to: '/' })
-        } else {
-            toast.error('login error');
         }
     }
     return (

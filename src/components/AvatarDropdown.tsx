@@ -1,14 +1,14 @@
 import { useSetAtom } from "jotai";
-import type { User } from "../types/User";
+import type { UserVO } from "../types/UserVO";
 import { doLogoutAtom } from "../stores/user";
-import useOverflowHelper from "../utils/OverflowHelper";
 import { GearIcon, SignOutIcon } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as meSettingsRoute } from "../routes/me/settings";
 import Avatar from "./Avatar";
+import useOverflowHelper from "../utils/overflowHelper";
 
 
-export default function AvatarDropdown({ user }: { user: User | null }) {
+export default function AvatarDropdown({ user }: { user: UserVO | null }) {
     const doLogout = useSetAtom(doLogoutAtom);
     const { handleOverflow } = useOverflowHelper();
     const navigate = useNavigate();
