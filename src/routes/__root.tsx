@@ -7,7 +7,8 @@ import {
     QueryClient,
     QueryClientProvider,
 } from '@tanstack/react-query'
-import request from '../utils/request'
+import { getUserProfile } from '../utils/userProfileHelper'
+import type { UserVO } from '../types/UserVO'
 
 const store = getDefaultStore()
 
@@ -35,8 +36,8 @@ export const Route = createRootRoute({
         }
 
         try {
-            const res = await request.get('/user/current')
-            store.set(userAtom, res.data.data)
+            const userInfo: UserVO = await getUserProfile();
+            store.set(userAtom, userInfo)
             store.set(tokenAtom, token)
         } catch (err) {
             store.set(tokenAtom, null)

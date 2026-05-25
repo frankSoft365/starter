@@ -1,3 +1,4 @@
+import type { UserVO } from "../types/UserVO";
 import request from "./request";
 
 export type UserUpdateRequest = {
@@ -10,7 +11,7 @@ export type UserUpdateRequest = {
 export async function getUserProfile() {
     const { data } = await request.get('/user/current');
     if (data.code === 0) {
-        return data.data;
+        return data.data as UserVO;
     }
     throw new Error('Failed to retrieve user information');
 }

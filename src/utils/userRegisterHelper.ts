@@ -17,7 +17,7 @@ export type VerifyCodeRequest = {
 
 export async function getVerificationCode(sendCodeRequest: SendCodeRequest) {
     const { data } = await request.post('/emailVerify/getVerificationCode', sendCodeRequest);
-    return data.code === 0;
+    return data;
 }
 
 export async function verifyVerificationCode(verifyCodeRequest: VerifyCodeRequest) {

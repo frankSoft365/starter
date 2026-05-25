@@ -93,10 +93,10 @@ export default function SettingsPage() {
                                     className="input validator"
                                     placeholder="Username"
                                     required
-                                    pattern="[A-Za-z][A-Za-z0-9_\-]*"
+                                    pattern="^[A-Za-z][A-Za-z0-9_\-]*$"
                                     minLength={6}
                                     maxLength={20}
-                                    title="Only letters, numbers or dash"
+                                    title="Only letters, numbers, underscores, or dash"
                                 />
                                 <p className="validator-hint">
                                     Must be 6 to 20 characters
