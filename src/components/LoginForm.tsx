@@ -1,32 +1,32 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import request from '../utils/request'
-import { doLoginAtom } from "../stores/user";
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { isLoginAtom } from "../stores/user";
+import { Route as HomeRoute } from "../routes/index";
 
 export default function LoginForm() {
+    const setIsLogin = useSetAtom(isLoginAtom);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const [, login] = useAtom(doLoginAtom)
     const navigate = useNavigate()
 
-    const { mutate: handleLogin, isPending: isLogining } = useMutation({
+    const { mutate: doLogin, isPending: isLogining } = useMutation({
         mutationFn: async () => {
-            const res = await request.post('/user/login', { email, password })
-            const baseResult = res.data;
+            const { data: baseResult } = await request.post('/user/login', { email, password })
             if (baseResult.code !== 0) {
                 throw new Error(baseResult.description);
             }
-            return baseResult
+            return baseResult;
         },
-        onSuccess: (baseResult) => {
+        onSuccess: async () => {
             toast.success('Login successful');
-            login(baseResult.data.token);
-            navigate({ to: '/' })
+            setIsLogin(true);
+            navigate({ to: HomeRoute.to });
         },
         onError: (error) => {
             console.log('error', error.message);
@@ -37,7 +37,7 @@ export default function LoginForm() {
         <form
             onSubmit={(event) => {
                 event.preventDefault();
-                handleLogin();
+                doLogin();
             }}
             className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-8"
         >

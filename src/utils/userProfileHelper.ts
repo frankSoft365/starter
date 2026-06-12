@@ -9,11 +9,14 @@ export type UserUpdateRequest = {
 }
 
 export async function getUserProfile() {
-    const { data } = await request.get('/user/current');
-    if (data.code === 0) {
-        return data.data as UserVO;
+    const res = await request.get('/user/current');
+    if (res) {
+        const data = res.data;
+        if (data.code === 0) {
+            return res.data.data as UserVO;
+        }
     }
-    throw new Error('Failed to retrieve user information');
+    return undefined;
 }
 
 export async function updateUserProfile(updateRequest: UserUpdateRequest) {

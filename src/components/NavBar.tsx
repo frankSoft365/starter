@@ -1,17 +1,26 @@
 import { SidebarIcon, NotePencilIcon } from "@phosphor-icons/react";
-import { useNavigate } from "@tanstack/react-router";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";
-import { useAtomValue } from "jotai";
-import { userAtom } from "../stores/user";
+import { useAtom, useAtomValue } from "jotai";
 import AvatarDropdown from "./AvatarDropdown";
 import { Route as homeRoute } from "../routes/index";
 import { Route as editorRoute } from "../routes/editor";
 import { Route as loginRoute } from "../routes/login";
+import { isEditorEmptyAtom } from "../stores/isEditorEmpty";
+import { isLoadingAtom } from "../stores/user";
 
 export default function NavBar() {
     const navigate = useNavigate();
-    const user = useAtomValue(userAtom);
+    const location = useLocation();
+
+    const isLoading = useAtomValue(isLoadingAtom);
+
+    const [isEditorEmpty, setIsEditorEmpty] = useAtom(isEditorEmptyAtom);
+
+    // derived state
+    const isEditorRoute = location.pathname === editorRoute.to;
+
     return (
         <div className="max-lg:collapse bg-base-200 shadow-sm w-full rounded-md">
             <input id="navbar-1-toggle" className="peer hidden" type="checkbox" />
@@ -29,19 +38,30 @@ export default function NavBar() {
                 <div className="navbar-end">
                     {/* can write only when is login */}
                     <SignedIn>
-                        <button onClick={() => navigate({ to: editorRoute.to })} className="btn btn-ghost hidden md:inline-flex mr-2">
+                        {!isEditorRoute && <button onClick={() => navigate({ to: editorRoute.to })} className="btn btn-ghost hidden md:inline-flex mr-2">
                             <NotePencilIcon size={24} />
                             Write
-                        </button>
+                        </button>}
+                        {isEditorRoute && <button disabled={isEditorEmpty} className="btn btn-success mr-4">
+                            Publish
+                        </button>}
+                        {isEditorRoute && <button onClick={() => setIsEditorEmpty(true)} disabled={isEditorEmpty} className="btn btn-error mr-4">
+                            Discard drafts
+                        </button>}
                     </SignedIn>
+                    {isLoading && <button className="btn btn-square">
+                        <span className="loading loading-spinner"></span>
+                    </button>}
                     {/* login-button when is not login */}
-                    <SignedOut>
-                        <button onClick={() => navigate({ to: loginRoute.to })} className="btn btn-info btn-sm lg:btn-md mr-4">Login</button>
-                    </SignedOut>
-                    {/* user avatar and dropdown */}
-                    <SignedIn>
-                        <AvatarDropdown user={user} />
-                    </SignedIn>
+                    {!isLoading && <>
+                        <SignedOut>
+                            <button onClick={() => navigate({ to: loginRoute.to })} className="btn btn-info btn-sm lg:btn-md mr-4">Login</button>
+                        </SignedOut>
+                        {/* user avatar and dropdown */}
+                        <SignedIn>
+                            <AvatarDropdown />
+                        </SignedIn>
+                    </>}
                 </div>
             </div>
         </div>

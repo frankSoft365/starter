@@ -6,7 +6,6 @@ import type { UseNavigateResult } from "@tanstack/react-router";
 import { Route as LoginRoute } from "../routes/login";
 import type { RegisterStep } from "./RegisterForm";
 
-
 export function useVerificationEmail(
     setTimer: React.Dispatch<React.SetStateAction<number>>,
     setCanResend: React.Dispatch<React.SetStateAction<boolean>>,

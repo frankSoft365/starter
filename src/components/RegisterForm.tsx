@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { useTimer, useVerificationEmail } from "./VerificationEmail";
+import { useTimer, useVerificationEmail } from './verificationEmail';
 
 export type RegisterStep = 'EMAIL' | 'VERIFY' | 'USERINFO';
 

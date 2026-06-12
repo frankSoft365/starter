@@ -1,18 +1,18 @@
 import axios from 'axios'
 import { getDefaultStore } from 'jotai'
-import { doLogoutAtom } from '../stores/user'
 import { toast } from 'sonner'
+import { isLoginAtom, userAtom } from '../stores/user';
+import { userLogout } from './userLoginHelper';
 
 const jotaiStore = getDefaultStore()
 
-const request = axios.create({ baseURL: 'http://127.0.0.1:8070' })
+const request = axios.create({
+    baseURL: 'http://localhost:8070',
+    withCredentials: true
+})
 
-// 请求拦截：携带token
+// 请求拦截
 request.interceptors.request.use((config) => {
-    const token = JSON.parse(localStorage.getItem('token') || 'null');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
     return config;
 })
 
@@ -24,9 +24,12 @@ request.interceptors.response.use(
         }
         return res;
     },
-    (err) => {
+    async (err) => {
         if (err.response?.status === 401) {
-            jotaiStore.set(doLogoutAtom)
+            jotaiStore.set(isLoginAtom, false);
+            jotaiStore.set(userAtom, null);
+            await userLogout();
+            return Promise.resolve();
         }
         return Promise.reject(err)
     }

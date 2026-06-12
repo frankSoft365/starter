@@ -1,20 +1,45 @@
-import { useSetAtom } from "jotai";
-import type { UserVO } from "../types/UserVO";
-import { doLogoutAtom } from "../stores/user";
 import { GearIcon, SignOutIcon } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as meSettingsRoute } from "../routes/me/settings";
 import Avatar from "./Avatar";
 import useOverflowHelper from "../utils/overflowHelper";
+import { userLogout } from "../utils/userLoginHelper";
+import { useAtom, useSetAtom } from "jotai";
+import { isLoadingAtom, isLoginAtom, userAtom } from "../stores/user";
+import { Route as LoginRoute } from "../routes/login";
+import { useEffect } from "react";
+import { getUserProfile } from "../utils/userProfileHelper";
 
-
-export default function AvatarDropdown({ user }: { user: UserVO | null }) {
-    const doLogout = useSetAtom(doLogoutAtom);
+export default function AvatarDropdown() {
     const { handleOverflow } = useOverflowHelper();
     const navigate = useNavigate();
+    const [user, setUser] = useAtom(userAtom);
+    const setUserInfo = useSetAtom(userAtom);
+    const setIsLogin = useSetAtom(isLoginAtom);
+    const setIsLoading = useSetAtom(isLoadingAtom);
+
+    useEffect(() => {
+        async function fetchUserInfo() {
+            const userInfo = await getUserProfile();
+            if (userInfo) {
+                setUserInfo(userInfo);
+                setIsLogin(true);
+            }
+        }
+        fetchUserInfo();
+    }, []);
 
     function UserAvatar() {
         return <Avatar imageUrl={user?.image ?? undefined} />
+    }
+
+    async function doLogout() {
+        setIsLoading(true);
+        await userLogout();
+        setUser(null);
+        setIsLogin(false);
+        setIsLoading(false);
+        navigate({ to: LoginRoute.to });
     }
 
     return (

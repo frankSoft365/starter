@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import type { UserVO } from "../types/UserVO";
 import { getUserProfile, updateUserProfile, type UserUpdateRequest } from "../utils/userProfileHelper";
 import { useSetAtom } from "jotai";
-import { userAtom } from "../stores/user";
+import { isLoginAtom, userAtom } from "../stores/user";
 import { toast } from "sonner";
 
 export function useUserProfile() {
     const setUserInfo = useSetAtom(userAtom);
+    const setIsLogin = useSetAtom(isLoginAtom);
     const [username, setUsername] = useState<string>('');
     const [image, setImage] = useState<string | undefined>('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,9 +16,13 @@ export function useUserProfile() {
     const { data: user, isLoading: isUserProfileLoading, isError: isLoadingError } = useQuery({
         queryKey: ['get-user-profile'],
         queryFn: async () => {
-            const userInfo: UserVO = await getUserProfile();
-            setUserInfo(userInfo);
-            return userInfo;
+            const userInfo = await getUserProfile();
+            if (userInfo) {
+                setUserInfo(userInfo);
+                setIsLogin(true);
+                return userInfo;
+            }
+            throw new Error('Failed to retrieve user information');
         }
     })
     const { isPending: isUpdating, mutate: handleUpdate } = useMutation({

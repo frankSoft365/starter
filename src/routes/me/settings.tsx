@@ -1,29 +1,28 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import RootLayout from '../../components/RootLayout';
 import SettingsPage from '../../components/SettingsPage';
-import { getDefaultStore } from 'jotai';
-import { isLoginAtom } from '../../stores/user';
-import { Route as NeedLoginRoute } from '../../routes/needLogin';
-
-const store = getDefaultStore();
+import SignedIn from '../../components/SignedIn';
+import SignedOut from '../../components/SignedOut';
+import NeedLogin from '../../components/NeedLogin';
+import Loading from '../../components/Loading';
+import { useAtomValue } from 'jotai';
+import { isLoadingAtom } from '../../stores/user';
 
 export const Route = createFileRoute('/me/settings')({
   component: RouteComponent,
-  beforeLoad: () => {
-    // redirect to login when isNOTlogin and visit editor
-    const isLogin = store.get(isLoginAtom);
-    if (!isLogin) {
-      throw redirect({
-        to: NeedLoginRoute.to,
-      })
-    }
-  }
 })
 
 function RouteComponent() {
+  const isLoading = useAtomValue(isLoadingAtom);
   return (
     <RootLayout>
-      <SettingsPage />
+      <SignedIn>
+        <SettingsPage />
+      </SignedIn>
+      {isLoading && <Loading />}
+      {!isLoading && <SignedOut>
+        <NeedLogin />
+      </SignedOut>}
     </RootLayout>
   );
 }
