@@ -2,21 +2,23 @@ import { SidebarIcon, NotePencilIcon } from "@phosphor-icons/react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import AvatarDropdown from "./AvatarDropdown";
 import { Route as homeRoute } from "../routes/index";
 import { Route as editorRoute } from "../routes/editor";
 import { Route as loginRoute } from "../routes/login";
-import { isEditorEmptyAtom } from "../stores/isEditorEmpty";
+import { editorEmptySignalAtom, isEditorEmptyAtom } from "../stores/editor";
 import { isLoadingAtom } from "../stores/user";
 
 export default function NavBar() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const setEditorEmptySignal = useSetAtom(editorEmptySignalAtom);
+
     const isLoading = useAtomValue(isLoadingAtom);
 
-    const [isEditorEmpty, setIsEditorEmpty] = useAtom(isEditorEmptyAtom);
+    const isEditorEmpty = useAtomValue(isEditorEmptyAtom);
 
     // derived state
     const isEditorRoute = location.pathname === editorRoute.to;
@@ -45,7 +47,7 @@ export default function NavBar() {
                         {isEditorRoute && <button disabled={isEditorEmpty} className="btn btn-success mr-4">
                             Publish
                         </button>}
-                        {isEditorRoute && <button onClick={() => setIsEditorEmpty(true)} disabled={isEditorEmpty} className="btn btn-error mr-4">
+                        {isEditorRoute && <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-4">
                             Discard drafts
                         </button>}
                     </SignedIn>

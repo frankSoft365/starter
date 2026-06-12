@@ -1,6 +1,7 @@
 import Avatar from "./Avatar";
 import { toast } from "sonner";
 import { useUserProfile } from "./userProfile";
+import { useRef } from "react";
 
 export default function SettingsPage() {
     const {
@@ -20,6 +21,14 @@ export default function SettingsPage() {
     if (isLoadingError) {
         toast.error('Failed to retrieve user information');
     }
+
+    function handleImageChange(evnet: React.ChangeEvent<HTMLInputElement>) {
+        const file = evnet.target.files![0];
+        const url = URL.createObjectURL(file);
+        setImage(url);
+    }
+
+    const imageUploadRef = useRef<HTMLInputElement>(null);
 
     return (
         <div className="p-3 relative w-full md:w-1/2">
@@ -44,7 +53,7 @@ export default function SettingsPage() {
                         <li className="list-row">
                             <div className="text-left">Photo</div>
                             <div className="text-right">
-                                <Avatar imageUrl={user?.image ?? undefined} />
+                                <Avatar imageUrl={user?.image ?? undefined} username={user?.username || ''} />
                             </div>
                         </li>
                     </ul>
@@ -67,19 +76,42 @@ export default function SettingsPage() {
                     <div className="modal-box">
                         <h3 className="font-bold text-lg mb-4">Profile information</h3>
                         <form
-                            action={() => {
-                                handleUpdate();
-                            }}
+                            action={() => handleUpdate()}
                             className="fieldset bg-base-200 border-base-300 w-xs md:w-full p-4">
                             <label className="label">Photo</label>
                             <div className="flex flex-row gap-4">
-                                <Avatar imageUrl={image} hover={true} />
+                                {/* click the avatar and open your file management */}
+                                <label htmlFor="avatar">
+                                    <Avatar imageUrl={image} hover={true} username={username} />
+                                </label>
                                 <div className="flex flex-col gap-4">
                                     <div>
-                                        <button type="button" disabled={isUpdating} className="btn btn-ghost btn-xs btn-success mr-2">Update</button>
+                                        {/* click the avatar and open your file management */}
+                                        <button
+                                            type="button"
+                                            disabled={isUpdating}
+                                            onClick={() => {
+                                                if (imageUploadRef.current) {
+                                                    imageUploadRef.current.click();
+                                                }
+                                            }}
+                                            className="btn btn-ghost btn-xs btn-success mr-2"
+                                        >
+                                            Update
+                                        </button>
                                         <button type="button" disabled={isUpdating} onClick={() => setImage(undefined)} className="btn btn-ghost btn-xs btn-error">Remove</button>
+                                        {/* upload your file */}
+                                        <input
+                                            ref={imageUploadRef}
+                                            className="hidden"
+                                            id="avatar"
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageChange}
+                                        />
                                     </div>
                                     <div className="text-xs">Recommended: Square JPG, PNG, or GIF, at least 1,000 pixels per side.</div>
+
                                 </div>
                             </div>
 

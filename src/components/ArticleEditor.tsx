@@ -6,13 +6,14 @@ import "@blocknote/core/fonts/inter.css";
 import { useDraft } from "./draft";
 import { useEffect } from "react";
 import { isEditorEmptyHelper } from "../utils/isEditorEmptyHelper";
-import { useAtom } from "jotai";
-import { isEditorEmptyAtom } from "../stores/isEditorEmpty";
+import { useAtomValue, useSetAtom } from "jotai";
+import { editorEmptySignalAtom, isEditorEmptyAtom } from "../stores/editor";
 import { EDITOR_DEFAULT } from "../constants/draft";
 
 export default function ArticleEditor() {
     const { draft, setDraft } = useDraft();
-    const [isEditorEmpty, setIsEditorEmpty] = useAtom(isEditorEmptyAtom);
+    const setIsEditorEmpty = useSetAtom(isEditorEmptyAtom);
+    const editorEmptySignal = useAtomValue(editorEmptySignalAtom);
 
     const editor = useCreateBlockNote(
         {
@@ -43,11 +44,11 @@ export default function ArticleEditor() {
     }, []);
 
     useEffect(() => {
-        if (isEditorEmpty) {
+        if (editorEmptySignal) {
             setDraft(EDITOR_DEFAULT);
             editor.replaceBlocks(editor.document, EDITOR_DEFAULT);
         }
-    }, [isEditorEmpty]);
+    }, [editorEmptySignal]);
 
     return (
         <BlockNoteView editor={editor} onChange={(editor) => saveDraft(editor.document)} />

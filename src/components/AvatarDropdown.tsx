@@ -30,7 +30,7 @@ export default function AvatarDropdown() {
     }, []);
 
     function UserAvatar() {
-        return <Avatar imageUrl={user?.image ?? undefined} />
+        return <Avatar imageUrl={user?.image ?? undefined} username={user?.username || ''} />
     }
 
     async function doLogout() {
