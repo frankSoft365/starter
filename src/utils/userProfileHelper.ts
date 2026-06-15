@@ -2,10 +2,9 @@ import type { UserVO } from "../types/UserVO";
 import request from "./request";
 
 export type UserUpdateRequest = {
-    id: string;
-    username: string;
+    username?: string;
     image?: string;
-    email: string;
+    email?: string;
 }
 
 export async function getUserProfile() {
