@@ -16,17 +16,14 @@ export type VerifyCodeRequest = {
 }
 
 export async function getVerificationCode(sendCodeRequest: SendCodeRequest) {
-    const { data } = await request.post('/emailVerify/getVerificationCode', sendCodeRequest);
-    return data;
+    return await request.post<SendCodeRequest, void>('/emailVerify/getVerificationCode', sendCodeRequest);
 }
 
 export async function verifyVerificationCode(verifyCodeRequest: VerifyCodeRequest) {
-    const { data } = await request.post('/emailVerify/verifyVerificationCode', verifyCodeRequest);
-    return data;
+    return await request.post<VerifyCodeRequest, string>('/emailVerify/verifyVerificationCode', verifyCodeRequest);
 }
 
 export async function userRegister(userRegisterRequest: UserRegisterRequest) {
-    const { data } = await request.post('/user/register', userRegisterRequest);
-    return data;
+    return await request.post<UserRegisterRequest, string>('/user/register', userRegisterRequest);
 }
 

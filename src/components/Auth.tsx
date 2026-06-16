@@ -15,6 +15,9 @@ export default function Auth({ children }: { children: React.ReactNode }) {
             if (userInfo) {
                 setUserInfo(userInfo);
                 setIsLogin(true);
+            } else {
+                console.log('userInfo is undefined');
+
             }
             setIsLoading(false);
         }

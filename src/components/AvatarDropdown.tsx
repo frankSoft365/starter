@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Route as meSettingsRoute } from "../routes/me/settings";
 import Avatar from "./Avatar";
 import useOverflowHelper from "../utils/overflowHelper";
-import { userLogout } from "../utils/userLoginHelper";
+import { useUserLogout } from "../utils/userLoginHelper";
 import { useAtom, useSetAtom } from "jotai";
 import { isLoadingAtom, isLoginAtom, userAtom } from "../stores/user";
 import { Route as LoginRoute } from "../routes/login";
@@ -17,6 +17,8 @@ export default function AvatarDropdown() {
     const setUserInfo = useSetAtom(userAtom);
     const setIsLogin = useSetAtom(isLoginAtom);
     const setIsLoading = useSetAtom(isLoadingAtom);
+
+    const { userLogout } = useUserLogout();
 
     useEffect(() => {
         async function fetchUserInfo() {
@@ -35,7 +37,7 @@ export default function AvatarDropdown() {
 
     async function doLogout() {
         setIsLoading(true);
-        await userLogout();
+        userLogout();
         setUser(null);
         setIsLogin(false);
         setIsLoading(false);

@@ -1,29 +1,20 @@
-import { useRef, useState, type Dispatch, type SetStateAction } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import type { UserVO } from "../types/UserVO";
 import Avatar from "./Avatar";
 import { useUserUpdate } from "./userProfile";
+import { useChangeAvatar } from "./userAvatar";
 
 export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user: UserVO, setIsModalOpen: Dispatch<SetStateAction<boolean>> }) {
-    const [currentAvatarFile, setCurrentAvatarFile] = useState<File | null>(null);
-    const [isRemoveAvatar, setIsRemoveAvatar] = useState(false);
+    const { imageUploadRef, image, setImage, handleImageChange, currentAvatarFile } = useChangeAvatar(user);
 
     const {
         username,
         setUsername,
-        image,
-        setImage,
         isUpdating,
-        handleUpdate
-    } = useUserUpdate(user, setIsModalOpen, currentAvatarFile, isRemoveAvatar);
-
-    function handleImageChange(evnet: React.ChangeEvent<HTMLInputElement>) {
-        const file = evnet.target.files![0];
-        const url = URL.createObjectURL(file);
-        setImage(url);
-        setCurrentAvatarFile(file);
-    }
-
-    const imageUploadRef = useRef<HTMLInputElement>(null);
+        handleUpdate,
+        setIsRemoveAvatar,
+        isUploading
+    } = useUserUpdate(user, setIsModalOpen, currentAvatarFile);
 
     return (
         <div className="modal modal-open">
@@ -110,13 +101,12 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
                             className="btn">Close</button>
                         <button
                             type="submit"
-                            disabled={(username.trim() === (user?.username || '')) &&
-                                (image === (user?.image || undefined)) || isUpdating}
+                            disabled={((username.trim() === (user?.username || '')) &&
+                                (image === (user?.image || undefined))) || isUpdating || isUploading}
                             className="btn btn-success"
-
                         >
-                            {isUpdating && <span className="loading loading-spinner"></span>}
-                            {!isUpdating && 'Save'}
+                            {(isUpdating || isUploading) && <span className="loading loading-spinner"></span>}
+                            {(!isUpdating && !isUploading) && 'Save'}
                         </button>
                     </div>
                 </form>

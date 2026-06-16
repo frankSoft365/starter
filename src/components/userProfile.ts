@@ -6,8 +6,7 @@ import { isLoginAtom, userAtom } from "../stores/user";
 import { toast } from "sonner";
 import type { UserVO } from "../types/UserVO";
 import type { Dispatch, SetStateAction } from "react";
-import request from "../utils/request";
-import { SilentBizError } from "../types/SilentBizError";
+import { useUploadAvatar } from "./userAvatar";
 
 export function useUserProfile() {
     const setUserInfo = useSetAtom(userAtom);
@@ -36,13 +35,14 @@ export function useUserProfile() {
 export function useUserUpdate(
     user: UserVO,
     setIsModalOpen: Dispatch<SetStateAction<boolean>>,
-    currentAvatarFile: File | null,
-    isRemoveAvatar: boolean
+    currentAvatarFile: File | null
 ) {
+    const [isRemoveAvatar, setIsRemoveAvatar] = useState(false);
     const [username, setUsername] = useState<string>(user.username);
-    const [image, setImage] = useState<string | undefined>(user.image || undefined);
 
     const queryClient = useQueryClient();
+
+    const { uploadAvatar, isUploading } = useUploadAvatar(currentAvatarFile);
 
     const { isPending: isUpdating, mutate: handleUpdate } = useMutation({
         mutationFn: async () => {
@@ -59,14 +59,8 @@ export function useUserUpdate(
                 throw new Error('Nothing to update');
             }
             if (currentAvatarFile) {
-                // TODO: upload avatar
-                const formData = new FormData();
-                formData.append('avatar', currentAvatarFile)
-                const { data } = await request.post('/upload', formData);
-                if (data.code !== 0) {
-                    throw new SilentBizError();
-                }
-                newAvatarURL = data.data;
+                const avatarURL = await uploadAvatar();
+                newAvatarURL = avatarURL;
             }
             let updateRequest: UserUpdateRequest | null = null;
             if (isRemoveAvatar) {
@@ -80,10 +74,7 @@ export function useUserUpdate(
                     ...(newAvatarURL && { image: newAvatarURL })
                 }
             }
-            const data = await updateUserProfile(updateRequest);
-            if (data.code !== 0) {
-                throw new SilentBizError();
-            }
+            await updateUserProfile(updateRequest);
         },
         onSuccess: () => {
             toast.success('update successfully');
@@ -91,18 +82,15 @@ export function useUserUpdate(
             setIsModalOpen(false);
         },
         onError: (error) => {
-            if (error instanceof SilentBizError) {
-                return;
-            }
             toast.error(error.message);
         }
     })
     return ({
         username,
         setUsername,
-        image,
-        setImage,
         isUpdating,
-        handleUpdate
+        handleUpdate,
+        setIsRemoveAvatar,
+        isUploading
     });
 }

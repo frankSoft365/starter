@@ -8,17 +8,9 @@ export type UserUpdateRequest = {
 }
 
 export async function getUserProfile() {
-    const res = await request.get('/user/current');
-    if (res) {
-        const data = res.data;
-        if (data.code === 0) {
-            return res.data.data as UserVO;
-        }
-    }
-    return undefined;
+    return request.get<any, UserVO>('/user/current');
 }
 
 export async function updateUserProfile(updateRequest: UserUpdateRequest) {
-    const { data } = await request.post('/user/update', updateRequest);
-    return data;
+    return await request.post<UserUpdateRequest, void>('/user/update', updateRequest);
 }

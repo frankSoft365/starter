@@ -1,43 +1,21 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-import request from '../utils/request'
-import { useSetAtom } from "jotai";
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { isLoginAtom } from "../stores/user";
-import { Route as HomeRoute } from "../routes/index";
+import { Link } from "@tanstack/react-router";
+import { useUserLogin } from "../utils/userLoginHelper";
 
 export default function LoginForm() {
-    const setIsLogin = useSetAtom(isLoginAtom);
-
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const navigate = useNavigate()
-
-    const { mutate: doLogin, isPending: isLogining } = useMutation({
-        mutationFn: async () => {
-            const { data: baseResult } = await request.post('/user/login', { email, password })
-            if (baseResult.code !== 0) {
-                throw new Error(baseResult.description);
-            }
-            return baseResult;
-        },
-        onSuccess: async () => {
-            toast.success('Login successful');
-            setIsLogin(true);
-            navigate({ to: HomeRoute.to });
-        },
-        onError: (error) => {
-            console.log('error', error.message);
-        }
-    })
+    const {
+        userLogin,
+        isLogining,
+        email,
+        setEmail,
+        password,
+        setPassword
+    } = useUserLogin();
 
     return (
         <form
             onSubmit={(event) => {
                 event.preventDefault();
-                doLogin();
+                userLogin({ email, password });
             }}
             className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-8"
         >

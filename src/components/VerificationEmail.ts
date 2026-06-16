@@ -24,10 +24,7 @@ export function useVerificationEmail(
             const request = {
                 email
             } as SendCodeRequest;
-            const baseResult = await getVerificationCode(request);
-            if (baseResult.code !== 0) {
-                throw new Error('failed send verification code')
-            }
+            await getVerificationCode(request);
         },
         mutationKey: ['send-verification-code'],
         onSuccess: () => {
@@ -37,7 +34,7 @@ export function useVerificationEmail(
             toast.success('Verification code has been sent');
         },
         onError: (error) => {
-            console.log('error : ', error.message);
+            toast.error(error.message);
         }
     });
 
@@ -49,22 +46,17 @@ export function useVerificationEmail(
                 email: email,
                 verifyCode: code
             } as VerifyCodeRequest;
-            const baseResult = await verifyVerificationCode(request);
-            if (baseResult.code !== 0) {
-                throw new Error('failed verify')
-            }
-
-            return baseResult;
+            const token = await verifyVerificationCode(request);
+            return token;
         },
         mutationKey: ['verify-verification-code'],
-        onSuccess: (data) => {
-            const token = data.data;
+        onSuccess: (token) => {
             setToken(token);
             setStep('USERINFO');
             toast.success('Email verification successful');
         },
         onError: (error) => {
-            console.log('error : ', error.message);
+            toast.error(error.message);
         }
     });
 
@@ -77,18 +69,17 @@ export function useVerificationEmail(
                 username,
                 password
             } as UserRegisterRequest;
-            const baseResult = await userRegister(request);
-            if (baseResult.code !== 0) {
-                throw new Error('failed register')
-            }
+            const userId = await userRegister(request);
+            return userId
         },
         mutationKey: ['user-register'],
-        onSuccess: () => {
+        onSuccess: (userId) => {
+            console.log('user register id : ', userId);
             toast.success('Registration successful');
             navigate({ to: LoginRoute.to });
         },
         onError: (error) => {
-            console.log('error : ', error.message);
+            toast.error(error.message);
         }
     });
 

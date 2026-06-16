@@ -14,7 +14,7 @@ const RootLayout = () => (
         <QueryClientProvider client={queryClient}>
             <Auth>
                 <Outlet />
-                <Toaster position="top-center" richColors duration={2000} />
+                <Toaster position="top-center" richColors duration={2000} gap={28} />
                 <TanStackRouterDevtools />
             </Auth>
         </QueryClientProvider>
