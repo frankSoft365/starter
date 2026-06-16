@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-export default function RedirectToHome() {
+export default function RedirectToLogin() {
     const navigate = useNavigate();
     useEffect(() => {
         navigate({

@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { isLoginAtom } from "../stores/user";
 import { useNavigate } from "@tanstack/react-router";
-import { Route as HomeRoute } from "../routes/index";
+import { Route as HomeRoute } from "../routes/_app/index";
 import { useState } from "react";
 
 type UserLoginRequest = {

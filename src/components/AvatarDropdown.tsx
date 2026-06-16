@@ -1,6 +1,6 @@
 import { GearIcon, SignOutIcon } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
-import { Route as meSettingsRoute } from "../routes/me/settings";
+import { Route as meSettingsRoute } from "../routes/_app/_protected/me/settings";
 import Avatar from "./Avatar";
 import useOverflowHelper from "../utils/overflowHelper";
 import { useUserLogout } from "../utils/userLoginHelper";

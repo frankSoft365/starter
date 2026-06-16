@@ -10,21 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
-import { Route as NeedLoginRouteImport } from './routes/needLogin'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as EditorRouteImport } from './routes/editor'
-import { Route as EmailnameRouteImport } from './routes/$emailname'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as MeSettingsRouteImport } from './routes/me/settings'
+import { Route as AppRouteRouteImport } from './routes/_app/route'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppNeedLoginRouteImport } from './routes/_app/needLogin'
+import { Route as AppProtectedRouteRouteImport } from './routes/_app/_protected/route'
+import { Route as AppProtectedEditorRouteImport } from './routes/_app/_protected/editor'
+import { Route as AppProtectedEmailnameRouteImport } from './routes/_app/_protected/$emailname'
+import { Route as AppProtectedMeSettingsRouteImport } from './routes/_app/_protected/me/settings'
+import { Route as AppProtectedMePasswordRouteImport } from './routes/_app/_protected/me/password'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NeedLoginRoute = NeedLoginRouteImport.update({
-  id: '/needLogin',
-  path: '/needLogin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -32,93 +30,117 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EditorRoute = EditorRouteImport.update({
-  id: '/editor',
-  path: '/editor',
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EmailnameRoute = EmailnameRouteImport.update({
-  id: '/$emailname',
-  path: '/$emailname',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRouteRoute,
 } as any)
-const MeSettingsRoute = MeSettingsRouteImport.update({
+const AppNeedLoginRoute = AppNeedLoginRouteImport.update({
+  id: '/needLogin',
+  path: '/needLogin',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppProtectedRouteRoute = AppProtectedRouteRouteImport.update({
+  id: '/_protected',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppProtectedEditorRoute = AppProtectedEditorRouteImport.update({
+  id: '/editor',
+  path: '/editor',
+  getParentRoute: () => AppProtectedRouteRoute,
+} as any)
+const AppProtectedEmailnameRoute = AppProtectedEmailnameRouteImport.update({
+  id: '/$emailname',
+  path: '/$emailname',
+  getParentRoute: () => AppProtectedRouteRoute,
+} as any)
+const AppProtectedMeSettingsRoute = AppProtectedMeSettingsRouteImport.update({
   id: '/me/settings',
   path: '/me/settings',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppProtectedRouteRoute,
+} as any)
+const AppProtectedMePasswordRoute = AppProtectedMePasswordRouteImport.update({
+  id: '/me/password',
+  path: '/me/password',
+  getParentRoute: () => AppProtectedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/$emailname': typeof EmailnameRoute
-  '/editor': typeof EditorRoute
+  '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
-  '/needLogin': typeof NeedLoginRoute
   '/register': typeof RegisterRoute
-  '/me/settings': typeof MeSettingsRoute
+  '/needLogin': typeof AppNeedLoginRoute
+  '/$emailname': typeof AppProtectedEmailnameRoute
+  '/editor': typeof AppProtectedEditorRoute
+  '/me/password': typeof AppProtectedMePasswordRoute
+  '/me/settings': typeof AppProtectedMeSettingsRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/$emailname': typeof EmailnameRoute
-  '/editor': typeof EditorRoute
   '/login': typeof LoginRoute
-  '/needLogin': typeof NeedLoginRoute
   '/register': typeof RegisterRoute
-  '/me/settings': typeof MeSettingsRoute
+  '/': typeof AppIndexRoute
+  '/needLogin': typeof AppNeedLoginRoute
+  '/$emailname': typeof AppProtectedEmailnameRoute
+  '/editor': typeof AppProtectedEditorRoute
+  '/me/password': typeof AppProtectedMePasswordRoute
+  '/me/settings': typeof AppProtectedMeSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/$emailname': typeof EmailnameRoute
-  '/editor': typeof EditorRoute
+  '/_app': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/needLogin': typeof NeedLoginRoute
   '/register': typeof RegisterRoute
-  '/me/settings': typeof MeSettingsRoute
+  '/_app/_protected': typeof AppProtectedRouteRouteWithChildren
+  '/_app/needLogin': typeof AppNeedLoginRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/_protected/$emailname': typeof AppProtectedEmailnameRoute
+  '/_app/_protected/editor': typeof AppProtectedEditorRoute
+  '/_app/_protected/me/password': typeof AppProtectedMePasswordRoute
+  '/_app/_protected/me/settings': typeof AppProtectedMeSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
+    | '/register'
+    | '/needLogin'
     | '/$emailname'
     | '/editor'
-    | '/login'
-    | '/needLogin'
-    | '/register'
+    | '/me/password'
     | '/me/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/login'
+    | '/register'
     | '/'
+    | '/needLogin'
     | '/$emailname'
     | '/editor'
-    | '/login'
-    | '/needLogin'
-    | '/register'
+    | '/me/password'
     | '/me/settings'
   id:
     | '__root__'
-    | '/'
-    | '/$emailname'
-    | '/editor'
+    | '/_app'
     | '/login'
-    | '/needLogin'
     | '/register'
-    | '/me/settings'
+    | '/_app/_protected'
+    | '/_app/needLogin'
+    | '/_app/'
+    | '/_app/_protected/$emailname'
+    | '/_app/_protected/editor'
+    | '/_app/_protected/me/password'
+    | '/_app/_protected/me/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  EmailnameRoute: typeof EmailnameRoute
-  EditorRoute: typeof EditorRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
-  NeedLoginRoute: typeof NeedLoginRoute
   RegisterRoute: typeof RegisterRoute
-  MeSettingsRoute: typeof MeSettingsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -130,13 +152,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/needLogin': {
-      id: '/needLogin'
-      path: '/needLogin'
-      fullPath: '/needLogin'
-      preLoaderRoute: typeof NeedLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -144,45 +159,102 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/editor': {
-      id: '/editor'
-      path: '/editor'
-      fullPath: '/editor'
-      preLoaderRoute: typeof EditorRouteImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/$emailname': {
-      id: '/$emailname'
-      path: '/$emailname'
-      fullPath: '/$emailname'
-      preLoaderRoute: typeof EmailnameRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
     }
-    '/me/settings': {
-      id: '/me/settings'
+    '/_app/needLogin': {
+      id: '/_app/needLogin'
+      path: '/needLogin'
+      fullPath: '/needLogin'
+      preLoaderRoute: typeof AppNeedLoginRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/_protected': {
+      id: '/_app/_protected'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppProtectedRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/_protected/editor': {
+      id: '/_app/_protected/editor'
+      path: '/editor'
+      fullPath: '/editor'
+      preLoaderRoute: typeof AppProtectedEditorRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
+    }
+    '/_app/_protected/$emailname': {
+      id: '/_app/_protected/$emailname'
+      path: '/$emailname'
+      fullPath: '/$emailname'
+      preLoaderRoute: typeof AppProtectedEmailnameRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
+    }
+    '/_app/_protected/me/settings': {
+      id: '/_app/_protected/me/settings'
       path: '/me/settings'
       fullPath: '/me/settings'
-      preLoaderRoute: typeof MeSettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppProtectedMeSettingsRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
+    }
+    '/_app/_protected/me/password': {
+      id: '/_app/_protected/me/password'
+      path: '/me/password'
+      fullPath: '/me/password'
+      preLoaderRoute: typeof AppProtectedMePasswordRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
     }
   }
 }
 
+interface AppProtectedRouteRouteChildren {
+  AppProtectedEmailnameRoute: typeof AppProtectedEmailnameRoute
+  AppProtectedEditorRoute: typeof AppProtectedEditorRoute
+  AppProtectedMePasswordRoute: typeof AppProtectedMePasswordRoute
+  AppProtectedMeSettingsRoute: typeof AppProtectedMeSettingsRoute
+}
+
+const AppProtectedRouteRouteChildren: AppProtectedRouteRouteChildren = {
+  AppProtectedEmailnameRoute: AppProtectedEmailnameRoute,
+  AppProtectedEditorRoute: AppProtectedEditorRoute,
+  AppProtectedMePasswordRoute: AppProtectedMePasswordRoute,
+  AppProtectedMeSettingsRoute: AppProtectedMeSettingsRoute,
+}
+
+const AppProtectedRouteRouteWithChildren =
+  AppProtectedRouteRoute._addFileChildren(AppProtectedRouteRouteChildren)
+
+interface AppRouteRouteChildren {
+  AppProtectedRouteRoute: typeof AppProtectedRouteRouteWithChildren
+  AppNeedLoginRoute: typeof AppNeedLoginRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppProtectedRouteRoute: AppProtectedRouteRouteWithChildren,
+  AppNeedLoginRoute: AppNeedLoginRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  EmailnameRoute: EmailnameRoute,
-  EditorRoute: EditorRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
   LoginRoute: LoginRoute,
-  NeedLoginRoute: NeedLoginRoute,
   RegisterRoute: RegisterRoute,
-  MeSettingsRoute: MeSettingsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

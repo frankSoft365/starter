@@ -1,9 +1,9 @@
 import { HouseIcon, NotePencilIcon, UserCircleIcon } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
-import { Route as editorRoute } from "../routes/editor";
-import { Route as homeRoute } from "../routes/index";
-import { Route as profileRoute } from "../routes/$emailname";
+import { Route as editorRoute } from "../routes/_app/_protected/editor";
+import { Route as homeRoute } from "../routes/_app/index";
+import { Route as profileRoute } from "../routes/_app/_protected/$emailname";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../stores/user";
 import useProfilePathHelper from "../utils/profilePathHelper";
