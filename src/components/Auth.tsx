@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { getUserProfile } from "../utils/userProfileHelper";
 import { useSetAtom } from "jotai";
 import { isLoadingAtom, isLoginAtom, userAtom } from "../stores/user";
+import { toast } from "sonner";
 
 export default function Auth({ children }: { children: React.ReactNode }) {
     const setUserInfo = useSetAtom(userAtom);
@@ -11,15 +12,16 @@ export default function Auth({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         async function fetchUserInfo() {
             setIsLoading(true);
-            const userInfo = await getUserProfile();
-            if (userInfo) {
+            try {
+                const userInfo = await getUserProfile();
                 setUserInfo(userInfo);
                 setIsLogin(true);
-            } else {
-                console.log('userInfo is undefined');
-
+                setIsLoading(false);
+            } catch (error) {
+                if (error instanceof Error) {
+                    toast.error(error.message);
+                }
             }
-            setIsLoading(false);
         }
         fetchUserInfo();
     }, []);

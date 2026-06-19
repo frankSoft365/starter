@@ -27,7 +27,7 @@ export default function SettingsPage() {
             <h1 className="text-4xl md:text-5xl font-bold m-4">Settings</h1>
             <p className="text-xl md:text-xl font-medium m-4">Profile</p>
             {/* user information show */}
-            {isUserProfileLoading && <div className="skeleton rounded-box h-48 w-full m-4"></div>}
+            {(isUserProfileLoading || isLoadingError) && <div className="skeleton rounded-box h-48 w-full m-4"></div>}
             {!isUserProfileLoading &&
                 <div className="m-4">
                     <ul className="list bg-base-100 rounded-box shadow-md w-full">

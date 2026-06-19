@@ -4,31 +4,15 @@ import { Route as meSettingsRoute } from "../routes/_app/_protected/me/settings"
 import Avatar from "./Avatar";
 import useOverflowHelper from "../utils/overflowHelper";
 import { useUserLogout } from "../utils/userLoginHelper";
-import { useAtomValue, useSetAtom } from "jotai";
-import { isLoginAtom, userAtom } from "../stores/user";
-import { useEffect } from "react";
-import { getUserProfile } from "../utils/userProfileHelper";
+import { useAtomValue } from "jotai";
+import { userAtom } from "../stores/user";
 
 export default function AvatarDropdown() {
     const { handleOverflow } = useOverflowHelper();
     const navigate = useNavigate();
     const user = useAtomValue(userAtom);
-    const setUserInfo = useSetAtom(userAtom);
-    const setIsLogin = useSetAtom(isLoginAtom);
-
 
     const { userLogout } = useUserLogout();
-
-    useEffect(() => {
-        async function fetchUserInfo() {
-            const userInfo = await getUserProfile();
-            if (userInfo) {
-                setUserInfo(userInfo);
-                setIsLogin(true);
-            }
-        }
-        fetchUserInfo();
-    }, []);
 
     function UserAvatar() {
         return <Avatar imageUrl={user?.image ?? undefined} username={user?.username || ''} />
