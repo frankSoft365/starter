@@ -1,12 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { getUserProfile, updateUserProfile, type UserUpdateRequest } from "../utils/userProfileHelper";
+import { changePassword, getUserProfile, updateUserProfile, type UserUpdateRequest } from "../utils/userProfileHelper";
 import { useSetAtom } from "jotai";
 import { isLoginAtom, userAtom } from "../stores/user";
 import { toast } from "sonner";
 import type { UserVO } from "../types/UserVO";
 import type { Dispatch, SetStateAction } from "react";
 import { useUploadAvatar } from "./userAvatar";
+import { useUserLogout } from "../utils/userLoginHelper";
 
 export function useUserProfile() {
     const setUserInfo = useSetAtom(userAtom);
@@ -16,12 +17,9 @@ export function useUserProfile() {
         queryKey: ['get-user-profile'],
         queryFn: async () => {
             const userInfo = await getUserProfile();
-            if (userInfo) {
-                setUserInfo(userInfo);
-                setIsLogin(true);
-                return userInfo;
-            }
-            throw new Error('Failed to retrieve user information');
+            setUserInfo(userInfo);
+            setIsLogin(true);
+            return userInfo;
         }
     })
 
@@ -92,5 +90,29 @@ export function useUserUpdate(
         handleUpdate,
         setIsRemoveAvatar,
         isUploading
+    });
+}
+
+export function useChangePassword() {
+    const { userLogout } = useUserLogout();
+
+    const { isPending: isChanging, mutate: handleChange } = useMutation({
+        mutationFn: async ({ currentPassword, newPassword }: { currentPassword: string, newPassword: string }) => {
+            if (currentPassword === newPassword) {
+                throw new Error('The old and new passwords are the same.');
+            }
+            await changePassword({ currentPassword, newPassword });
+        },
+        onSuccess: () => {
+            toast.success('Password changed successfully');
+            userLogout();
+        },
+        onError: (error) => {
+            toast.error(error.message);
+        }
+    })
+    return ({
+        isChanging,
+        handleChange,
     });
 }

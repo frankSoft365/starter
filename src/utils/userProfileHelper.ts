@@ -7,10 +7,19 @@ export type UserUpdateRequest = {
     email?: string;
 }
 
+export type ChangePasswordRequest = {
+    currentPassword: string;
+    newPassword: string;
+}
+
 export async function getUserProfile() {
     return request.get<any, UserVO>('/user/current');
 }
 
 export async function updateUserProfile(updateRequest: UserUpdateRequest) {
-    return await request.post<UserUpdateRequest, void>('/user/update', updateRequest);
+    return request.post<UserUpdateRequest, void>('/user/update', updateRequest);
+}
+
+export async function changePassword(changePasswordRequest: ChangePasswordRequest) {
+    return request.post<ChangePasswordRequest, void>('/user/changePassword', changePasswordRequest);
 }

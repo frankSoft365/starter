@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import ChangePasswordForm from '../../../../components/ChangePasswordForm'
 
 export const Route = createFileRoute('/_app/_protected/me/password')({
     component: RouteComponent,
@@ -7,7 +8,7 @@ export const Route = createFileRoute('/_app/_protected/me/password')({
 function RouteComponent() {
 
     return (
-        <div>Hello "/me/password"!</div>
+        <ChangePasswordForm />
     );
 
 }

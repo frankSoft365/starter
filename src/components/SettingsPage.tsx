@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { useUserProfile } from "./userProfile";
 import { useState } from "react";
 import SettingsPageUpdateModal from "./SettingsPageUpdateModal";
-import { ArrowSquareUpRightIcon } from "@phosphor-icons/react";
+import { ArrowUpRightIcon } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as mePasswordRoute } from "../routes/_app/_protected/me/password";
 
@@ -70,7 +70,7 @@ export default function SettingsPage() {
                     <li className="list-row hover:bg-gray-50 cursor-pointer relative" onClick={() => navigate({ to: mePasswordRoute.to })}>
                         <div className="text-left cursor-pointer">Change Password</div>
                         <div className="text-right cursor-pointer w-12 absolute right-0">
-                            <ArrowSquareUpRightIcon size={24} />
+                            <ArrowUpRightIcon size={24} />
                         </div>
                     </li>
                 </ul>

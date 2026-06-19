@@ -4,19 +4,18 @@ import { Route as meSettingsRoute } from "../routes/_app/_protected/me/settings"
 import Avatar from "./Avatar";
 import useOverflowHelper from "../utils/overflowHelper";
 import { useUserLogout } from "../utils/userLoginHelper";
-import { useAtom, useSetAtom } from "jotai";
-import { isLoadingAtom, isLoginAtom, userAtom } from "../stores/user";
-import { Route as LoginRoute } from "../routes/login";
+import { useAtomValue, useSetAtom } from "jotai";
+import { isLoginAtom, userAtom } from "../stores/user";
 import { useEffect } from "react";
 import { getUserProfile } from "../utils/userProfileHelper";
 
 export default function AvatarDropdown() {
     const { handleOverflow } = useOverflowHelper();
     const navigate = useNavigate();
-    const [user, setUser] = useAtom(userAtom);
+    const user = useAtomValue(userAtom);
     const setUserInfo = useSetAtom(userAtom);
     const setIsLogin = useSetAtom(isLoginAtom);
-    const setIsLoading = useSetAtom(isLoadingAtom);
+
 
     const { userLogout } = useUserLogout();
 
@@ -33,15 +32,6 @@ export default function AvatarDropdown() {
 
     function UserAvatar() {
         return <Avatar imageUrl={user?.image ?? undefined} username={user?.username || ''} />
-    }
-
-    async function doLogout() {
-        setIsLoading(true);
-        userLogout();
-        setUser(null);
-        setIsLogin(false);
-        setIsLoading(false);
-        navigate({ to: LoginRoute.to });
     }
 
     return (
@@ -64,7 +54,7 @@ export default function AvatarDropdown() {
                     </a>
                 </li>
                 <li className="list-row"><a onClick={() => navigate({ to: meSettingsRoute.to })}><GearIcon size={24} />Settings</a></li>
-                <li className="list-row"><a onClick={doLogout}><SignOutIcon size={24} />Logout</a></li>
+                <li className="list-row"><a onClick={() => userLogout()}><SignOutIcon size={24} />Logout</a></li>
             </ul>
         </div>
     );
