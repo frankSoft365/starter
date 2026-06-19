@@ -43,7 +43,7 @@ request.interceptors.response.use(
                             toast.error(error.message);
                         }
                     }
-                    return Promise.resolve();
+                    return Promise.reject();
                 case 403:
                     msg = "当前操作无权限";
                     break;

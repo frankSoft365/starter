@@ -51,7 +51,7 @@ export default function NavBar() {
                             Discard drafts
                         </button>}
                     </SignedIn>
-                    {isLoading && <button className="btn btn-square">
+                    {isLoading && <button className="btn btn-square mr-3">
                         <span className="loading loading-spinner"></span>
                     </button>}
                     {/* login-button when is not login */}

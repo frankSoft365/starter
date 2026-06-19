@@ -5,4 +5,8 @@ export const EDITOR_DEFAULT: PartialBlock[] = [
         type: 'heading',
         content: '',
     },
+    {
+        type: 'paragraph',
+        content: '',
+    }
 ];

@@ -4,15 +4,39 @@ import { Route as meSettingsRoute } from "../routes/_app/_protected/me/settings"
 import Avatar from "./Avatar";
 import useOverflowHelper from "../utils/overflowHelper";
 import { useUserLogout } from "../utils/userLoginHelper";
-import { useAtomValue } from "jotai";
-import { userAtom } from "../stores/user";
+import { useAtomValue, useSetAtom } from "jotai";
+import { isLoginAtom, userAtom } from "../stores/user";
+import { useEffect, useState } from "react";
+import { getCurrentUser } from "../services/apiUserProfile";
+import { Route as LoginRoute } from "../routes/login";
+import { toast } from "sonner";
 
 export default function AvatarDropdown() {
     const { handleOverflow } = useOverflowHelper();
     const navigate = useNavigate();
     const user = useAtomValue(userAtom);
+    const setUserInfo = useSetAtom(userAtom);
+    const setIsLogin = useSetAtom(isLoginAtom);
+    const [isLoading, setIsLoading] = useState(true);
 
     const { userLogout } = useUserLogout();
+    useEffect(() => {
+        async function fetchUserInfo() {
+            setIsLoading(true);
+            try {
+                const userInfo = await getCurrentUser();
+                setUserInfo(userInfo);
+                setIsLogin(true);
+            } catch (error) {
+                if (error instanceof Error) {
+                    toast.error(error.message);
+                }
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchUserInfo();
+    }, []);
 
     function UserAvatar() {
         return <Avatar imageUrl={user?.image ?? undefined} username={user?.username || ''} />
@@ -20,12 +44,17 @@ export default function AvatarDropdown() {
 
     return (
         <div className="dropdown dropdown-bottom dropdown-end dropdown-hover mr-3">
-            <button className="btn btn-circle">
-                <UserAvatar />
-            </button>
+
+            <div tabIndex={0} role="button" className="btn btn-circle">
+                {isLoading
+                    ? <button className="btn btn-circle">
+                        <span className="loading loading-spinner"></span>
+                    </button>
+                    : <UserAvatar />}
+            </div>
             <ul
                 tabIndex={-1}
-                className="dropdown-content menu bg-base-100 rounded-box z-1 w-68 p-2 shadow-sm">
+                className="dropdown-content menu bg-base-100 rounded-box z-1 w-68 p-2 shadow-sm mt-1">
                 <li className="list-row">
                     <a>
                         <UserAvatar />
@@ -37,8 +66,17 @@ export default function AvatarDropdown() {
                         </div>
                     </a>
                 </li>
-                <li className="list-row"><a onClick={() => navigate({ to: meSettingsRoute.to })}><GearIcon size={24} />Settings</a></li>
-                <li className="list-row"><a onClick={() => userLogout()}><SignOutIcon size={24} />Logout</a></li>
+                <li onClick={() => navigate({ to: meSettingsRoute.to })} className="list-row"><a><GearIcon size={24} />Settings</a></li>
+                <li onClick={() => {
+                    userLogout();
+                    toast.success('Logout successful');
+                    navigate({ to: LoginRoute.to });
+                }} className="list-row">
+                    <div>
+                        <SignOutIcon size={24} />
+                        Logout
+                    </div>
+                </li>
             </ul>
         </div>
     );

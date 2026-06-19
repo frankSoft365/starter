@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState, type Dispatch } from "react";
-import { getVerificationCode, userRegister, verifyVerificationCode, type SendCodeRequest, type UserRegisterRequest, type VerifyCodeRequest } from "../utils/userRegisterHelper";
+import { getVerificationCode, userRegister, verifyVerificationCode, type SendCodeRequest, type UserRegisterRequest, type VerifyCodeRequest } from "../services/apiUserRegister";
 import { toast } from "sonner";
 import type { UseNavigateResult } from "@tanstack/react-router";
 import { Route as LoginRoute } from "../routes/login";

@@ -23,14 +23,14 @@ const ChangePasswordSchema = z.object({
 
 export default function ChangePasswordForm() {
 
-    const { handleChange, isChanging } = useChangePassword();
+    const { handleChangePassword, isChanging } = useChangePassword();
 
     const defaultValues: ChangePassword = { currentPassword: '', newPassword: '' }
 
     const form = useForm({
         defaultValues: defaultValues,
         onSubmit: ({ value }) => {
-            handleChange(value);
+            handleChangePassword(value);
         },
         validators: {
             onChange: ChangePasswordSchema,

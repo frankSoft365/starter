@@ -6,7 +6,6 @@ import { isLoadingAtom, isLoginAtom, userAtom } from "../stores/user";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as HomeRoute } from "../routes/_app/index";
 import { useState } from "react";
-import { Route as LoginRoute } from "../routes/login";
 
 type UserLoginRequest = {
     email: string;
@@ -57,7 +56,6 @@ export function useUserLogout() {
     const setIsLoading = useSetAtom(isLoadingAtom);
     const setUser = useSetAtom(userAtom);
     const setIsLogin = useSetAtom(isLoginAtom);
-    const navigate = useNavigate();
 
     const { isPending: isLogouting, mutate: userLogout } = useMutation({
         mutationFn: async () => {
@@ -65,11 +63,9 @@ export function useUserLogout() {
             await logout();
         },
         onSuccess: () => {
-            toast.success('Logout successful');
             setUser(null);
             setIsLogin(false);
             setIsLoading(false);
-            navigate({ to: LoginRoute.to });
         },
         onError: (error) => {
             toast.error(error.message);

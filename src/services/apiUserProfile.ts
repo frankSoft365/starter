@@ -1,5 +1,5 @@
 import type { UserVO } from "../types/UserVO";
-import request from "./request";
+import request from "../utils/request";
 
 export type UserUpdateRequest = {
     username?: string;
@@ -12,7 +12,7 @@ export type ChangePasswordRequest = {
     newPassword: string;
 }
 
-export async function getUserProfile() {
+export async function getCurrentUser() {
     return request.get<any, UserVO>('/user/current');
 }
 

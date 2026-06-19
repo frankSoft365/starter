@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { changePassword, getUserProfile, updateUserProfile, type UserUpdateRequest } from "../utils/userProfileHelper";
+import { changePassword, getCurrentUser, updateUserProfile, type UserUpdateRequest } from "../services/apiUserProfile";
 import { useSetAtom } from "jotai";
 import { isLoginAtom, userAtom } from "../stores/user";
 import { toast } from "sonner";
@@ -16,7 +16,7 @@ export function useUserProfile() {
     const { data: user, isLoading: isUserProfileLoading, isError: isLoadingError } = useQuery({
         queryKey: ['get-user-profile'],
         queryFn: async () => {
-            const userInfo = await getUserProfile();
+            const userInfo = await getCurrentUser();
             setUserInfo(userInfo);
             setIsLogin(true);
             return userInfo;
@@ -96,7 +96,7 @@ export function useUserUpdate(
 export function useChangePassword() {
     const { userLogout } = useUserLogout();
 
-    const { isPending: isChanging, mutate: handleChange } = useMutation({
+    const { isPending: isChanging, mutate: handleChangePassword } = useMutation({
         mutationFn: async ({ currentPassword, newPassword }: { currentPassword: string, newPassword: string }) => {
             if (currentPassword === newPassword) {
                 throw new Error('The old and new passwords are the same.');
@@ -113,6 +113,6 @@ export function useChangePassword() {
     })
     return ({
         isChanging,
-        handleChange,
+        handleChangePassword,
     });
 }
