@@ -1,24 +1,20 @@
 import { toast } from "sonner";
-import request from "./request";
+import request from "../utils/request";
 import { useMutation } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
-import { isLoadingAtom, isLoginAtom, userAtom } from "../stores/user";
+import { isLoadingAtom, isLoginAtom, userAtom } from "../atoms/user";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as HomeRoute } from "../routes/_app/index";
 import { useState } from "react";
+import type { UserVO } from "../types/UserVO";
 
 type UserLoginRequest = {
     email: string;
     password: string;
 }
 
-type UserLoginVO = {
-    id: string;
-    username: string;
-}
-
 export async function login(params: UserLoginRequest) {
-    return request.post<any, UserLoginVO>('/user/login', params);
+    return request.post<any, UserVO>('/user/login', params);
 }
 
 export async function logout() {
@@ -26,16 +22,18 @@ export async function logout() {
 }
 
 export function useUserLogin() {
+    const setUserInfo = useSetAtom(userAtom);
     const setIsLogin = useSetAtom(isLoginAtom);
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { isPending: isLogining, mutate: userLogin } = useMutation({
+    const { isPending: isLoggingIn, mutate: userLogin } = useMutation({
         mutationFn: login,
-        onSuccess: () => {
+        onSuccess: async (userInfo) => {
             toast.success('Login successful');
             setIsLogin(true);
+            setUserInfo(userInfo);
             navigate({ to: HomeRoute.to });
         },
         onError: (error) => {
@@ -44,7 +42,7 @@ export function useUserLogin() {
     })
     return ({
         userLogin,
-        isLogining,
+        isLoggingIn,
         email,
         setEmail,
         password,
@@ -57,7 +55,7 @@ export function useUserLogout() {
     const setUser = useSetAtom(userAtom);
     const setIsLogin = useSetAtom(isLoginAtom);
 
-    const { isPending: isLogouting, mutate: userLogout } = useMutation({
+    const { isPending: isLoggingOut, mutate: userLogout } = useMutation({
         mutationFn: async () => {
             setIsLoading(true);
             await logout();
@@ -65,14 +63,16 @@ export function useUserLogout() {
         onSuccess: () => {
             setUser(null);
             setIsLogin(false);
-            setIsLoading(false);
         },
         onError: (error) => {
             toast.error(error.message);
+        },
+        onSettled: () => {
+            setIsLoading(false);
         }
     })
     return ({
         userLogout,
-        isLogouting
+        isLoggingOut
     });
 }

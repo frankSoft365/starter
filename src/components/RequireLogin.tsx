@@ -1,4 +1,4 @@
-import { isLoadingAtom } from "../stores/user";
+import { isLoadingAtom } from "../atoms/user";
 import Loading from "./Loading";
 import NeedLogin from "./NeedLogin";
 import SignedIn from "./SignedIn";

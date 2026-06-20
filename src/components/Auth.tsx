@@ -2,7 +2,7 @@ import type React from "react";
 import { useEffect } from "react";
 import { getCurrentUser } from "../services/apiUserProfile";
 import { useSetAtom } from "jotai";
-import { isLoadingAtom, isLoginAtom, userAtom } from "../stores/user";
+import { isLoadingAtom, isLoginAtom, userAtom } from "../atoms/user";
 import { toast } from "sonner";
 
 export default function Auth({ children }: { children: React.ReactNode }) {

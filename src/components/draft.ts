@@ -4,7 +4,7 @@ import { EDITOR_DEFAULT } from '../constants/draft';
 import { debounce } from 'es-toolkit/function';
 import { isEditorEmptyHelper } from '../utils/isEditorEmptyHelper';
 import { useSetAtom } from 'jotai';
-import { isEditorEmptyAtom } from '../stores/editor';
+import { isEditorEmptyAtom } from '../atoms/editor';
 
 const DRAFT_KEY = 'draft';
 

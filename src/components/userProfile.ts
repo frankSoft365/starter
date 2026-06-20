@@ -2,12 +2,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { changePassword, getCurrentUser, updateUserProfile, type UserUpdateRequest } from "../services/apiUserProfile";
 import { useSetAtom } from "jotai";
-import { isLoginAtom, userAtom } from "../stores/user";
+import { isLoginAtom, userAtom } from "../atoms/user";
 import { toast } from "sonner";
 import type { UserVO } from "../types/UserVO";
 import type { Dispatch, SetStateAction } from "react";
 import { useUploadAvatar } from "./userAvatar";
-import { useUserLogout } from "../utils/userLoginHelper";
+import { useUserLogout } from "../services/apiUserLogin";
 
 export function useUserProfile() {
     const setUserInfo = useSetAtom(userAtom);

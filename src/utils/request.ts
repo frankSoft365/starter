@@ -1,15 +1,16 @@
 import axios, { type AxiosResponse } from 'axios'
 import { getDefaultStore } from 'jotai'
 import { toast } from 'sonner'
-import { isLoginAtom, userAtom } from '../stores/user';
+import { isLoginAtom, userAtom } from '../atoms/user';
 import type { BaseResponse } from '../types/BaseResponse';
-import { logout } from './userLoginHelper';
+import { logout } from '../services/apiUserLogin';
 
 const jotaiStore = getDefaultStore()
 
 const request = axios.create({
     baseURL: 'http://localhost:8070',
-    withCredentials: true
+    withCredentials: true,
+    timeout: 10000
 })
 
 request.interceptors.request.use((config) => {
@@ -18,22 +19,20 @@ request.interceptors.request.use((config) => {
 
 request.interceptors.response.use(
     (res: AxiosResponse<BaseResponse>) => {
-        const { code, data, message, description } = res.data;
+        const { code, data, description } = res.data;
         if (code === 0) {
             return data;
         }
         // bussiness error
-        console.log('error : ', message);
         return Promise.reject(new Error(description || 'Error'));
     },
     async (err) => {
         let msg = '';
         const { response } = err;
         if (response) {
-            // 针对不同的 HTTP 状态码进行统一拦截
             switch (response.status) {
                 case 401:
-                    msg = "登录已过期，请重新登录";
+                    msg = "Your login has expired. Please log in again.";
                     jotaiStore.set(isLoginAtom, false);
                     jotaiStore.set(userAtom, null);
                     try {
@@ -45,24 +44,23 @@ request.interceptors.response.use(
                     }
                     return Promise.reject();
                 case 403:
-                    msg = "当前操作无权限";
+                    msg = "No permission is granted for the current operation.";
                     break;
                 case 500:
-                    msg = "服务器内部错误，请稍后重试";
+                    msg = "A server error has occurred. Please try again later.";
                     break;
                 default:
-                    msg = `网络错误: ${response.status}`;
+                    msg = `Network error, error code : ${response.status}`;
             }
         } else {
-            // 处理断网或请求超时
             if (err.message.includes('timeout')) {
-                msg = '请求超时，请检查网络';
+                msg = 'Request timed out, please check your network.';
             } else {
-                msg = '网络连接异常';
+                msg = 'Network connection error';
             }
         }
         return Promise.reject(new Error(msg));
     }
 )
 
-export default request
+export default request;

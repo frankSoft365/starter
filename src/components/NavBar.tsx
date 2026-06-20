@@ -7,8 +7,8 @@ import AvatarDropdown from "./AvatarDropdown";
 import { Route as homeRoute } from "../routes/_app/index";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as loginRoute } from "../routes/login";
-import { editorEmptySignalAtom, isEditorEmptyAtom } from "../stores/editor";
-import { isLoadingAtom } from "../stores/user";
+import { editorEmptySignalAtom, isEditorEmptyAtom } from "../atoms/editor";
+import { isLoadingAtom } from "../atoms/user";
 
 export default function NavBar() {
     const navigate = useNavigate();

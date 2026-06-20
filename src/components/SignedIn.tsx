@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { isLoginAtom } from "../stores/user";
+import { isLoginAtom } from "../atoms/user";
 
 /**
  * children in component shows only when isLogin

@@ -1,11 +1,12 @@
 import { type DebouncedFunction } from 'es-toolkit/function';
-import { useSetAtom } from "jotai";
-import { isEditorEmptyAtom } from "../stores/editor";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { editorEmptySignalAtom, isEditorEmptyAtom } from "../atoms/editor";
 import { isEditorEmptyHelper } from "../utils/isEditorEmptyHelper";
 import { EDITOR_DEFAULT } from "../constants/draft";
 import { useCreateBlockNote } from "@blocknote/react";
 import { en } from "@blocknote/core/locales";
 import type { PartialBlock } from '@blocknote/core';
+import { useEffect } from 'react';
 
 export function useEditor(
     draft: PartialBlock[] | undefined,
@@ -14,6 +15,8 @@ export function useEditor(
 ) {
     const locale = en;
     const setIsEditorEmpty = useSetAtom(isEditorEmptyAtom);
+    const [editorEmptySignal, setEditorEmptySignal] = useAtom(editorEmptySignalAtom);
+
 
     let isRestoring = false;
 
@@ -48,6 +51,27 @@ export function useEditor(
         }
         saveDraft(changedEditor.document);
     }
+
+    useEffect(() => {
+        if (!isEditorEmptyHelper(editor.document)) {
+            console.log('i invoke 1');
+
+            setIsEditorEmpty(false)
+        }
+        return () => {
+            saveDraft.cancel();
+            saveDraft.flush();
+        }
+    }, []);
+
+    useEffect(() => {
+        if (editorEmptySignal) {
+            console.log('i invoke 2');
+
+            setDraft(EDITOR_DEFAULT);
+            editor.replaceBlocks(editor.document, EDITOR_DEFAULT);
+        }
+    }, [editorEmptySignal]);
 
     return ({
         editor,

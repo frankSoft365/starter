@@ -5,7 +5,7 @@ import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as homeRoute } from "../routes/_app/index";
 import { Route as profileRoute } from "../routes/_app/_protected/$emailname";
 import { useAtomValue } from "jotai";
-import { userAtom } from "../stores/user";
+import { userAtom } from "../atoms/user";
 import useProfilePathHelper from "../utils/profilePathHelper";
 
 export default function DrawerSide() {

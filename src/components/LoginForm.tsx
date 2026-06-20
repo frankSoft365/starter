@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { useUserLogin } from "../utils/userLoginHelper";
+import { useUserLogin } from "../services/apiUserLogin";
 
 export default function LoginForm() {
     const {
         userLogin,
-        isLogining,
+        isLoggingIn,
         email,
         setEmail,
         password,
@@ -27,7 +27,7 @@ export default function LoginForm() {
             <input
                 type="email"
                 placeholder="Email"
-                disabled={isLogining}
+                disabled={isLoggingIn}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="input validator"
@@ -40,7 +40,7 @@ export default function LoginForm() {
                 className="input validator"
                 placeholder="Password"
                 required
-                disabled={isLogining}
+                disabled={isLoggingIn}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 pattern="^[a-zA-Z0-9!@#$%*+=_\-]+$"
@@ -49,7 +49,9 @@ export default function LoginForm() {
                 title="Only letters, numbers or dash"
             />
 
-            <button type="submit" className="btn btn-neutral mt-4">Login</button>
+            <button disabled={isLoggingIn} type="submit" className="btn btn-neutral mt-4">
+                {isLoggingIn ? <span className="loading loading-spinner"></span> : 'Login'}
+            </button>
 
             <div className="text-center mt-4">Don't have an account? <Link className="link link-error font-bold" to="/register">Sign Up</Link></div>
         </form>

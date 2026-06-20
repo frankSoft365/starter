@@ -3,11 +3,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { Route as meSettingsRoute } from "../routes/_app/_protected/me/settings";
 import Avatar from "./Avatar";
 import useOverflowHelper from "../utils/overflowHelper";
-import { useUserLogout } from "../utils/userLoginHelper";
-import { useAtomValue, useSetAtom } from "jotai";
-import { isLoginAtom, userAtom } from "../stores/user";
-import { useEffect, useState } from "react";
-import { getCurrentUser } from "../services/apiUserProfile";
+import { useUserLogout } from "../services/apiUserLogin";
+import { useAtomValue } from "jotai";
+import { isLoadingAtom, userAtom } from "../atoms/user";
 import { Route as LoginRoute } from "../routes/login";
 import { toast } from "sonner";
 
@@ -15,28 +13,9 @@ export default function AvatarDropdown() {
     const { handleOverflow } = useOverflowHelper();
     const navigate = useNavigate();
     const user = useAtomValue(userAtom);
-    const setUserInfo = useSetAtom(userAtom);
-    const setIsLogin = useSetAtom(isLoginAtom);
-    const [isLoading, setIsLoading] = useState(true);
+    const isLoading = useAtomValue(isLoadingAtom);
 
     const { userLogout } = useUserLogout();
-    useEffect(() => {
-        async function fetchUserInfo() {
-            setIsLoading(true);
-            try {
-                const userInfo = await getCurrentUser();
-                setUserInfo(userInfo);
-                setIsLogin(true);
-            } catch (error) {
-                if (error instanceof Error) {
-                    toast.error(error.message);
-                }
-            } finally {
-                setIsLoading(false);
-            }
-        }
-        fetchUserInfo();
-    }, []);
 
     function UserAvatar() {
         return <Avatar imageUrl={user?.image ?? undefined} username={user?.username || ''} />
