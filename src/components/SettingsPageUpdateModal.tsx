@@ -1,5 +1,5 @@
 import { type Dispatch, type SetStateAction } from "react";
-import type { UserVO } from "../types/UserVO";
+import type { UserVO } from "../types/user";
 import Avatar from "./Avatar";
 import { useUserUpdate } from "./userProfile";
 import { useChangeAvatar } from "./userAvatar";

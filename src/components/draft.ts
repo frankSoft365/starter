@@ -2,7 +2,7 @@ import { useLocalStorage } from 'react-use';
 import { type PartialBlock } from "@blocknote/core";
 import { EDITOR_DEFAULT } from '../constants/draft';
 import { debounce } from 'es-toolkit/function';
-import { isEditorEmptyHelper } from '../utils/isEditorEmptyHelper';
+import { isEditorEmpty } from '../utils/editorHelper';
 import { useSetAtom } from 'jotai';
 import { isEditorEmptyAtom } from '../atoms/editor';
 
@@ -13,7 +13,7 @@ export function useDraft() {
     const [draft, setDraft] = useLocalStorage<PartialBlock[]>(DRAFT_KEY, EDITOR_DEFAULT);
 
     const saveDraft = debounce((document) => {
-        if (isEditorEmptyHelper(document)) {
+        if (isEditorEmpty(document)) {
             setIsEditorEmpty(true);
             setDraft(EDITOR_DEFAULT);
             return;

@@ -1,19 +1,5 @@
+import type { SendCodeRequest, UserRegisterRequest, VerifyCodeRequest } from "../types/user";
 import request from "../utils/request";
-
-export type UserRegisterRequest = {
-    token: string;
-    username: string;
-    password: string;
-}
-
-export type SendCodeRequest = {
-    email: string;
-}
-
-export type VerifyCodeRequest = {
-    email: string;
-    verifyCode: string;
-}
 
 export async function getVerificationCode(sendCodeRequest: SendCodeRequest) {
     return await request.post<SendCodeRequest, void>('/emailVerify/getVerificationCode', sendCodeRequest);

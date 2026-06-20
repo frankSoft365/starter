@@ -1,4 +1,5 @@
-import type { Block } from "@blocknote/core";
+import type { Block, BlockNoteEditor } from "@blocknote/core";
+import type { ArticlePublishRequest } from "../types/article";
 
 type BlockContent = Block['content'];
 
@@ -10,7 +11,7 @@ const CONTENTLESS_BLOCK_TYPES = new Set([
     'divider',
 ]);
 
-export function isEditorEmptyHelper(blocks: Block[]): boolean {
+export function isEditorEmpty(blocks: Block[]): boolean {
     if (!blocks) {
         return true;
     }
@@ -18,7 +19,7 @@ export function isEditorEmptyHelper(blocks: Block[]): boolean {
         if (CONTENTLESS_BLOCK_TYPES.has(block.type)) {
             return false;
         }
-        return isContentEmpty(block.content) && isEditorEmptyHelper(block.children);
+        return isContentEmpty(block.content) && isEditorEmpty(block.children);
     })
 }
 
@@ -44,4 +45,15 @@ function isContentEmpty(content: BlockContent | undefined): boolean {
         }
         return false;
     })
+}
+
+export function buildArticleInsert(editor: BlockNoteEditor): ArticlePublishRequest {
+    const [headingBlock, ...contentBlock] = editor.document;
+    const headingMarkdown = editor.blocksToMarkdownLossy([headingBlock]);
+    const title = headingMarkdown.replace('#', '').trim();
+
+    return ({
+        title,
+        content: JSON.stringify(contentBlock)
+    });
 }

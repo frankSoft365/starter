@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import type { UserVO } from "../types/UserVO";
+import type { UserVO } from "../types/user";
 import { useMutation } from "@tanstack/react-query";
-import request from "../utils/request";
 import { toast } from "sonner";
+import { uploadImage } from "../services/apiUpload";
 
 export function useChangeAvatar(user: UserVO) {
     const imageUploadRef = useRef<HTMLInputElement>(null);
@@ -33,7 +33,7 @@ export function useUploadAvatar(currentAvatarFile: File | null) {
             }
             const formData = new FormData();
             formData.append('avatar', currentAvatarFile)
-            return await request.post<FormData, string>('/upload', formData);
+            return await uploadImage(formData);
         },
         onSuccess: () => {
             toast.success('Avatar uploaded successfully');

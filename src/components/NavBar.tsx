@@ -7,7 +7,7 @@ import AvatarDropdown from "./AvatarDropdown";
 import { Route as homeRoute } from "../routes/_app/index";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as loginRoute } from "../routes/login";
-import { editorEmptySignalAtom, isEditorEmptyAtom } from "../atoms/editor";
+import { editorEmptySignalAtom, editorPublishSignalAtom, isEditorEmptyAtom } from "../atoms/editor";
 import { isLoadingAtom } from "../atoms/user";
 
 export default function NavBar() {
@@ -15,6 +15,7 @@ export default function NavBar() {
     const location = useLocation();
 
     const setEditorEmptySignal = useSetAtom(editorEmptySignalAtom);
+    const setEditorPublishSignal = useSetAtom(editorPublishSignalAtom);
 
     const isLoading = useAtomValue(isLoadingAtom);
 
@@ -44,7 +45,7 @@ export default function NavBar() {
                             <NotePencilIcon size={24} />
                             Write
                         </button>}
-                        {isEditorRoute && <button disabled={isEditorEmpty} className="btn btn-success mr-4">
+                        {isEditorRoute && <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-4">
                             Publish
                         </button>}
                         {isEditorRoute && <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-4">

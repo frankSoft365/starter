@@ -1,5 +1,5 @@
 import { atom } from 'jotai'
-import type { UserVO } from '../types/UserVO';
+import type { UserVO } from '../types/user';
 
 export const userAtom = atom<UserVO | null>(null);
 

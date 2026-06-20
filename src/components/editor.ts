@@ -1,7 +1,7 @@
 import { type DebouncedFunction } from 'es-toolkit/function';
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { editorEmptySignalAtom, isEditorEmptyAtom } from "../atoms/editor";
-import { isEditorEmptyHelper } from "../utils/isEditorEmptyHelper";
+import { isEditorEmpty } from "../utils/editorHelper";
 import { EDITOR_DEFAULT } from "../constants/draft";
 import { useCreateBlockNote } from "@blocknote/react";
 import { en } from "@blocknote/core/locales";
@@ -41,7 +41,7 @@ export function useEditor(
             return;
         }
 
-        if (isEditorEmptyHelper(changedEditor.document)) {
+        if (isEditorEmpty(changedEditor.document)) {
             isRestoring = true;
             setIsEditorEmpty(true);
             saveDraft.cancel();
@@ -52,10 +52,15 @@ export function useEditor(
         saveDraft(changedEditor.document);
     }
 
-    useEffect(() => {
-        if (!isEditorEmptyHelper(editor.document)) {
-            console.log('i invoke 1');
+    function resetEditor() {
+        setIsEditorEmpty(true);
+        setDraft(EDITOR_DEFAULT);
+        saveDraft.cancel();
+        editor.replaceBlocks(editor.document, EDITOR_DEFAULT);
+    }
 
+    useEffect(() => {
+        if (!isEditorEmpty(editor.document)) {
             setIsEditorEmpty(false)
         }
         return () => {
@@ -66,15 +71,15 @@ export function useEditor(
 
     useEffect(() => {
         if (editorEmptySignal) {
-            console.log('i invoke 2');
-
             setDraft(EDITOR_DEFAULT);
             editor.replaceBlocks(editor.document, EDITOR_DEFAULT);
+            setEditorEmptySignal(0);
         }
     }, [editorEmptySignal]);
 
     return ({
         editor,
-        handleEditorChange
+        handleEditorChange,
+        resetEditor
     });
 }

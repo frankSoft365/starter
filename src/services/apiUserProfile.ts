@@ -1,16 +1,5 @@
-import type { UserVO } from "../types/UserVO";
+import type { ChangePasswordRequest, UserUpdateRequest, UserVO } from "../types/user";
 import request from "../utils/request";
-
-export type UserUpdateRequest = {
-    username?: string;
-    image?: string;
-    email?: string;
-}
-
-export type ChangePasswordRequest = {
-    currentPassword: string;
-    newPassword: string;
-}
 
 export async function getCurrentUser() {
     return request.get<any, UserVO>('/user/current');
