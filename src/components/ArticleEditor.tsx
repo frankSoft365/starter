@@ -4,25 +4,39 @@ import "@blocknote/core/fonts/inter.css";
 import { useEditor } from "./editor";
 import { useDraft } from "./draft";
 import { useEffect } from "react";
-import { useAtom } from "jotai";
-import { editorPublishSignalAtom } from "../atoms/editor";
-import { isEditorEmpty } from "../utils/editorHelper";
-import { useArticlePublish } from "./articlePublish";
+import { useAtom, useSetAtom } from "jotai";
+import { articlePreviewAtom, editorPublishSignalAtom, editorSubmissionSignalAtom } from "../atoms/editor";
+import { buildArticlePreview, isEditorEmpty } from "../utils/editorHelper";
+import { useNavigate } from "@tanstack/react-router";
+import { Route as submissionRoute } from "../routes/_app/_protected/submission";
 
 export default function ArticleEditor() {
     const { draft, setDraft, saveDraft } = useDraft();
     const { editor, handleEditorChange, resetEditor } = useEditor(draft, saveDraft, setDraft);
+    const [editorSubmissionSignal, setEditorSubmissionSignal] = useAtom(editorSubmissionSignalAtom);
     const [editorPublishSignal, setEditorPublishSignal] = useAtom(editorPublishSignalAtom);
-    const { handlePublish } = useArticlePublish(editor);
+
+    const setArticlePreview = useSetAtom(articlePreviewAtom);
+
+    const navigate = useNavigate();
+
+    function getArticleSubmission() {
+        const articlePreview = buildArticlePreview(editor);
+        setArticlePreview(articlePreview);
+    }
+
+    useEffect(() => {
+        if (editorSubmissionSignal && !isEditorEmpty(editor.document)) {
+            getArticleSubmission();
+            navigate({ to: submissionRoute.to });
+            setEditorSubmissionSignal(0);
+        }
+    }, [editorSubmissionSignal]);
 
     useEffect(() => {
         if (editorPublishSignal && !isEditorEmpty(editor.document)) {
-            handlePublish({}, {
-                onSuccess: () => {
-                    resetEditor();
-                    setEditorPublishSignal(0);
-                }
-            });
+            resetEditor();
+            setEditorPublishSignal(0);
         }
     }, [editorPublishSignal]);
 

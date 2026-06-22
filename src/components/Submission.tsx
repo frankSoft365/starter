@@ -1,0 +1,169 @@
+import { useEffect } from "react"
+import { useForm } from "@tanstack/react-form";
+import FieldInfo from "./FieldInfo";
+import { useAtomValue, useSetAtom } from "jotai";
+import { articlePreviewAtom, editorPublishSignalAtom } from "../atoms/editor";
+import { useNavigate } from "@tanstack/react-router";
+import { Route as editorRoute } from "../routes/_app/_protected/editor";
+import { useArticlePublish } from "./articlePublish";
+import * as z from "zod";
+import TopicInput from "./TopicInput";
+
+export default function Submission() {
+    const articlePreview = useAtomValue(articlePreviewAtom);
+    const navigate = useNavigate();
+    const { handlePublish, isPublishing } = useArticlePublish();
+    const setEditorPublishSignal = useSetAtom(editorPublishSignalAtom);
+
+    const defaultValues = {
+        coverImage: articlePreview?.coverImage[0],
+        title: articlePreview?.title,
+        subtitle: articlePreview?.subtitle,
+        topics: []
+    };
+
+    const TitleSchema = z.string()
+        .min(1, "Please enter a title")
+        .max(100, "The title cannot exceed 100 characters.");
+
+    const SubtitleSchema = z.string()
+        .max(140, "The subtitle cannot exceed 140 characters.");
+    const TopicSchema = z.array(z.string());
+
+    const PreviewSchema = z.object({
+        coverImage: z.string().optional(),
+        title: TitleSchema,
+        subtitle: SubtitleSchema.optional(),
+        topics: TopicSchema,
+    });
+
+    type PreviewSchema = z.infer<typeof PreviewSchema>;
+
+    useEffect(() => {
+        if (!articlePreview) {
+            navigate({ to: editorRoute.to });
+        }
+    }, [articlePreview, navigate]);
+
+    const form = useForm({
+        defaultValues: defaultValues as PreviewSchema,
+        onSubmit: ({ value }) => {
+            setEditorPublishSignal(pre => pre + 1);
+            alert(JSON.stringify(value));
+            // handlePublish({}, {
+            //     onSuccess: () => {
+            //         resetEditor();
+            //     }
+            // });
+        },
+        validators: {
+            onChange: PreviewSchema,
+            onSubmit: PreviewSchema
+        },
+    })
+    return (
+        <div className="card w-5xl bg-base-100 card-xl shadow-sm mx-auto mt-12">
+            <div className="card-body w-full">
+                <h2 className="card-title">Story preview</h2>
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        form.handleSubmit()
+                    }}
+                >
+                    <div className="grid grid-cols-2 gap-8">
+                        <div>
+                            <form.Field
+                                name="coverImage"
+                                children={(field) => (
+                                    <>
+                                        <fieldset className="fieldset w-full">
+                                            <legend className="fieldset-legend text-base font-normal">Cover image</legend>
+                                            {field.state.value
+                                                ? <img src={field.state.value} />
+                                                : <div className="bg-gray-100 w-full h-48 text-left content-center text-sm p-8 text-gray-500">Include a high-quality image in your story to make it more inviting to readers.</div>
+                                            }
+
+                                        </fieldset>
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            />
+                            <form.Field
+                                name="title"
+                                children={(field) => (
+                                    <>
+                                        <fieldset className="fieldset w-full">
+                                            <legend className="fieldset-legend text-base font-normal">Title</legend>
+                                            <input
+                                                value={field.state.value}
+                                                onBlur={field.handleBlur}
+                                                onChange={(e) => field.handleChange(e.target.value)}
+                                                type="text"
+                                                className="input w-full font-bold"
+                                                placeholder="Write a preview title..."
+                                            />
+                                        </fieldset>
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            />
+                            <form.Field
+                                name="subtitle"
+                                children={(field) => (
+                                    <>
+                                        <fieldset className="fieldset w-full">
+                                            <legend className="fieldset-legend text-base font-normal">Subtitle</legend>
+                                            <div className="flex items-center gap-2">
+                                                <input
+                                                    value={field.state.value}
+                                                    onBlur={field.handleBlur}
+                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                    type="text"
+                                                    className="input w-full"
+                                                    placeholder="Write a preview subtitle..."
+                                                />
+                                            </div>
+                                        </fieldset>
+
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            />
+                            <div className="w-full text-left content-center text-sm text-gray-500 mt-4">
+                                Note: Changes here will affect how your story appears in public places like Aedium’s homepage and in subscribers’ inboxes — not the contents of the story itself.
+                            </div>
+                        </div>
+                        <div className="relative">
+                            <form.Field
+                                name="topics"
+                                mode="array"
+                                children={(field) => (
+                                    <>
+                                        <fieldset className="fieldset w-full">
+                                            <legend className="fieldset-legend text-base font-normal">Topics</legend>
+                                            <p className="label mb-1">Add up to five topics to help readers find your story.</p>
+                                            <TopicInput field={field} />
+                                        </fieldset>
+
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            />
+                            <div className="absolute left-0 bottom-0">
+                                <button onClick={() => navigate({ to: editorRoute.to })} type="button" className="btn btn-neutral mr-3">
+                                    Cancel
+                                </button>
+                                <button disabled={isPublishing} type="submit" className="btn btn-success">
+                                    {!isPublishing && 'Publish'}
+                                    {isPublishing && <span className="loading loading-spinner"></span>}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    );
+}

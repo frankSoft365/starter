@@ -15,6 +15,7 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppNeedLoginRouteImport } from './routes/_app/needLogin'
 import { Route as AppProtectedRouteRouteImport } from './routes/_app/_protected/route'
+import { Route as AppProtectedSubmissionRouteImport } from './routes/_app/_protected/submission'
 import { Route as AppProtectedEditorRouteImport } from './routes/_app/_protected/editor'
 import { Route as AppProtectedEmailnameRouteImport } from './routes/_app/_protected/$emailname'
 import { Route as AppProtectedMeSettingsRouteImport } from './routes/_app/_protected/me/settings'
@@ -48,6 +49,11 @@ const AppProtectedRouteRoute = AppProtectedRouteRouteImport.update({
   id: '/_protected',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppProtectedSubmissionRoute = AppProtectedSubmissionRouteImport.update({
+  id: '/submission',
+  path: '/submission',
+  getParentRoute: () => AppProtectedRouteRoute,
+} as any)
 const AppProtectedEditorRoute = AppProtectedEditorRouteImport.update({
   id: '/editor',
   path: '/editor',
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/needLogin': typeof AppNeedLoginRoute
   '/$emailname': typeof AppProtectedEmailnameRoute
   '/editor': typeof AppProtectedEditorRoute
+  '/submission': typeof AppProtectedSubmissionRoute
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
 }
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/needLogin': typeof AppNeedLoginRoute
   '/$emailname': typeof AppProtectedEmailnameRoute
   '/editor': typeof AppProtectedEditorRoute
+  '/submission': typeof AppProtectedSubmissionRoute
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
 }
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/_app/': typeof AppIndexRoute
   '/_app/_protected/$emailname': typeof AppProtectedEmailnameRoute
   '/_app/_protected/editor': typeof AppProtectedEditorRoute
+  '/_app/_protected/submission': typeof AppProtectedSubmissionRoute
   '/_app/_protected/me/password': typeof AppProtectedMePasswordRoute
   '/_app/_protected/me/settings': typeof AppProtectedMeSettingsRoute
 }
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/needLogin'
     | '/$emailname'
     | '/editor'
+    | '/submission'
     | '/me/password'
     | '/me/settings'
   fileRoutesByTo: FileRoutesByTo
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/needLogin'
     | '/$emailname'
     | '/editor'
+    | '/submission'
     | '/me/password'
     | '/me/settings'
   id:
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/_app/'
     | '/_app/_protected/$emailname'
     | '/_app/_protected/editor'
+    | '/_app/_protected/submission'
     | '/_app/_protected/me/password'
     | '/_app/_protected/me/settings'
   fileRoutesById: FileRoutesById
@@ -187,6 +199,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProtectedRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/_protected/submission': {
+      id: '/_app/_protected/submission'
+      path: '/submission'
+      fullPath: '/submission'
+      preLoaderRoute: typeof AppProtectedSubmissionRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
+    }
     '/_app/_protected/editor': {
       id: '/_app/_protected/editor'
       path: '/editor'
@@ -221,6 +240,7 @@ declare module '@tanstack/react-router' {
 interface AppProtectedRouteRouteChildren {
   AppProtectedEmailnameRoute: typeof AppProtectedEmailnameRoute
   AppProtectedEditorRoute: typeof AppProtectedEditorRoute
+  AppProtectedSubmissionRoute: typeof AppProtectedSubmissionRoute
   AppProtectedMePasswordRoute: typeof AppProtectedMePasswordRoute
   AppProtectedMeSettingsRoute: typeof AppProtectedMeSettingsRoute
 }
@@ -228,6 +248,7 @@ interface AppProtectedRouteRouteChildren {
 const AppProtectedRouteRouteChildren: AppProtectedRouteRouteChildren = {
   AppProtectedEmailnameRoute: AppProtectedEmailnameRoute,
   AppProtectedEditorRoute: AppProtectedEditorRoute,
+  AppProtectedSubmissionRoute: AppProtectedSubmissionRoute,
   AppProtectedMePasswordRoute: AppProtectedMePasswordRoute,
   AppProtectedMeSettingsRoute: AppProtectedMeSettingsRoute,
 }

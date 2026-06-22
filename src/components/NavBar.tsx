@@ -7,7 +7,7 @@ import AvatarDropdown from "./AvatarDropdown";
 import { Route as homeRoute } from "../routes/_app/index";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as loginRoute } from "../routes/login";
-import { editorEmptySignalAtom, editorPublishSignalAtom, isEditorEmptyAtom } from "../atoms/editor";
+import { editorEmptySignalAtom, editorSubmissionSignalAtom, isEditorEmptyAtom } from "../atoms/editor";
 import { isLoadingAtom } from "../atoms/user";
 
 export default function NavBar() {
@@ -15,7 +15,7 @@ export default function NavBar() {
     const location = useLocation();
 
     const setEditorEmptySignal = useSetAtom(editorEmptySignalAtom);
-    const setEditorPublishSignal = useSetAtom(editorPublishSignalAtom);
+    const setEditorPublishSignal = useSetAtom(editorSubmissionSignalAtom);
 
     const isLoading = useAtomValue(isLoadingAtom);
 

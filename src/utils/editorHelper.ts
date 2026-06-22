@@ -1,5 +1,5 @@
 import type { Block, BlockNoteEditor } from "@blocknote/core";
-import type { ArticlePublishRequest } from "../types/article";
+import type { ArticlePublishPreview } from "../types/article";
 
 type BlockContent = Block['content'];
 
@@ -47,13 +47,62 @@ function isContentEmpty(content: BlockContent | undefined): boolean {
     })
 }
 
-export function buildArticleInsert(editor: BlockNoteEditor): ArticlePublishRequest {
-    const [headingBlock, ...contentBlock] = editor.document;
+export function buildArticlePreview(editor: BlockNoteEditor): ArticlePublishPreview {
+    const [headingBlock, ...contentBlocks] = editor.document;
     const headingMarkdown = editor.blocksToMarkdownLossy([headingBlock]);
     const title = headingMarkdown.replace('#', '').trim();
+    const subtitle = getSubtitle(contentBlocks);
+    console.log(contentBlocks);
+    const coverImage = getImages(contentBlocks);
+
 
     return ({
         title,
-        content: JSON.stringify(contentBlock)
+        subtitle,
+        content: JSON.stringify(contentBlocks),
+        coverImage
     });
+}
+
+function getImages(contentBlocks: Block[]) {
+    const images = contentBlocks.map((block) => {
+        if (block.type === 'image') {
+            return block.props.url;
+        }
+        return '';
+    }).filter(image => image);
+
+    return images;
+}
+
+function getSubtitle(contentBlocks: Block[], maxLength = 100) {
+    let subtitle = '';
+    subtitle = contentBlocks.map((block) => {
+        let ownText = '';
+        let childrenText = '';
+        // is InlineContent type
+        if (Array.isArray(block.content)) {
+            ownText = block.content.map((inlineContent) => {
+                // is StyledText type
+                if (inlineContent.type === 'text') {
+                    return inlineContent.text;
+                }
+                // is Link type
+                if (inlineContent.type === 'link') {
+                    if (Array.isArray(inlineContent.content)) {
+                        return inlineContent.content.map((styledText) => {
+                            return styledText.text ?? '';
+                        }).join(' ');
+                    }
+                }
+                return '';
+            }).join(' ');
+        }
+        if (Array.isArray(block.children)) {
+            childrenText = getSubtitle(block.children, maxLength);
+        }
+        return `${ownText} ${childrenText}`.trim();
+    }).join(' ').replace(/\s+/g, ' ').trim();
+
+    return subtitle.length > maxLength ? subtitle.slice(0, maxLength).trim() + '...' : subtitle;
 }
