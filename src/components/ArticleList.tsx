@@ -15,10 +15,10 @@ export default function ArticleList() {
     return (
         <>
             {isLoading && <Loading />}
-            {!isLoading && <ul className="list bg-base-100 rounded-box shadow-md">
+            {!isLoading && <ul className="list w-3xl bg-base-100 shadow-md">
                 {articleList && articleList.map((article) => {
                     return (
-                        <ArticleListItem article={article} />
+                        <ArticleListItem key={article.id} article={article} />
                     );
                 })}
             </ul>}

@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import type { UserVO } from "../types/user";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { uploadImage } from "../services/apiUpload";
+import { uploadAvatar } from "../services/apiUpload";
 
 export function useChangeAvatar(user: UserVO) {
     const imageUploadRef = useRef<HTMLInputElement>(null);
@@ -26,14 +26,14 @@ export function useChangeAvatar(user: UserVO) {
 }
 
 export function useUploadAvatar(currentAvatarFile: File | null) {
-    const { isPending: isUploading, mutateAsync: uploadAvatar } = useMutation({
+    const { isPending: isUploading, mutateAsync: upload } = useMutation({
         mutationFn: async () => {
             if (!currentAvatarFile) {
                 throw new Error('No file selected')
             }
             const formData = new FormData();
             formData.append('avatar', currentAvatarFile)
-            return await uploadImage(formData);
+            return await uploadAvatar(formData);
         },
         onSuccess: () => {
             toast.success('Avatar uploaded successfully');
@@ -43,7 +43,7 @@ export function useUploadAvatar(currentAvatarFile: File | null) {
         }
     })
     return ({
-        uploadAvatar,
+        upload,
         isUploading
     });
 }

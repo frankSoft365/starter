@@ -1,43 +1,43 @@
 import { useEffect } from "react"
 import { useForm } from "@tanstack/react-form";
 import FieldInfo from "./FieldInfo";
-import { useAtomValue, useSetAtom } from "jotai";
-import { articlePreviewAtom, editorPublishSignalAtom } from "../atoms/editor";
+import { useAtomValue } from "jotai";
+import { articlePreviewAtom } from "../atoms/editor";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { useArticlePublish } from "./articlePublish";
 import * as z from "zod";
 import TopicInput from "./TopicInput";
 
+const TitleSchema = z.string()
+    .min(1, "Please enter a title")
+    .max(100, "The title cannot exceed 100 characters.");
+
+const SubtitleSchema = z.string()
+    .max(140, "The subtitle cannot exceed 140 characters.");
+
+const TopicSchema = z.array(z.string());
+
+const PreviewSchema = z.object({
+    coverImage: z.string().optional(),
+    title: TitleSchema,
+    subtitle: SubtitleSchema.optional(),
+    topics: TopicSchema,
+});
+
+export type PreviewSchema = z.infer<typeof PreviewSchema>;
+
 export default function Submission() {
     const articlePreview = useAtomValue(articlePreviewAtom);
     const navigate = useNavigate();
-    const { handlePublish, isPublishing } = useArticlePublish();
-    const setEditorPublishSignal = useSetAtom(editorPublishSignalAtom);
+    const { handlePublish, isPublishing } = useArticlePublish(articlePreview);
 
-    const defaultValues = {
+    const defaultValues: PreviewSchema = {
         coverImage: articlePreview?.coverImage[0],
-        title: articlePreview?.title,
+        title: articlePreview?.title ?? 'Title',
         subtitle: articlePreview?.subtitle,
         topics: []
     };
-
-    const TitleSchema = z.string()
-        .min(1, "Please enter a title")
-        .max(100, "The title cannot exceed 100 characters.");
-
-    const SubtitleSchema = z.string()
-        .max(140, "The subtitle cannot exceed 140 characters.");
-    const TopicSchema = z.array(z.string());
-
-    const PreviewSchema = z.object({
-        coverImage: z.string().optional(),
-        title: TitleSchema,
-        subtitle: SubtitleSchema.optional(),
-        topics: TopicSchema,
-    });
-
-    type PreviewSchema = z.infer<typeof PreviewSchema>;
 
     useEffect(() => {
         if (!articlePreview) {
@@ -46,15 +46,9 @@ export default function Submission() {
     }, [articlePreview, navigate]);
 
     const form = useForm({
-        defaultValues: defaultValues as PreviewSchema,
+        defaultValues: defaultValues,
         onSubmit: ({ value }) => {
-            setEditorPublishSignal(pre => pre + 1);
-            alert(JSON.stringify(value));
-            // handlePublish({}, {
-            //     onSuccess: () => {
-            //         resetEditor();
-            //     }
-            // });
+            handlePublish(value);
         },
         validators: {
             onChange: PreviewSchema,
@@ -161,7 +155,6 @@ export default function Submission() {
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>

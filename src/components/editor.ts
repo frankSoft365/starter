@@ -7,8 +7,6 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { en } from "@blocknote/core/locales";
 import type { PartialBlock } from '@blocknote/core';
 import { useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { toast } from 'sonner';
 import { uploadImage } from '../services/apiUpload';
 
 export function useEditor(
@@ -21,23 +19,6 @@ export function useEditor(
     const [editorEmptySignal, setEditorEmptySignal] = useAtom(editorEmptySignalAtom);
 
     let isRestoring = false;
-
-    const { isPending: isUploading, mutateAsync: uploadFile } = useMutation({
-        mutationFn: async (file: File) => {
-            if (!file) {
-                throw new Error('No file selected')
-            }
-            const formData = new FormData();
-            formData.append('avatar', file)
-            return await uploadImage(formData);
-        },
-        onSuccess: () => {
-            toast.success('Image uploaded successfully');
-        },
-        onError: (error) => {
-            toast.error(error.message);
-        }
-    })
 
     const editor = useCreateBlockNote({
         autofocus: 'end',
@@ -52,8 +33,13 @@ export function useEditor(
                 heading: "Title",
             },
         },
-        uploadFile: (file) => {
-            return uploadFile(file);
+        uploadFile: async (file) => {
+            if (!file) {
+                throw new Error('No file selected');
+            }
+            const formData = new FormData();
+            formData.append('image', file);
+            return await uploadImage(formData);
         }
     }, []);
 
