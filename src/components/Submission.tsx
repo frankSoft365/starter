@@ -7,7 +7,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { useArticlePublish } from "./articlePublish";
 import * as z from "zod";
-import TopicInput from "./TopicInput";
+import TopicInput, { TopicCandidateSchema } from "./TopicInput";
 
 const TitleSchema = z.string()
     .min(1, "Please enter a title")
@@ -16,13 +16,14 @@ const TitleSchema = z.string()
 const SubtitleSchema = z.string()
     .max(140, "The subtitle cannot exceed 140 characters.");
 
-const TopicSchema = z.array(z.string());
+const TopicSchema = z.array(TopicCandidateSchema);
 
 const PreviewSchema = z.object({
     coverImage: z.string().optional(),
     title: TitleSchema,
     subtitle: SubtitleSchema.optional(),
     topics: TopicSchema,
+    topicCandidate: TopicCandidateSchema.optional(),
 });
 
 export type PreviewSchema = z.infer<typeof PreviewSchema>;
@@ -36,7 +37,8 @@ export default function Submission() {
         coverImage: articlePreview?.coverImage[0],
         title: articlePreview?.title ?? 'Title',
         subtitle: articlePreview?.subtitle,
-        topics: []
+        topics: [],
+        topicCandidate: ''
     };
 
     useEffect(() => {
@@ -48,7 +50,8 @@ export default function Submission() {
     const form = useForm({
         defaultValues: defaultValues,
         onSubmit: ({ value }) => {
-            handlePublish(value);
+            alert(JSON.stringify(value));
+            // handlePublish(value);
         },
         validators: {
             onChange: PreviewSchema,
@@ -130,28 +133,38 @@ export default function Submission() {
                         </div>
                         <div className="relative">
                             <form.Field
-                                name="topics"
-                                mode="array"
-                                children={(field) => (
-                                    <>
-                                        <fieldset className="fieldset w-full">
-                                            <legend className="fieldset-legend text-base font-normal">Topics</legend>
-                                            <p className="label mb-1">Add up to five topics to help readers find your story.</p>
-                                            <TopicInput field={field} />
-                                        </fieldset>
+                                name="topicCandidate"
+                                children={(candidateField) => (
+                                    <form.Field
+                                        name="topics"
+                                        mode="array"
+                                        children={(topicsField) => (
+                                            <>
+                                                <fieldset className="fieldset w-full">
+                                                    <legend className="fieldset-legend text-base font-normal">Topics</legend>
+                                                    <p className="label mb-1">Add up to five topics to help readers find your story.</p>
+                                                    <TopicInput topicsField={topicsField} candidateField={candidateField} />
+                                                </fieldset>
 
-                                        <FieldInfo field={field} />
-                                    </>
+                                                <FieldInfo field={topicsField} />
+                                            </>
+                                        )}
+                                    />
                                 )}
                             />
                             <div className="absolute left-0 bottom-0">
                                 <button onClick={() => navigate({ to: editorRoute.to })} type="button" className="btn btn-neutral mr-3">
                                     Cancel
                                 </button>
-                                <button disabled={isPublishing} type="submit" className="btn btn-success">
-                                    {!isPublishing && 'Publish'}
-                                    {isPublishing && <span className="loading loading-spinner"></span>}
-                                </button>
+                                <form.Subscribe
+                                    selector={(state) => [state.canSubmit, state.isSubmitting]}
+                                    children={([canSubmit, isSubmitting]) => (
+                                        <button disabled={!canSubmit || isPublishing} type="submit" className="btn btn-success">
+                                            {!isPublishing && !isSubmitting && 'Publish'}
+                                            {(isPublishing || isSubmitting) && <span className="loading loading-spinner"></span>}
+                                        </button>
+                                    )}
+                                />
                             </div>
                         </div>
                     </div>
