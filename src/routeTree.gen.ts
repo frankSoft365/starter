@@ -15,11 +15,13 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppNeedLoginRouteImport } from './routes/_app/needLogin'
 import { Route as AppProtectedRouteRouteImport } from './routes/_app/_protected/route'
+import { Route as AppArticleArticleIdRouteImport } from './routes/_app/article.$articleId'
 import { Route as AppProtectedSubmissionRouteImport } from './routes/_app/_protected/submission'
 import { Route as AppProtectedEditorRouteImport } from './routes/_app/_protected/editor'
 import { Route as AppProtectedEmailnameRouteImport } from './routes/_app/_protected/$emailname'
 import { Route as AppProtectedMeSettingsRouteImport } from './routes/_app/_protected/me/settings'
 import { Route as AppProtectedMePasswordRouteImport } from './routes/_app/_protected/me/password'
+import { Route as AppProtectedArticlesEditArticleIdRouteImport } from './routes/_app/_protected/articles.edit.$articleId'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -49,6 +51,11 @@ const AppProtectedRouteRoute = AppProtectedRouteRouteImport.update({
   id: '/_protected',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppArticleArticleIdRoute = AppArticleArticleIdRouteImport.update({
+  id: '/article/$articleId',
+  path: '/article/$articleId',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppProtectedSubmissionRoute = AppProtectedSubmissionRouteImport.update({
   id: '/submission',
   path: '/submission',
@@ -74,6 +81,12 @@ const AppProtectedMePasswordRoute = AppProtectedMePasswordRouteImport.update({
   path: '/me/password',
   getParentRoute: () => AppProtectedRouteRoute,
 } as any)
+const AppProtectedArticlesEditArticleIdRoute =
+  AppProtectedArticlesEditArticleIdRouteImport.update({
+    id: '/articles/edit/$articleId',
+    path: '/articles/edit/$articleId',
+    getParentRoute: () => AppProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
@@ -83,8 +96,10 @@ export interface FileRoutesByFullPath {
   '/$emailname': typeof AppProtectedEmailnameRoute
   '/editor': typeof AppProtectedEditorRoute
   '/submission': typeof AppProtectedSubmissionRoute
+  '/article/$articleId': typeof AppArticleArticleIdRoute
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
+  '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -94,8 +109,10 @@ export interface FileRoutesByTo {
   '/$emailname': typeof AppProtectedEmailnameRoute
   '/editor': typeof AppProtectedEditorRoute
   '/submission': typeof AppProtectedSubmissionRoute
+  '/article/$articleId': typeof AppArticleArticleIdRoute
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
+  '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -108,8 +125,10 @@ export interface FileRoutesById {
   '/_app/_protected/$emailname': typeof AppProtectedEmailnameRoute
   '/_app/_protected/editor': typeof AppProtectedEditorRoute
   '/_app/_protected/submission': typeof AppProtectedSubmissionRoute
+  '/_app/article/$articleId': typeof AppArticleArticleIdRoute
   '/_app/_protected/me/password': typeof AppProtectedMePasswordRoute
   '/_app/_protected/me/settings': typeof AppProtectedMeSettingsRoute
+  '/_app/_protected/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,8 +140,10 @@ export interface FileRouteTypes {
     | '/$emailname'
     | '/editor'
     | '/submission'
+    | '/article/$articleId'
     | '/me/password'
     | '/me/settings'
+    | '/articles/edit/$articleId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -132,8 +153,10 @@ export interface FileRouteTypes {
     | '/$emailname'
     | '/editor'
     | '/submission'
+    | '/article/$articleId'
     | '/me/password'
     | '/me/settings'
+    | '/articles/edit/$articleId'
   id:
     | '__root__'
     | '/_app'
@@ -145,8 +168,10 @@ export interface FileRouteTypes {
     | '/_app/_protected/$emailname'
     | '/_app/_protected/editor'
     | '/_app/_protected/submission'
+    | '/_app/article/$articleId'
     | '/_app/_protected/me/password'
     | '/_app/_protected/me/settings'
+    | '/_app/_protected/articles/edit/$articleId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -199,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProtectedRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/article/$articleId': {
+      id: '/_app/article/$articleId'
+      path: '/article/$articleId'
+      fullPath: '/article/$articleId'
+      preLoaderRoute: typeof AppArticleArticleIdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/_protected/submission': {
       id: '/_app/_protected/submission'
       path: '/submission'
@@ -234,6 +266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProtectedMePasswordRouteImport
       parentRoute: typeof AppProtectedRouteRoute
     }
+    '/_app/_protected/articles/edit/$articleId': {
+      id: '/_app/_protected/articles/edit/$articleId'
+      path: '/articles/edit/$articleId'
+      fullPath: '/articles/edit/$articleId'
+      preLoaderRoute: typeof AppProtectedArticlesEditArticleIdRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
+    }
   }
 }
 
@@ -243,6 +282,7 @@ interface AppProtectedRouteRouteChildren {
   AppProtectedSubmissionRoute: typeof AppProtectedSubmissionRoute
   AppProtectedMePasswordRoute: typeof AppProtectedMePasswordRoute
   AppProtectedMeSettingsRoute: typeof AppProtectedMeSettingsRoute
+  AppProtectedArticlesEditArticleIdRoute: typeof AppProtectedArticlesEditArticleIdRoute
 }
 
 const AppProtectedRouteRouteChildren: AppProtectedRouteRouteChildren = {
@@ -251,6 +291,8 @@ const AppProtectedRouteRouteChildren: AppProtectedRouteRouteChildren = {
   AppProtectedSubmissionRoute: AppProtectedSubmissionRoute,
   AppProtectedMePasswordRoute: AppProtectedMePasswordRoute,
   AppProtectedMeSettingsRoute: AppProtectedMeSettingsRoute,
+  AppProtectedArticlesEditArticleIdRoute:
+    AppProtectedArticlesEditArticleIdRoute,
 }
 
 const AppProtectedRouteRouteWithChildren =
@@ -260,12 +302,14 @@ interface AppRouteRouteChildren {
   AppProtectedRouteRoute: typeof AppProtectedRouteRouteWithChildren
   AppNeedLoginRoute: typeof AppNeedLoginRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppArticleArticleIdRoute: typeof AppArticleArticleIdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppProtectedRouteRoute: AppProtectedRouteRouteWithChildren,
   AppNeedLoginRoute: AppNeedLoginRoute,
   AppIndexRoute: AppIndexRoute,
+  AppArticleArticleIdRoute: AppArticleArticleIdRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

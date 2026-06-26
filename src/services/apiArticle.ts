@@ -9,6 +9,7 @@ export async function getArticleList(params: any) {
     return request.post<any, ArticleListItemVO[]>('/article/list', params);
 }
 
-export async function getOneArticle(params: any) {
-    return request.post<any, ArticleVO>('/article/getOne', params);
+export async function getArticleById(id: string) {
+    return request.get<void, ArticleVO>(`/article/${id}`);
 }
+

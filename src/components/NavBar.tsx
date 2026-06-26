@@ -9,6 +9,7 @@ import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as loginRoute } from "../routes/login";
 import { editorEmptySignalAtom, editorSubmissionSignalAtom, isEditorEmptyAtom } from "../atoms/editor";
 import { isLoadingAtom } from "../atoms/user";
+import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
 
 export default function NavBar() {
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function NavBar() {
 
     // derived state
     const isEditorRoute = location.pathname === editorRoute.to;
+    const isArticleEditRoute = location.pathname.includes(articleEditRoute.to.split('$')[0]);
 
     return (
         <div className="max-lg:collapse bg-base-200 shadow-sm w-full rounded-md">
@@ -41,15 +43,20 @@ export default function NavBar() {
                 <div className="navbar-end">
                     {/* can write only when is login */}
                     <SignedIn>
-                        {!isEditorRoute && <button onClick={() => navigate({ to: editorRoute.to })} className="btn btn-ghost hidden md:inline-flex mr-2">
+                        {!isEditorRoute && !isArticleEditRoute && <button onClick={() => navigate({ to: editorRoute.to })} className="btn btn-ghost hidden md:inline-flex mr-2">
                             <NotePencilIcon size={24} />
                             Write
                         </button>}
-                        {isEditorRoute && <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-4">
-                            Publish
-                        </button>}
-                        {isEditorRoute && <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-4">
-                            Discard drafts
+                        {isEditorRoute && <>
+                            <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-4">
+                                Publish
+                            </button>
+                            <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-4">
+                                Discard drafts
+                            </button>
+                        </>}
+                        {isArticleEditRoute && <button className="btn btn-primary mr-4">
+                            Update
                         </button>}
                     </SignedIn>
                     {isLoading && <button className="btn btn-square mr-3">

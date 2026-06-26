@@ -17,6 +17,7 @@ export type ArticlePublishPreview = {
 
 export type ArticleListItemVO = {
     id: string;
+    authorId: string;
     authorName: string;
     authorAvatar: string;
     publishTime: Date;
@@ -39,6 +40,7 @@ export type ArticleVO = {
     responseNum?: number;
     repostNum?: number;
 
+    authorId: string;
     authorAvatar: string;
     authorName: string;
     publishTime: string;

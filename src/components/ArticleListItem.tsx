@@ -1,27 +1,15 @@
 import { BookmarkIcon, ChatCircleDotsIcon, DotsThreeIcon, HandsClappingIcon, RepeatIcon, ThumbsDownIcon } from "@phosphor-icons/react";
 import type { ArticleListItemVO } from "../types/article";
 import Avatar from "./Avatar";
+import { getPublishDate } from "../utils/dateHelper";
+import ArticleMenuButton from "./ArticleMenuButton";
 
 export default function ArticleListItem({ article }: { article: ArticleListItemVO }) {
 
-    function getPublishDate(date: Date) {
-        const month = date.toLocaleString('en', { month: 'short' });
-        const day = date.getDate();
-        return `${month} ${day}`;
-    }
-
-    function ArticleButton({ children }: { children: React.ReactNode }) {
-        return (
-            <button className="btn btn-ghost btn-sm pl-0.5 gap-0.5 font-light">
-                {children}
-            </button>
-        );
-    }
-
     return (
-        <li className="list-row min-h-64">
-            <div className="grid grid-cols-3 gap-4">
-                <div className="col-span-2 flex flex-col justify-between">
+        <li className="list-row min-h-64 cursor-pointer">
+            <div className={`grid gap-4 ${article.coverImage ? 'grid-cols-3' : 'col-start-1 col-end-3'}`}>
+                <div className={`flex flex-col justify-between ${article.coverImage ? 'col-span-2' : ''}`}>
                     <div className="flex flex-row items-center text-sm gap-1">
                         <Avatar imageUrl={article.authorAvatar} username={article.authorName} size="sm" />
                         <span className="ml-1.5">{article.authorName}</span>
@@ -40,22 +28,22 @@ export default function ArticleListItem({ article }: { article: ArticleListItemV
                     <div className="flex flex-row justify-between items-center">
                         <div>
                             <div className="lg:tooltip" data-tip="3K claps">
-                                <ArticleButton>
+                                <ArticleMenuButton>
                                     <HandsClappingIcon weight="fill" size={20} color="#676565" />
                                     3K
-                                </ArticleButton>
+                                </ArticleMenuButton>
                             </div>
-                            <div className="lg:tooltip text-sm" data-tip="90 responses">
-                                <ArticleButton>
+                            <div className="lg:tooltip" data-tip="90 responses">
+                                <ArticleMenuButton>
                                     <ChatCircleDotsIcon weight="fill" size={20} color="#676565" />
                                     90
-                                </ArticleButton>
+                                </ArticleMenuButton>
                             </div>
                             <div className="lg:tooltip" data-tip="20 reposts">
-                                <ArticleButton>
+                                <ArticleMenuButton>
                                     <RepeatIcon size={20} color="#676565" weight="light" />
                                     20
-                                </ArticleButton>
+                                </ArticleMenuButton>
                             </div>
                         </div>
                         <div>
@@ -77,9 +65,9 @@ export default function ArticleListItem({ article }: { article: ArticleListItemV
                         </div>
                     </div>
                 </div>
-                <div className="content-center">
+                {article.coverImage && <div className="content-center">
                     <img src={article.coverImage} alt="cover image of article" />
-                </div>
+                </div>}
             </div>
         </li >
     );

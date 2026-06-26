@@ -2,15 +2,16 @@ import ArticleListItem from "./ArticleListItem";
 import { useQuery } from "@tanstack/react-query";
 import { getArticleList } from "../services/apiArticle";
 import Loading from "./Loading";
+import { Link } from "@tanstack/react-router";
+import { Route } from "../routes/_app/article.$articleId";
 
 export default function ArticleList() {
 
-    const { data: articleList, isLoading, isError } = useQuery({
+    const { data: articleList, isLoading } = useQuery({
         queryKey: ['get-article-list'],
         queryFn: async () => {
             return await getArticleList({});
         },
-
     });
     return (
         <>
@@ -18,7 +19,12 @@ export default function ArticleList() {
             {!isLoading && <ul className="list w-3xl bg-base-100 shadow-md">
                 {articleList && articleList.map((article) => {
                     return (
-                        <ArticleListItem key={article.id} article={article} />
+                        <Link to={Route.to} params={{ articleId: article.id }}>
+                            <ArticleListItem
+                                key={article.id}
+                                article={article}
+                            />
+                        </Link>
                     );
                 })}
             </ul>}

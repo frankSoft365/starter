@@ -1,5 +1,5 @@
+import type { ArticlePublishPreview } from '@/types/article';
 import { atom } from 'jotai'
-import type { ArticlePublishPreview } from '../types/article';
 
 export const isEditorEmptyAtom = atom(true);
 

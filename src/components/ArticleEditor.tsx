@@ -1,6 +1,3 @@
-import { BlockNoteView } from "@blocknote/mantine";
-import "@blocknote/mantine/style.css";
-import "@blocknote/core/fonts/inter.css";
 import { useEditor } from "./editor";
 import { useDraft } from "./draft";
 import { useEffect } from "react";
@@ -9,6 +6,7 @@ import { articlePreviewAtom, editorPublishSignalAtom, editorSubmissionSignalAtom
 import { buildArticlePreview, isEditorEmpty } from "../utils/editorHelper";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as submissionRoute } from "../routes/_app/_protected/submission";
+import EditorComponent from "./EditorComponent";
 
 export default function ArticleEditor() {
     const { draft, setDraft, saveDraft } = useDraft();
@@ -41,9 +39,6 @@ export default function ArticleEditor() {
     }, [editorPublishSignal]);
 
     return (
-        <BlockNoteView
-            editor={editor}
-            onChange={handleEditorChange}
-        />
+        <EditorComponent editor={editor} onChange={handleEditorChange} />
     );
 }
