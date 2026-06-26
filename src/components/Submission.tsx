@@ -50,8 +50,7 @@ export default function Submission() {
     const form = useForm({
         defaultValues: defaultValues,
         onSubmit: ({ value }) => {
-            alert(JSON.stringify(value));
-            // handlePublish(value);
+            handlePublish(value);
         },
         validators: {
             onChange: PreviewSchema,

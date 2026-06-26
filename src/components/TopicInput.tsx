@@ -1,4 +1,4 @@
-import { useState, type KeyboardEvent, useMemo } from "react";
+import { useState, type KeyboardEvent } from "react";
 import Topic from "./Topic";
 import { debounce } from "es-toolkit/function";
 import { getTopicSuggestion } from "../services/apiTopic";
@@ -49,7 +49,7 @@ export default function TopicInput({ topicsField, candidateField, max = 5 }: { t
                         value={topic}
                         type="text"
                         placeholder={topicsField.state.value.length === 0 ? 'Add a topic...' : 'Add more topics...'}
-                        className="text-sm bg-transparent border-none focus:outline-none focus:shadow-none hover:border-none active:border-none flex-1 w-auto min-w-12 max-w-full h-7 p-0"
+                        className="text-sm bg-transparent border-none focus:outline-none focus:shadow-none hover:border-none active:border-none flex-1 min-w-32 max-w-full h-7 p-0"
                         onBlur={() => {
                             handleInputChange.cancel();
                             candidateField.handleChange('');
@@ -76,9 +76,9 @@ export default function TopicInput({ topicsField, candidateField, max = 5 }: { t
                                 if (!topicsField.state.value.includes(nextTopic)) {
                                     topicsField.pushValue(nextTopic);
                                 }
+                                candidateField.handleChange('');
+                                setIsDropdownShow(false);
                             }
-                            candidateField.handleChange('');
-                            setIsDropdownShow(false);
 
                         }}
                     />
