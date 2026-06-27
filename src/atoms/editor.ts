@@ -9,4 +9,6 @@ export const editorSubmissionSignalAtom = atom(0);
 
 export const editorPublishSignalAtom = atom(0);
 
+export const editorUpdateSignalAtom = atom(0);
+
 export const articlePreviewAtom = atom<null | ArticlePublishPreview>(null);

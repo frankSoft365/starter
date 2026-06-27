@@ -8,6 +8,11 @@ export type ArticlePublishRequest = {
     publishAt?: Date;
 }
 
+export type ArticleUpdateRequest = {
+    articleId: string;
+    content: string;
+}
+
 export type ArticlePublishPreview = {
     title: string;
     subtitle: string;

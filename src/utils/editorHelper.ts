@@ -52,15 +52,29 @@ export function buildArticlePreview(editor: BlockNoteEditor): ArticlePublishPrev
     const headingMarkdown = editor.blocksToMarkdownLossy([headingBlock]);
     const title = headingMarkdown.replace('#', '').trim();
     const subtitle = getSubtitle(contentBlocks);
-    console.log(contentBlocks);
     const coverImage = getImages(contentBlocks);
-
 
     return ({
         title,
         subtitle,
-        content: JSON.stringify(contentBlocks),
+        content: JSON.stringify(editor.document),
         coverImage
+    });
+}
+
+export function getTitle(editor: BlockNoteEditor, blocks: Block[]) {
+    const headingBlock = blocks[0];
+    if (headingBlock.type === 'heading') {
+        const headingMarkdown = editor.blocksToMarkdownLossy([headingBlock]);
+        const title = headingMarkdown.replace('#', '').trim();
+        return title;
+    }
+    return '';
+}
+
+export function buildArticleContent(editor: BlockNoteEditor) {
+    return ({
+        content: JSON.stringify(editor.document)
     });
 }
 

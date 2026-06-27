@@ -5,9 +5,9 @@ import { useAtomValue } from "jotai";
 import { articlePreviewAtom } from "../atoms/editor";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
-import { useArticlePublish } from "./articlePublish";
 import * as z from "zod";
 import TopicInput, { TopicCandidateSchema } from "./TopicInput";
+import { useArticlePublish } from "./article";
 
 const TitleSchema = z.string()
     .min(1, "Please enter a title")
@@ -50,7 +50,7 @@ export default function Submission() {
     const form = useForm({
         defaultValues: defaultValues,
         onSubmit: ({ value }) => {
-            handlePublish(value);
+            handlePublish({ value });
         },
         validators: {
             onChange: PreviewSchema,

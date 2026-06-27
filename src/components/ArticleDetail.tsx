@@ -1,24 +1,29 @@
 import { Route as articleRoute } from "../routes/_app/article.$articleId";
-import Loading from "./Loading";
+import Loading from "../ui/Loading";
 import Avatar from "./Avatar";
 import { getPublishDate } from "../utils/dateHelper";
-import EditorComponent from "./EditorComponent";
+import EditorComponent from "../ui/EditorComponent";
 import { BookmarkIcon, ChatCircleDotsIcon, DotsThreeIcon, ExportIcon, HandsClappingIcon, RepeatIcon, ThumbsDownIcon } from "@phosphor-icons/react";
 import ArticleMenuButton from "./ArticleMenuButton";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
-import { useCurrentArticle } from "./article";
 import { useCreateBlockNote } from "@blocknote/react";
+import { useCurrentArticle, useDeleteArticle } from "./article";
+import { Route as homeRoute } from "@/routes/_app/index";
 
-export default function Article() {
+export default function ArticleDetail() {
     const navigate = useNavigate();
     const { articleId } = articleRoute.useParams();
     const user = useAtomValue(userAtom);
     const editor = useCreateBlockNote();
 
-    const { article, isLoading } = useCurrentArticle(articleId, editor);
+    const { processedArticle, isLoading } = useCurrentArticle(articleId, editor);
+    const { handleDelete, isDeleting } = useDeleteArticle();
+
+    const article = processedArticle?.article;
+    const title = processedArticle?.title;
 
     const isOwnStory = article?.authorId === user?.id;
     const meneButtonColor = isOwnStory ? "#adadad" : "#676565";
@@ -28,7 +33,7 @@ export default function Article() {
             {isLoading && <Loading />}
             {!isLoading && article && <>
                 <div className="flex flex-col items-center w-3xl mx-auto">
-                    <h1 className="text-center font-sans font-bold text-5xl m-6">{article.title}</h1>
+                    <h1 className="text-center font-sans font-bold text-5xl m-6">{title}</h1>
                     <div className="flex flex-row items-center text-sm gap-1">
                         <Avatar imageUrl={article.authorAvatar} username={article.authorName} size="sm" />
                         <span className="ml-1.5">{article.authorName}</span>
@@ -92,18 +97,49 @@ export default function Article() {
                                         Report story...
                                     </button></li>}
                                     {isOwnStory && <li>
-                                        <button className="btn btn-ghost justify-start text-red-600">
+                                        <button onClick={() => {
+                                            const modal = document.getElementById('my_modal_3');
+                                            if (modal instanceof HTMLDialogElement) {
+                                                modal.showModal();
+                                            }
+                                        }} className="btn btn-ghost justify-start text-red-600">
                                             Delete story
                                         </button>
                                     </li>}
                                 </ul>
-
                             </div>
-
                         </div>
                     </div>
                     <div className="divider mt-0"></div>
                 </div>
+                <dialog id="my_modal_3" className="modal">
+                    <div className="modal-box w-11/12 max-w-4xl aspect-5/3 flex flex-col items-center justify-center text-center">
+                        <form method="dialog">
+                            {/* if there is a button in form, it will close the modal */}
+                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        </form>
+                        <h1 className="text-center font-bold text-3xl">Delete story</h1>
+                        <p className="pt-2 pb-3 text-base text-gray-500 text-center max-w-9/12">Deletion is not reversible, and the story will be completely deleted. If you do not want to delete, you can unlist the story.</p>
+                        <div className="modal-action justify-center items-center gap-4">
+                            <form method="dialog">
+                                {/* if there is a button, it will close the modal */}
+                                <button className="btn btn-outline">Cancel</button>
+                            </form>
+                            <button disabled={isDeleting} onClick={() => {
+                                const deleteRequest = { id: articleId };
+                                handleDelete({ deleteRequest }, {
+                                    onSuccess: () => {
+                                        const modal = document.getElementById('my_modal_3');
+                                        if (modal instanceof HTMLDialogElement) {
+                                            modal.close();
+                                        }
+                                        navigate({ to: homeRoute.to });
+                                    }
+                                });
+                            }} className="btn btn-error">Delete</button>
+                        </div>
+                    </div>
+                </dialog>
                 <EditorComponent
                     editor={editor}
                     editable={false}

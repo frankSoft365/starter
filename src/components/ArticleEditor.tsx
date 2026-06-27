@@ -6,7 +6,7 @@ import { articlePreviewAtom, editorPublishSignalAtom, editorSubmissionSignalAtom
 import { buildArticlePreview, isEditorEmpty } from "../utils/editorHelper";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as submissionRoute } from "../routes/_app/_protected/submission";
-import EditorComponent from "./EditorComponent";
+import EditorComponent from "../ui/EditorComponent";
 
 export default function ArticleEditor() {
     const { draft, setDraft, saveDraft } = useDraft();

@@ -7,7 +7,7 @@ import AvatarDropdown from "./AvatarDropdown";
 import { Route as homeRoute } from "../routes/_app/index";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as loginRoute } from "../routes/login";
-import { editorEmptySignalAtom, editorSubmissionSignalAtom, isEditorEmptyAtom } from "../atoms/editor";
+import { editorEmptySignalAtom, editorSubmissionSignalAtom, editorUpdateSignalAtom, isEditorEmptyAtom } from "../atoms/editor";
 import { isLoadingAtom } from "../atoms/user";
 import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
 
@@ -17,6 +17,7 @@ export default function NavBar() {
 
     const setEditorEmptySignal = useSetAtom(editorEmptySignalAtom);
     const setEditorPublishSignal = useSetAtom(editorSubmissionSignalAtom);
+    const setEditorUpdateSignal = useSetAtom(editorUpdateSignalAtom);
 
     const isLoading = useAtomValue(isLoadingAtom);
 
@@ -55,7 +56,7 @@ export default function NavBar() {
                                 Discard drafts
                             </button>
                         </>}
-                        {isArticleEditRoute && <button className="btn btn-primary mr-4">
+                        {isArticleEditRoute && <button onClick={() => setEditorUpdateSignal(pre => pre + 1)} className="btn btn-primary mr-4">
                             Update
                         </button>}
                     </SignedIn>
