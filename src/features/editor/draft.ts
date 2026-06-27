@@ -1,10 +1,10 @@
 import { useLocalStorage } from 'react-use';
 import { type PartialBlock } from "@blocknote/core";
-import { EDITOR_DEFAULT } from '../constants/draft';
+import { EDITOR_DEFAULT } from '../../constants/draft';
 import { debounce } from 'es-toolkit/function';
-import { isEditorEmpty } from '../utils/editorHelper';
+import { isEditorEmpty } from '../../utils/editorHelper';
 import { useSetAtom } from 'jotai';
-import { isEditorEmptyAtom } from '../atoms/editor';
+import { isEditorEmptyAtom } from '../../atoms/editor';
 
 const DRAFT_KEY = 'draft';
 

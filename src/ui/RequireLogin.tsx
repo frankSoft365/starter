@@ -1,5 +1,5 @@
 import { isLoadingAtom } from "../atoms/user";
-import Loading from "../ui/Loading";
+import Loading from "./Loading";
 import NeedLogin from "./NeedLogin";
 import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";

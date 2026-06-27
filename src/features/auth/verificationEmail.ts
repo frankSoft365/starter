@@ -1,10 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState, type Dispatch } from "react";
-import { getVerificationCode, userRegister, verifyVerificationCode, type SendCodeRequest, type UserRegisterRequest, type VerifyCodeRequest } from "../services/apiUserRegister";
+import { getVerificationCode, userRegister, verifyVerificationCode } from "@/services/apiUserRegister";
 import { toast } from "sonner";
 import type { UseNavigateResult } from "@tanstack/react-router";
-import { Route as LoginRoute } from "../routes/login";
+import { Route as LoginRoute } from "@/routes/login";
 import type { RegisterStep } from "./RegisterForm";
+import type { SendCodeRequest, UserRegisterRequest, VerifyCodeRequest } from "@/types/user";
 
 export function useVerificationEmail(
     setTimer: React.Dispatch<React.SetStateAction<number>>,

@@ -1,9 +1,9 @@
 import type React from "react";
 import { useEffect } from "react";
-import { getCurrentUser } from "../services/apiUserProfile";
 import { useSetAtom } from "jotai";
-import { isLoadingAtom, isLoginAtom, userAtom } from "../atoms/user";
+import { isLoadingAtom, isLoginAtom, userAtom } from "@/atoms/user";
 import { toast } from "sonner";
+import { getCurrentUser } from "@/services/apiUserProfile";
 
 export default function Auth({ children }: { children: React.ReactNode }) {
     const setUserInfo = useSetAtom(userAtom);

@@ -1,13 +1,13 @@
 import { type DebouncedFunction } from 'es-toolkit/function';
 import { useAtom, useSetAtom } from "jotai";
-import { editorEmptySignalAtom, isEditorEmptyAtom } from "../atoms/editor";
-import { isEditorEmpty } from "../utils/editorHelper";
-import { EDITOR_DEFAULT } from "../constants/draft";
+import { editorEmptySignalAtom, isEditorEmptyAtom } from "../../atoms/editor";
+import { isEditorEmpty } from "../../utils/editorHelper";
+import { EDITOR_DEFAULT } from "../../constants/draft";
 import { useCreateBlockNote } from "@blocknote/react";
 import { en } from "@blocknote/core/locales";
 import type { PartialBlock } from '@blocknote/core';
 import { useEffect } from 'react';
-import { uploadImage } from '../services/apiUpload';
+import { uploadImageApi } from '../../services/apiUpload';
 
 export function useEditor(
     draft: PartialBlock[] | undefined,
@@ -39,7 +39,7 @@ export function useEditor(
             }
             const formData = new FormData();
             formData.append('image', file);
-            return await uploadImage(formData);
+            return await uploadImageApi(formData);
         }
     }, []);
 

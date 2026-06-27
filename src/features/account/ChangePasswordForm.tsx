@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form"
-import FieldInfo from "./FieldInfo"
+import FieldInfo from "../../ui/FieldInfo"
 import { useChangePassword } from "./userProfile"
 import * as z from "zod";
 

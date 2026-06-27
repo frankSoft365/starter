@@ -1,10 +1,10 @@
-import { Route as articleRoute } from "../routes/_app/article.$articleId";
-import Loading from "../ui/Loading";
-import Avatar from "./Avatar";
-import { getPublishDate } from "../utils/dateHelper";
-import EditorComponent from "../ui/EditorComponent";
+import { Route as articleRoute } from "../../routes/_app/article.$articleId";
+import Loading from "../../ui/Loading";
+import Avatar from "../../ui/Avatar";
+import { getPublishDate } from "../../utils/dateHelper";
+import EditorComponent from "../../ui/EditorComponent";
 import { BookmarkIcon, ChatCircleDotsIcon, DotsThreeIcon, ExportIcon, HandsClappingIcon, RepeatIcon, ThumbsDownIcon } from "@phosphor-icons/react";
-import ArticleMenuButton from "./ArticleMenuButton";
+import ArticleMenuButton from "../../ui/ArticleMenuButton";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
 import { useNavigate } from "@tanstack/react-router";

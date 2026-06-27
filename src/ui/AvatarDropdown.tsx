@@ -1,13 +1,13 @@
 import { GearIcon, SignOutIcon } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as meSettingsRoute } from "../routes/_app/_protected/me/settings";
-import Avatar from "./Avatar";
+import Avatar from "../ui/Avatar";
 import useOverflowHelper from "../utils/overflowHelper";
 import { useAtomValue } from "jotai";
 import { isLoadingAtom, userAtom } from "../atoms/user";
 import { Route as LoginRoute } from "../routes/login";
 import { toast } from "sonner";
-import { useUserLogout } from "./userLogin";
+import { useUserLogout } from "@/features/auth/userLogin";
 
 export default function AvatarDropdown() {
     const { handleOverflow } = useOverflowHelper();

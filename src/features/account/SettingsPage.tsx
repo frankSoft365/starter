@@ -1,11 +1,11 @@
-import Avatar from "./Avatar";
+import Avatar from "../../ui/Avatar";
 import { toast } from "sonner";
 import { useUserProfile } from "./userProfile";
 import { useState } from "react";
 import SettingsPageUpdateModal from "./SettingsPageUpdateModal";
 import { ArrowSquareOutIcon } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
-import { Route as mePasswordRoute } from "../routes/_app/_protected/me/password";
+import { Route as mePasswordRoute } from "../../routes/_app/_protected/me/password";
 
 export default function SettingsPage() {
     const {

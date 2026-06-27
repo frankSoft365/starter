@@ -1,8 +1,8 @@
 import { useState, type KeyboardEvent } from "react";
-import Topic from "./Topic";
+import Topic from "../../ui/Topic";
 import { debounce } from "es-toolkit/function";
-import { getTopicSuggestion } from "../services/apiTopic";
-import type { TopicSuggestionVO } from "../types/topic";
+import { getTopicSuggestion } from "../../services/apiTopic";
+import type { TopicSuggestionVO } from "../../types/topic";
 import * as z from "zod";
 
 export const TopicCandidateSchema = z.string()

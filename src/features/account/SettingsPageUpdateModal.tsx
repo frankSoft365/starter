@@ -1,8 +1,9 @@
+import type { UserVO } from "@/types/user";
 import { type Dispatch, type SetStateAction } from "react";
-import type { UserVO } from "../types/user";
-import Avatar from "./Avatar";
-import { useUserUpdate } from "./userProfile";
 import { useChangeAvatar } from "./userAvatar";
+import { useUserUpdate } from "./userProfile";
+import Avatar from "@/ui/Avatar";
+
 
 export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user: UserVO, setIsModalOpen: Dispatch<SetStateAction<boolean>> }) {
     const { imageUploadRef, image, setImage, handleImageChange, currentAvatarFile } = useChangeAvatar(user);

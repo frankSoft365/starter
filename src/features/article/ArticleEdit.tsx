@@ -1,6 +1,6 @@
 import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
-import EditorComponent from "../ui/EditorComponent";
-import Loading from "../ui/Loading";
+import EditorComponent from "../../ui/EditorComponent";
+import Loading from "../../ui/Loading";
 import { useCreateBlockNote } from "@blocknote/react";
 import { useUpdateArticle, useCurrentArticle } from "./article";
 import { useEffect } from "react";

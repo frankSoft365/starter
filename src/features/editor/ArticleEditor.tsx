@@ -2,11 +2,11 @@ import { useEditor } from "./editor";
 import { useDraft } from "./draft";
 import { useEffect } from "react";
 import { useAtom, useSetAtom } from "jotai";
-import { articlePreviewAtom, editorPublishSignalAtom, editorSubmissionSignalAtom } from "../atoms/editor";
-import { buildArticlePreview, isEditorEmpty } from "../utils/editorHelper";
+import { articlePreviewAtom, editorPublishSignalAtom, editorSubmissionSignalAtom } from "../../atoms/editor";
+import { buildArticlePreview, isEditorEmpty } from "../../utils/editorHelper";
 import { useNavigate } from "@tanstack/react-router";
-import { Route as submissionRoute } from "../routes/_app/_protected/submission";
-import EditorComponent from "../ui/EditorComponent";
+import { Route as submissionRoute } from "../../routes/_app/_protected/submission";
+import EditorComponent from "../../ui/EditorComponent";
 
 export default function ArticleEditor() {
     const { draft, setDraft, saveDraft } = useDraft();

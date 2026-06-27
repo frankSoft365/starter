@@ -3,15 +3,15 @@ import type { BlockNoteEditor } from "@blocknote/core";
 import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { ArticlePublishPreview, ArticlePublishRequest, ArticleUpdateRequest } from "../types/article";
+import type { ArticlePublishPreview, ArticlePublishRequest, ArticleUpdateRequest } from "../../types/article";
 import { useSetAtom } from "jotai";
-import { editorPublishSignalAtom } from "../atoms/editor";
-import type { PreviewSchema } from "./Submission";
-import { publishArticle } from "../services/apiArticle";
+import { editorPublishSignalAtom } from "../../atoms/editor";
+import { publishArticle } from "../../services/apiArticle";
 import { getTitle } from "@/utils/editorHelper";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import type { DeleteRequest } from "@/types/DeleteRequest";
+import type { PreviewSchema } from "./Submission";
 
 export function useArticlePublish(articlePreview: ArticlePublishPreview | null) {
     const navigate = useNavigate();

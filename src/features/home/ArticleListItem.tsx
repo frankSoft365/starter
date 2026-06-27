@@ -1,8 +1,8 @@
 import { BookmarkIcon, ChatCircleDotsIcon, DotsThreeIcon, HandsClappingIcon, RepeatIcon, ThumbsDownIcon } from "@phosphor-icons/react";
-import type { ArticleListItemVO } from "../types/article";
-import Avatar from "./Avatar";
-import { getPublishDate } from "../utils/dateHelper";
-import ArticleMenuButton from "./ArticleMenuButton";
+import type { ArticleListItemVO } from "../../types/article";
+import Avatar from "../../ui/Avatar";
+import { getPublishDate } from "../../utils/dateHelper";
+import ArticleMenuButton from "../../ui/ArticleMenuButton";
 
 export default function ArticleListItem({ article }: { article: ArticleListItemVO }) {
 

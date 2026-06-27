@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
-import LoginForm from '../components/LoginForm'
-import SignedOut from '../components/SignedOut';
-import SignedIn from '../components/SignedIn';
-import RedirectToHome from '../components/RedirectToHome';
+import SignedOut from '../ui/SignedOut';
+import SignedIn from '../ui/SignedIn';
+import RedirectToHome from '../ui/RedirectToHome';
+import LoginForm from '@/features/auth/LoginForm';
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,

@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { changePassword, getCurrentUser, updateUserProfile } from "../services/apiUserProfile";
+import { changePassword, getCurrentUser, updateUserProfile } from "../../services/apiUserProfile";
 import { useSetAtom } from "jotai";
-import { isLoginAtom, userAtom } from "../atoms/user";
+import { isLoginAtom, userAtom } from "../../atoms/user";
 import { toast } from "sonner";
-import type { UserUpdateRequest, UserVO } from "../types/user";
+import type { UserUpdateRequest, UserVO } from "../../types/user";
 import type { Dispatch, SetStateAction } from "react";
 import { useUploadAvatar } from "./userAvatar";
-import { useUserLogout } from "./userLogin";
+import { useUserLogout } from "../auth/userLogin";
 
 export function useUserProfile() {
     const setUserInfo = useSetAtom(userAtom);

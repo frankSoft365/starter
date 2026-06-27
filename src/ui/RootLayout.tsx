@@ -1,5 +1,5 @@
-import DrawerSide from "../components/DrawerSide";
-import NavBar from "../components/NavBar";
+import DrawerSide from "./DrawerSide";
+import NavBar from "./NavBar";
 
 /**
  * Page-root-layout in addition to the login and registration page

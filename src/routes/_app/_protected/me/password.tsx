@@ -1,4 +1,4 @@
-import ChangePasswordForm from '@/components/ChangePasswordForm';
+import ChangePasswordForm from '@/features/account/ChangePasswordForm';
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_app/_protected/me/password')({

@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query'
 import { DevTools } from 'jotai-devtools'
 import 'jotai-devtools/styles.css'
-import Auth from '../components/Auth'
+import Auth from '@/features/auth/Auth'
 
 const queryClient = new QueryClient();
 

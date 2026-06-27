@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
-import { isLoadingAtom, isLoginAtom, userAtom } from "../atoms/user";
+import { isLoadingAtom, isLoginAtom, userAtom } from "@/atoms/user";
 import { useNavigate } from "@tanstack/react-router";
-import { Route as HomeRoute } from "../routes/_app/index";
+import { Route as HomeRoute } from "@/routes/_app";
 import { useState } from "react";
 import { toast } from "sonner";
-import { login, logout } from "../services/apiUserLogin";
+import { login, logout } from "@/services/apiUserLogin";
 
 export function useUserLogin() {
     const setUserInfo = useSetAtom(userAtom);

@@ -1,12 +1,12 @@
 import { useEffect } from "react"
 import { useForm } from "@tanstack/react-form";
-import FieldInfo from "./FieldInfo";
 import { useAtomValue } from "jotai";
-import { articlePreviewAtom } from "../atoms/editor";
+import { articlePreviewAtom } from "@/atoms/editor";
 import { useNavigate } from "@tanstack/react-router";
-import { Route as editorRoute } from "../routes/_app/_protected/editor";
+import { Route as editorRoute } from "@/routes/_app/_protected/editor";
 import * as z from "zod";
 import TopicInput, { TopicCandidateSchema } from "./TopicInput";
+import FieldInfo from "@/ui/FieldInfo";
 import { useArticlePublish } from "./article";
 
 const TitleSchema = z.string()
