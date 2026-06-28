@@ -1,3 +1,4 @@
+import type { ChangePasswordForm } from "@/schemas/account";
 import type { LoginForm } from "@/schemas/auth";
 
 export type UserVO = {
@@ -11,13 +12,9 @@ export type UserVO = {
 export type UserUpdateRequest = {
     username?: string;
     image?: string;
-    email?: string;
 }
 
-export type ChangePasswordRequest = {
-    currentPassword: string;
-    newPassword: string;
-}
+export type ChangePasswordRequest = ChangePasswordForm;
 
 export type UserLoginRequest = LoginForm;
 

@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { PasswordSchema } from "./auth";
 
 const USERNAME_REGEX = /^[a-zA-Z0-9_\-]+$/;
 
@@ -12,5 +13,12 @@ const UsernameSchema = z.string()
 export const AccountUpdateSchema = z.object({
     username: UsernameSchema
 });
+
+export const ChangePasswordSchema = z.object({
+    currentPassword: PasswordSchema,
+    newPassword: PasswordSchema
+});
+
+export type ChangePasswordForm = z.infer<typeof ChangePasswordSchema>;
 
 export type AccountUpdateForm = z.infer<typeof AccountUpdateSchema>;

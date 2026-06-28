@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form"
 import FieldInfo from "@/ui/FieldInfo"
 import { useChangePassword } from "./userProfile"
-import { ChangePasswordSchema, type ChangePasswordForm } from "@/schemas/auth";
+import { ChangePasswordSchema, type ChangePasswordForm } from "@/schemas/account";
 
 
 export default function ChangePasswordForm() {

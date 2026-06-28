@@ -36,7 +36,6 @@ export default function LoginForm() {
         >
             <legend className="fieldset-legend text-2xl">Login</legend>
             <div className="text-left mb-4">Enter your email below to login to your account</div>
-
             <form.Field
                 name="email"
                 children={(field) => (
@@ -55,7 +54,6 @@ export default function LoginForm() {
                     </>
                 )}
             />
-
             <form.Field
                 name="password"
                 children={(field) => (
@@ -74,11 +72,9 @@ export default function LoginForm() {
                     </>
                 )}
             />
-
             <button disabled={isLoggingIn} type="submit" className="btn btn-neutral mt-4">
                 {isLoggingIn ? <span className="loading loading-spinner"></span> : 'Login'}
             </button>
-
             <div className="text-center mt-4">Don't have an account? <Link className="link link-error font-bold" to="/register">Sign Up</Link></div>
         </form>
     );

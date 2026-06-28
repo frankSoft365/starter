@@ -1,10 +1,10 @@
-import { Route as articleRoute } from "../../routes/_app/article.$articleId";
-import Loading from "../../ui/Loading";
-import Avatar from "../../ui/Avatar";
-import { getPublishDate } from "../../utils/dateHelper";
-import EditorComponent from "../../ui/EditorComponent";
+import { Route as articleRoute } from "@/routes/_app/article.$articleId";
+import Loading from "@/ui/Loading";
+import Avatar from "@/ui/Avatar";
+import { getPublishDate } from "@/utils/dateHelper";
+import EditorComponent from "@/ui/EditorComponent";
 import { BookmarkIcon, ChatCircleDotsIcon, DotsThreeIcon, ExportIcon, HandsClappingIcon, RepeatIcon, ThumbsDownIcon } from "@phosphor-icons/react";
-import ArticleMenuButton from "../../ui/ArticleMenuButton";
+import ArticleMenuButton from "@/ui/ArticleMenuButton";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
 import { useNavigate } from "@tanstack/react-router";
@@ -12,6 +12,7 @@ import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edi
 import { useCreateBlockNote } from "@blocknote/react";
 import { useCurrentArticle, useDeleteArticle } from "./article";
 import { Route as homeRoute } from "@/routes/_app/index";
+import CurrentUser from "@/ui/CurrentUser";
 
 export default function ArticleDetail() {
     const navigate = useNavigate();
@@ -85,27 +86,31 @@ export default function ArticleDetail() {
                                             Show less like this
                                         </button>
                                     </li>}
-                                    {isOwnStory && <li>
-                                        <button onClick={() => navigate({ to: articleEditRoute.to, params: { articleId: article.id } })} className="btn btn-ghost justify-start">
-                                            Edit story
-                                        </button>
-                                    </li>}
+                                    <CurrentUser authorId={article.authorId}>
+                                        <li>
+                                            <button onClick={() => navigate({ to: articleEditRoute.to, params: { articleId: article.id } })} className="btn btn-ghost justify-start">
+                                                Edit story
+                                            </button>
+                                        </li>
+                                    </CurrentUser>
                                     {!isOwnStory && <li><button className="btn btn-ghost justify-start">
                                         Follow author
                                     </button></li>}
                                     {!isOwnStory && <li><button className="btn btn-ghost justify-start text-red-600">
                                         Report story...
                                     </button></li>}
-                                    {isOwnStory && <li>
-                                        <button onClick={() => {
-                                            const modal = document.getElementById('my_modal_3');
-                                            if (modal instanceof HTMLDialogElement) {
-                                                modal.showModal();
-                                            }
-                                        }} className="btn btn-ghost justify-start text-red-600">
-                                            Delete story
-                                        </button>
-                                    </li>}
+                                    <CurrentUser authorId={article.authorId}>
+                                        <li>
+                                            <button onClick={() => {
+                                                const modal = document.getElementById('my_modal_3');
+                                                if (modal instanceof HTMLDialogElement) {
+                                                    modal.showModal();
+                                                }
+                                            }} className="btn btn-ghost justify-start text-red-600">
+                                                Delete story
+                                            </button>
+                                        </li>
+                                    </CurrentUser>
                                 </ul>
                             </div>
                         </div>
