@@ -11,6 +11,7 @@ interface ChangePassword {
 const PASSWORD_REGEX = /^[a-zA-Z0-9!@#$%*+=_\-]+$/;
 
 const PasswordSchema = z.string()
+    .trim()
     .min(1, "Password is required")
     .min(6, "Password must be between 6 and 20 characters.")
     .max(20, "Password must be between 6 and 20 characters.")
@@ -36,7 +37,7 @@ export default function ChangePasswordForm() {
             onChange: ChangePasswordSchema,
             onSubmit: ChangePasswordSchema
         },
-    })
+    });
 
     return (
         <main className="mx-auto">

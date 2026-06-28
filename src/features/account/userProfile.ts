@@ -36,20 +36,16 @@ export function useUserUpdate(
     currentAvatarFile: File | null
 ) {
     const [isRemoveAvatar, setIsRemoveAvatar] = useState(false);
-    const [username, setUsername] = useState<string>(user.username);
 
     const queryClient = useQueryClient();
 
     const { uploadAvatar, isUploading } = useUploadAvatar(currentAvatarFile);
 
     const { isPending: isUpdating, mutate: handleUpdate } = useMutation({
-        mutationFn: async () => {
+        mutationFn: async ({ username }: { username: string }) => {
             let newUserName = '';
             let newAvatarURL = '';
 
-            if (!username.length) {
-                throw new Error('Name is required');
-            }
             if (username !== user.username) {
                 newUserName = username;
             }
@@ -84,8 +80,6 @@ export function useUserUpdate(
         }
     })
     return ({
-        username,
-        setUsername,
         isUpdating,
         handleUpdate,
         setIsRemoveAvatar,

@@ -10,20 +10,26 @@ import { Route as loginRoute } from "../routes/login";
 import { editorEmptySignalAtom, editorSubmissionSignalAtom, editorUpdateSignalAtom, isEditorEmptyAtom } from "../atoms/editor";
 import { isLoadingAtom } from "../atoms/user";
 import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
+import { isDirtyAtom } from "@/atoms/article";
 
 export default function NavBar() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    // editor discard publish update work flow
     const setEditorEmptySignal = useSetAtom(editorEmptySignalAtom);
     const setEditorPublishSignal = useSetAtom(editorSubmissionSignalAtom);
     const setEditorUpdateSignal = useSetAtom(editorUpdateSignalAtom);
 
-    const isLoading = useAtomValue(isLoadingAtom);
+    // article update
+    const isDirty = useAtomValue(isDirtyAtom);
 
+    // user Auth info loading
+    const isLoading = useAtomValue(isLoadingAtom);
+    // article editor
     const isEditorEmpty = useAtomValue(isEditorEmptyAtom);
 
-    // derived state
+    // derived state - route path info
     const isEditorRoute = location.pathname === editorRoute.to;
     const isArticleEditRoute = location.pathname.includes(articleEditRoute.to.split('$')[0]);
 
@@ -37,7 +43,7 @@ export default function NavBar() {
                         {/* Sidebar toggle icon */}
                         <SidebarIcon size={32} />
                     </label>
-                    <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost text-xl mr-2">Aedium</button>
+                    <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost font-serif text-xl mr-2">Aedium</button>
                     {/* search input field */}
                     <input type="text" placeholder="Search" className="input input-bordered w-36 lg:w-auto mr-2" />
                 </div>
@@ -56,7 +62,7 @@ export default function NavBar() {
                                 Discard drafts
                             </button>
                         </>}
-                        {isArticleEditRoute && <button onClick={() => setEditorUpdateSignal(pre => pre + 1)} className="btn btn-primary mr-4">
+                        {isArticleEditRoute && <button disabled={!isDirty} onClick={() => setEditorUpdateSignal(pre => pre + 1)} className="btn btn-primary mr-4">
                             Update
                         </button>}
                     </SignedIn>
