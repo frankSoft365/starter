@@ -3,19 +3,20 @@ import { useSetAtom } from "jotai";
 import { isLoadingAtom, isLoginAtom, userAtom } from "@/atoms/user";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as HomeRoute } from "@/routes/_app";
-import { useState } from "react";
 import { toast } from "sonner";
 import { login, logout } from "@/services/apiUserLogin";
+import type { LoginForm } from "@/schemas/auth";
 
 export function useUserLogin() {
     const setUserInfo = useSetAtom(userAtom);
     const setIsLogin = useSetAtom(isLoginAtom);
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
     const { isPending: isLoggingIn, mutate: userLogin } = useMutation({
-        mutationFn: login,
+        mutationFn: async ({ value }: { value: LoginForm }) => {
+            const userInfo = await login(value);
+            return userInfo;
+        },
         onSuccess: async (userInfo) => {
             toast.success('Login successful');
             setIsLogin(true);
@@ -29,10 +30,6 @@ export function useUserLogin() {
     return ({
         userLogin,
         isLoggingIn,
-        email,
-        setEmail,
-        password,
-        setPassword
     });
 }
 

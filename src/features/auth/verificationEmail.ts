@@ -1,18 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState, type Dispatch } from "react";
+import { useEffect, useState } from "react";
 import { getVerificationCode, userRegister, verifyVerificationCode } from "@/services/apiUserRegister";
 import { toast } from "sonner";
-import type { UseNavigateResult } from "@tanstack/react-router";
-import { Route as LoginRoute } from "@/routes/login";
-import type { RegisterStep } from "./RegisterForm";
 import type { SendCodeRequest, UserRegisterRequest, VerifyCodeRequest } from "@/types/user";
 
-export function useVerificationEmail(
-    setTimer: React.Dispatch<React.SetStateAction<number>>,
-    setCanResend: React.Dispatch<React.SetStateAction<boolean>>,
-    setStep: Dispatch<React.SetStateAction<RegisterStep>>,
-    navigate: UseNavigateResult<string>
-) {
+export function useVerificationEmail() {
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('');
     const [username, setUsername] = useState('');
@@ -20,8 +12,7 @@ export function useVerificationEmail(
     const [token, setToken] = useState('');
 
     const { mutate: sendVerificationCode, isPending: isSending } = useMutation({
-        mutationFn: async () => {
-            console.log('发送验证码到', email);
+        mutationFn: async ({ }: {}) => {
             const request = {
                 email
             } as SendCodeRequest;
@@ -29,9 +20,6 @@ export function useVerificationEmail(
         },
         mutationKey: ['send-verification-code'],
         onSuccess: () => {
-            setTimer(60);
-            setCanResend(false);
-            setStep('VERIFY');
             toast.success('Verification code has been sent');
         },
         onError: (error) => {
@@ -41,8 +29,7 @@ export function useVerificationEmail(
 
 
     const { mutate: verifyCode, isPending: isVerifying } = useMutation({
-        mutationFn: async () => {
-            console.log('验证', email, code);
+        mutationFn: async ({ }: {}) => {
             const request = {
                 email: email,
                 verifyCode: code
@@ -53,7 +40,6 @@ export function useVerificationEmail(
         mutationKey: ['verify-verification-code'],
         onSuccess: (token) => {
             setToken(token);
-            setStep('USERINFO');
             toast.success('Email verification successful');
         },
         onError: (error) => {
@@ -63,21 +49,17 @@ export function useVerificationEmail(
 
 
     const { mutate: registerUser, isPending: isRegister } = useMutation({
-        mutationFn: async () => {
-            console.log('注册', { email, username, password });
+        mutationFn: async ({ }: {}) => {
             const request = {
                 token,
                 username,
                 password
             } as UserRegisterRequest;
-            const userId = await userRegister(request);
-            return userId
+            await userRegister(request);
         },
         mutationKey: ['user-register'],
-        onSuccess: (userId) => {
-            console.log('user register id : ', userId);
+        onSuccess: () => {
             toast.success('Registration successful');
-            navigate({ to: LoginRoute.to });
         },
         onError: (error) => {
             toast.error(error.message);

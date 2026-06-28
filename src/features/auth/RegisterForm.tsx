@@ -1,11 +1,13 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTimer, useVerificationEmail } from './verificationEmail';
+import { Route as LoginRoute } from "@/routes/login";
 
 export type RegisterStep = 'EMAIL' | 'VERIFY' | 'USERINFO';
 
 export default function RegisterForm() {
     const [step, setStep] = useState<RegisterStep>('EMAIL');
+    const navigate = useNavigate();
 
     const {
         timer,
@@ -13,8 +15,6 @@ export default function RegisterForm() {
         canResend,
         setCanResend
     } = useTimer();
-
-    const navigate = useNavigate()
 
     const {
         email,
@@ -31,24 +31,38 @@ export default function RegisterForm() {
         isVerifying,
         registerUser,
         isRegister
-    } = useVerificationEmail(setTimer, setCanResend, setStep, navigate);
+    } = useVerificationEmail();
 
     const handleEmailSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!email) return;
-        sendVerificationCode();
+        sendVerificationCode({}, {
+            onSuccess: () => {
+                setTimer(60);
+                setCanResend(false);
+                setStep('VERIFY');
+            }
+        });
     };
 
     const handleVerifySubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        verifyCode();
+        verifyCode({}, {
+            onSuccess: () => {
+                setStep('USERINFO');
+            }
+        });
 
     };
 
     const handleUserInfoSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!username || !password) return;
-        registerUser();
+        registerUser({}, {
+            onSuccess: () => {
+                navigate({ to: LoginRoute.to });
+            }
+        });
     };
 
     return (
@@ -90,7 +104,13 @@ export default function RegisterForm() {
                         type="button"
                         className="btn btn-secondary mt-4"
                         disabled={!canResend}
-                        onClick={() => sendVerificationCode()}
+                        onClick={() => sendVerificationCode({}, {
+                            onSuccess: () => {
+                                setTimer(60);
+                                setCanResend(false);
+                                setStep('VERIFY');
+                            }
+                        })}
                     >
                         {canResend ? 'Resend Code' : `Resend in ${timer}s`}
                     </button>

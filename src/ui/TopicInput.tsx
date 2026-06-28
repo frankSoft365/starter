@@ -1,14 +1,9 @@
 import { useState, type KeyboardEvent } from "react";
-import Topic from "../../ui/Topic";
+import Topic from "./Topic";
 import { debounce } from "es-toolkit/function";
-import { getTopicSuggestion } from "../../services/apiTopic";
-import type { TopicSuggestionVO } from "../../types/topic";
-import * as z from "zod";
-
-export const TopicCandidateSchema = z.string()
-    .trim()
-    .regex(/^[\p{L}0-9\s-]*$/u, "Tags only support letters, numbers, spaces and dashes.")
-    .max(25, "A tag name must be 25 characters max.");
+import { getTopicSuggestion } from "../services/apiTopic";
+import type { TopicSuggestionVO } from "../types/topic";
+import { TopicCandidateSchema } from "@/schemas/article";
 
 function formatArticlesCount(count: string) {
     const num = Number(count);

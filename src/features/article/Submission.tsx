@@ -4,36 +4,17 @@ import { useAtomValue } from "jotai";
 import { articlePreviewAtom } from "@/atoms/editor";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as editorRoute } from "@/routes/_app/_protected/editor";
-import * as z from "zod";
-import TopicInput, { TopicCandidateSchema } from "./TopicInput";
+import TopicInput from "@/ui/TopicInput";
 import FieldInfo from "@/ui/FieldInfo";
 import { useArticlePublish } from "./article";
-
-const TitleSchema = z.string()
-    .min(1, "Please enter a title")
-    .max(100, "The title cannot exceed 100 characters.");
-
-const SubtitleSchema = z.string()
-    .max(140, "The subtitle cannot exceed 140 characters.");
-
-const TopicSchema = z.array(TopicCandidateSchema);
-
-const PreviewSchema = z.object({
-    coverImage: z.string().optional(),
-    title: TitleSchema,
-    subtitle: SubtitleSchema.optional(),
-    topics: TopicSchema,
-    topicCandidate: TopicCandidateSchema.optional(),
-});
-
-export type PreviewSchema = z.infer<typeof PreviewSchema>;
+import { ArticleSubmissionSchema, type ArticleSubmissionForm } from "@/schemas/article";
 
 export default function Submission() {
     const articlePreview = useAtomValue(articlePreviewAtom);
     const navigate = useNavigate();
     const { handlePublish, isPublishing } = useArticlePublish(articlePreview);
 
-    const defaultValues: PreviewSchema = {
+    const defaultValues: ArticleSubmissionForm = {
         coverImage: articlePreview?.coverImage[0],
         title: articlePreview?.title ?? 'Title',
         subtitle: articlePreview?.subtitle,
@@ -41,22 +22,23 @@ export default function Submission() {
         topicCandidate: ''
     };
 
-    useEffect(() => {
-        if (!articlePreview) {
-            navigate({ to: editorRoute.to });
-        }
-    }, [articlePreview, navigate]);
-
     const form = useForm({
         defaultValues: defaultValues,
         onSubmit: ({ value }) => {
             handlePublish({ value });
         },
         validators: {
-            onChange: PreviewSchema,
-            onSubmit: PreviewSchema
+            onChange: ArticleSubmissionSchema,
+            onSubmit: ArticleSubmissionSchema
         },
     })
+
+    useEffect(() => {
+        if (!articlePreview) {
+            navigate({ to: editorRoute.to });
+        }
+    }, [articlePreview, navigate]);
+
     return (
         <div className="card w-5xl bg-base-100 card-xl shadow-sm mx-auto mt-12">
             <div className="card-body w-full">

@@ -11,7 +11,7 @@ import { getTitle } from "@/utils/editorHelper";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import type { DeleteRequest } from "@/types/DeleteRequest";
-import type { PreviewSchema } from "./Submission";
+import type { ArticleSubmissionForm } from "@/schemas/article";
 
 export function useArticlePublish(articlePreview: ArticlePublishPreview | null) {
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ export function useArticlePublish(articlePreview: ArticlePublishPreview | null) 
 
     const { mutate: handlePublish, isPending: isPublishing } = useMutation({
         mutationKey: ['publish-article'],
-        mutationFn: async ({ value }: { value: PreviewSchema }) => {
+        mutationFn: async ({ value }: { value: ArticleSubmissionForm }) => {
             if (!articlePreview) {
                 throw new Error('No article submission content.');
             }

@@ -1,52 +1,78 @@
 import { Link } from "@tanstack/react-router";
 import { useUserLogin } from "./userLogin";
+import { useForm } from "@tanstack/react-form";
+import { LoginSchema, type LoginForm } from "@/schemas/auth";
+import FieldInfo from "@/ui/FieldInfo";
 
 export default function LoginForm() {
     const {
         userLogin,
         isLoggingIn,
-        email,
-        setEmail,
-        password,
-        setPassword
     } = useUserLogin();
+
+    const defaultValues: LoginForm = {
+        email: '',
+        password: ''
+    }
+
+    const form = useForm({
+        defaultValues: defaultValues,
+        onSubmit: ({ value }) => {
+            userLogin({ value });
+        },
+        validators: {
+            onBlur: LoginSchema,
+            onSubmit: LoginSchema
+        },
+    });
 
     return (
         <form
-            onSubmit={(event) => {
-                event.preventDefault();
-                userLogin({ email, password });
+            onSubmit={(e) => {
+                e.preventDefault()
+                form.handleSubmit()
             }}
             className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-8"
         >
             <legend className="fieldset-legend text-2xl">Login</legend>
             <div className="text-left mb-4">Enter your email below to login to your account</div>
 
-            <label className="label">Email</label>
-
-            <input
-                type="email"
-                placeholder="Email"
-                disabled={isLoggingIn}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input validator"
-                required
+            <form.Field
+                name="email"
+                children={(field) => (
+                    <>
+                        <label className="label">Email</label>
+                        <input
+                            disabled={isLoggingIn}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            className="input"
+                            type="email"
+                            placeholder="Email"
+                        />
+                        <FieldInfo field={field} />
+                    </>
+                )}
             />
 
-            <label className="label">Password</label>
-            <input
-                type="password"
-                className="input validator"
-                placeholder="Password"
-                required
-                disabled={isLoggingIn}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                pattern="^[a-zA-Z0-9!@#$%*+=_\-]+$"
-                minLength={6}
-                maxLength={20}
-                title="Only letters, numbers or dash"
+            <form.Field
+                name="password"
+                children={(field) => (
+                    <>
+                        <label className="label">Password</label>
+                        <input
+                            disabled={isLoggingIn}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            type="password"
+                            className="input"
+                            placeholder="Password"
+                        />
+                        <FieldInfo field={field} />
+                    </>
+                )}
             />
 
             <button disabled={isLoggingIn} type="submit" className="btn btn-neutral mt-4">

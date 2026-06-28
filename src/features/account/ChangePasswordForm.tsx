@@ -1,32 +1,13 @@
 import { useForm } from "@tanstack/react-form"
-import FieldInfo from "../../ui/FieldInfo"
+import FieldInfo from "@/ui/FieldInfo"
 import { useChangePassword } from "./userProfile"
-import * as z from "zod";
+import { ChangePasswordSchema, type ChangePasswordForm } from "@/schemas/auth";
 
-interface ChangePassword {
-    currentPassword: string
-    newPassword: string
-}
-
-const PASSWORD_REGEX = /^[a-zA-Z0-9!@#$%*+=_\-]+$/;
-
-const PasswordSchema = z.string()
-    .trim()
-    .min(1, "Password is required")
-    .min(6, "Password must be between 6 and 20 characters.")
-    .max(20, "Password must be between 6 and 20 characters.")
-    .regex(PASSWORD_REGEX, "Password does not match required format");
-
-const ChangePasswordSchema = z.object({
-    currentPassword: PasswordSchema,
-    newPassword: PasswordSchema
-});
 
 export default function ChangePasswordForm() {
-
     const { handleChangePassword, isChanging } = useChangePassword();
 
-    const defaultValues: ChangePassword = { currentPassword: '', newPassword: '' }
+    const defaultValues: ChangePasswordForm = { currentPassword: '', newPassword: '' }
 
     const form = useForm({
         defaultValues: defaultValues,

@@ -5,22 +5,7 @@ import { useUserUpdate } from "./userProfile";
 import Avatar from "@/ui/Avatar";
 import { useForm, useStore } from "@tanstack/react-form";
 import FieldInfo from "@/ui/FieldInfo";
-import * as z from "zod";
-
-const USERNAME_REGEX = /^[a-zA-Z0-9_\-]+$/;
-
-const UsernameSchema = z.string()
-    .trim()
-    .min(1, "Username is required")
-    .min(6, "Username must be between 6 and 20 characters.")
-    .max(20, "Username must be between 6 and 20 characters.")
-    .regex(USERNAME_REGEX, "Username does not match required format");
-
-const FormSchema = z.object({
-    username: UsernameSchema
-})
-
-type FormSchema = z.infer<typeof FormSchema>;
+import { AccountUpdateSchema, type AccountUpdateForm } from "@/schemas/account";
 
 export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user: UserVO, setIsModalOpen: Dispatch<SetStateAction<boolean>> }) {
     const { imageUploadRef, image, setImage, handleImageChange, currentAvatarFile } = useChangeAvatar(user);
@@ -32,7 +17,7 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
         isUploading
     } = useUserUpdate(user, setIsModalOpen, currentAvatarFile);
 
-    const defaultValues: FormSchema = { username: user.username }
+    const defaultValues: AccountUpdateForm = { username: user.username }
 
     const form = useForm({
         defaultValues: defaultValues,
@@ -40,8 +25,8 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
             handleUpdate(value);
         },
         validators: {
-            onChange: FormSchema,
-            onSubmit: FormSchema
+            onChange: AccountUpdateSchema,
+            onSubmit: AccountUpdateSchema
         },
     });
 
