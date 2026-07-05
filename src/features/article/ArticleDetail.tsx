@@ -20,7 +20,7 @@ export default function ArticleDetail() {
     const user = useAtomValue(userAtom);
     const editor = useCreateBlockNote();
 
-    const { processedArticle, isLoading } = useCurrentArticle(articleId, editor);
+    const { processedArticle, isLoading, isError, error } = useCurrentArticle(articleId, editor);
     const { handleDelete, isDeleting } = useDeleteArticle();
 
     const article = processedArticle?.article;
@@ -31,8 +31,13 @@ export default function ArticleDetail() {
 
     return (
         <>
-            {isLoading && <Loading />}
-            {!isLoading && article && <>
+            {isLoading && !isError && <Loading />}
+            {isError && <main className="flex items-center justify-center min-h-screen">
+                <div className="text-3xl text-red-600">
+                    {error?.message || 'Failed to load article content.'}
+                </div>
+            </main>}
+            {!isLoading && !isError && article && <>
                 <div className="flex flex-col items-center w-3xl mx-auto">
                     <h1 className="text-center font-sans font-bold text-5xl m-6">{title}</h1>
                     <div className="flex flex-row items-center text-sm gap-1">

@@ -17,7 +17,7 @@ export default function Auth({ children }: { children: React.ReactNode }) {
                 setUserInfo(userInfo);
                 setIsLogin(true);
             } catch (error) {
-                if (error instanceof Error) {
+                if (error instanceof Error && error.message) {
                     toast.error(error.message);
                 }
             } finally {

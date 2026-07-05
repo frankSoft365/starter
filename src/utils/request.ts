@@ -42,7 +42,7 @@ request.interceptors.response.use(
                             toast.error(error.message);
                         }
                     }
-                    return Promise.reject();
+                    return Promise.reject(new Error());
                 case 403:
                     msg = "No permission is granted for the current operation.";
                     break;

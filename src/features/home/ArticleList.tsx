@@ -7,7 +7,7 @@ import { Route } from "../../routes/_app/article.$articleId";
 
 export default function ArticleList() {
 
-    const { data: articleList, isLoading } = useQuery({
+    const { data: articleList, isLoading, isError, error } = useQuery({
         queryKey: ['get-article-list'],
         queryFn: async () => {
             return await getArticleList({});
@@ -15,8 +15,13 @@ export default function ArticleList() {
     });
     return (
         <>
-            {isLoading && <Loading />}
-            {!isLoading && <ul className="list w-3xl bg-base-100 shadow-md">
+            {isLoading && !isError && <Loading />}
+            {isError && <main className="flex items-center justify-center min-h-screen">
+                <div className="text-3xl text-red-600">
+                    {error.message || 'Failed to load article list.'}
+                </div>
+            </main>}
+            {!isLoading && !isError && <ul className="list w-3xl bg-base-100 shadow-md">
                 {articleList && articleList.map((article) => {
                     return (
                         <Link key={article.id} to={Route.to} params={{ articleId: article.id }}>

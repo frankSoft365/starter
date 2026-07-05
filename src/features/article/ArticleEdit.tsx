@@ -18,7 +18,7 @@ export default function ArticleEdit() {
     const { articleId } = articleEditRoute.useParams();
     const editor = useCreateBlockNote();
 
-    const { processedArticle, isLoading } = useCurrentArticle(articleId, editor, false);
+    const { processedArticle, isLoading, isError, error } = useCurrentArticle(articleId, editor, false);
     const article = processedArticle?.article;
 
     const editorUpdateSignal = useAtomValue(editorUpdateSignalAtom);
@@ -78,6 +78,11 @@ export default function ArticleEdit() {
     return (
         <>
             {isLoading && <Loading />}
+            {isError && <main className="flex items-center justify-center min-h-screen">
+                <div className="text-3xl text-red-600">
+                    {error?.message || 'Failed to load article content.'}
+                </div>
+            </main>}
             {!isLoading && article && <>
                 <EditorComponent
                     editor={editor}
