@@ -38,8 +38,8 @@ export default function ArticleDetail() {
                 </div>
             </main>}
             {!isLoading && !isError && article && <>
-                <div className="flex flex-col items-center w-3xl mx-auto">
-                    <h1 className="text-center font-sans font-bold text-5xl m-6">{title}</h1>
+                <div className="flex flex-col items-center w-full lg:w-3xl mx-auto">
+                    <h1 className="text-center font-sans font-bold text-3xl lg:text-5xl m-6">{title}</h1>
                     <div className="flex flex-row items-center text-sm gap-1">
                         <Avatar imageUrl={article.authorAvatar} username={article.authorName} size="sm" />
                         <span className="ml-1.5">{article.authorName}</span>
@@ -48,7 +48,7 @@ export default function ArticleDetail() {
                     </div>
                     <div className="divider mb-0"></div>
                     <div className="flex flex-row items-center justify-around w-full">
-                        <div>
+                        <div className="flex flex-row">
                             <div className="lg:tooltip mx-2" data-tip={isOwnStory ? 'Your cannot applaud your own story' : "3K claps"}>
                                 <ArticleMenuButton disable={isOwnStory}>
                                     <HandsClappingIcon size={24} color={meneButtonColor} weight="light" />
@@ -68,7 +68,7 @@ export default function ArticleDetail() {
                                 </ArticleMenuButton>
                             </div>
                         </div>
-                        <div>
+                        <div className="flex flex-row">
                             <div className="lg:tooltip mx-2" data-tip="Save">
                                 <button className="btn btn-square btn-ghost">
                                     <BookmarkIcon size={24} color="#676565" weight="light" />
