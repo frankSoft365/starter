@@ -8,6 +8,8 @@ import { logout } from '../services/apiUserLogin';
 const jotaiStore = getDefaultStore()
 
 const request = axios.create({
+    // prod: https://aedium.franksoft.top
+    // dev: http://localhost:8070
     baseURL: 'https://aedium.franksoft.top',
     withCredentials: true,
     timeout: 10000
