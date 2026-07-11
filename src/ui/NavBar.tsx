@@ -30,6 +30,7 @@ export default function NavBar() {
     const isEditorEmpty = useAtomValue(isEditorEmptyAtom);
 
     // derived state - route path info
+    const isHomeRoute = location.pathname === homeRoute.to;
     const isEditorRoute = location.pathname === editorRoute.to;
     const isArticleEditRoute = location.pathname.includes(articleEditRoute.to.split('$')[0]);
 
@@ -43,9 +44,9 @@ export default function NavBar() {
                         {/* Sidebar toggle icon */}
                         <SidebarIcon size={32} />
                     </label>
-                    <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost font-serif text-xl mr-2">Aedium</button>
+                    <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost btn-sm font-serif text-sm mr-2 lg:text-xl lg:btn-md">Aedium</button>
                     {/* search input field */}
-                    <input type="text" placeholder="Search" className="input input-bordered w-36 lg:w-auto mr-2" />
+                    {isHomeRoute && <input type="text" placeholder="Search" className="input input-bordered w-36 lg:w-auto mr-2" />}
                 </div>
                 <div className="navbar-end">
                     {/* can write only when is login */}
@@ -55,10 +56,10 @@ export default function NavBar() {
                             Write
                         </button>}
                         {isEditorRoute && <>
-                            <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-4">
+                            <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-2 btn-sm lg:btn-md lg:mr-4">
                                 Publish
                             </button>
-                            <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-4">
+                            <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-4 btn-sm lg:btn-md">
                                 Discard drafts
                             </button>
                         </>}

@@ -22,7 +22,7 @@ export default function ArticleList() {
                 </div>
             </main>}
 
-            {!isLoading && !isError && articleList && <ul className="list w-3xl bg-base-100 shadow-md">
+            {!isLoading && !isError && articleList && <ul className="list w-full lg:w-3xl bg-base-100 shadow-md">
                 {articleList.length === 0 && <main className="flex items-center justify-center min-h-screen">
                     <div className="text-3xl text-red-600">
                         Article not found.

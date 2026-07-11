@@ -25,8 +25,8 @@ export default function ArticleListItem({ article }: { article: ArticleListItemV
                             {article.subtitle}
                         </p>
                     </div>
-                    <div className="flex flex-row justify-between items-center">
-                        <div>
+                    <div className="flex flex-col lg:flex-row justify-between lg:items-center">
+                        <div className="flex flex-row">
                             <div className="lg:tooltip" data-tip="3K claps">
                                 <ArticleMenuButton>
                                     <HandsClappingIcon weight="fill" size={20} color="#676565" />
@@ -46,7 +46,7 @@ export default function ArticleListItem({ article }: { article: ArticleListItemV
                                 </ArticleMenuButton>
                             </div>
                         </div>
-                        <div>
+                        <div className="flex flex-row">
                             <div className="lg:tooltip" data-tip="I'm not interested in this story">
                                 <button className="btn btn-square btn-ghost">
                                     <ThumbsDownIcon size={24} color="#676565" weight="light" />
