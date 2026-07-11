@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "@tanstack/react-form";
 import { useAtomValue } from "jotai";
 import { articlePreviewAtom } from "@/atoms/editor";
@@ -21,6 +21,10 @@ export default function Submission() {
         topics: [],
         topicCandidate: ''
     };
+
+    const [isModalShow, setIsModalShow] = useState(false);
+    const [newImage, setNewImage] = useState(articlePreview?.coverImage[0]);
+    const coverImages = articlePreview?.coverImage || [];
 
     const form = useForm({
         defaultValues: defaultValues,
@@ -57,9 +61,36 @@ export default function Submission() {
                                     <>
                                         <fieldset className="fieldset w-full">
                                             <legend className="fieldset-legend text-base font-normal">Cover image</legend>
-                                            {field.state.value
-                                                ? <img src={field.state.value} />
-                                                : <div className="bg-gray-100 w-full h-48 text-left content-center text-sm p-8 text-gray-500">Include a high-quality image in your story to make it more inviting to readers.</div>
+                                            {
+                                                field.state.value
+                                                    ?
+                                                    <>
+                                                        {!isModalShow && <div className="relative w-full">
+                                                            <img src={field.state.value} />
+                                                            {!isModalShow && <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
+                                                                <button onClick={() => setIsModalShow(true)} type="button" className="rounded-full btn btn-neutral bg-black/75 mb-2">Change preview image</button>
+                                                                <button type="button" className="rounded-full btn btn-neutral bg-black/75">Adjust image</button>
+                                                            </div>}
+                                                        </div>}
+                                                        {isModalShow &&
+                                                            <div className="p-4 w-full bg-gray-100 min-h-84">
+                                                                <button className="btn btn-ghost mb-2" onClick={() => {
+                                                                    field.handleChange(newImage);
+                                                                    setIsModalShow(false);
+                                                                }} >Done</button>
+                                                                <div className="grid grid-cols-3 gap-1 lg:gap-4">
+                                                                    {coverImages.map((imageUrl, index) => {
+                                                                        return (
+                                                                            <div key={index} className={`w-24 h-24 lg:w-30 lg:h-30 ${imageUrl === newImage && 'border-4 border-green-500'}`}>
+                                                                                <img onClick={() => setNewImage(imageUrl)} className="w-full h-full object-center object-cover" src={imageUrl} />
+                                                                            </div>
+                                                                        );
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </>
+                                                    : <div className="bg-gray-100 w-full h-48 text-left content-center text-sm p-8 text-gray-500">Include a high-quality image in your story to make it more inviting to readers.</div>
                                             }
 
                                         </fieldset>
@@ -67,47 +98,51 @@ export default function Submission() {
                                     </>
                                 )}
                             />
-                            <form.Field
-                                name="title"
-                                children={(field) => (
-                                    <>
-                                        <fieldset className="fieldset w-full">
-                                            <legend className="fieldset-legend text-base font-normal">Title</legend>
-                                            <input
-                                                value={field.state.value}
-                                                onBlur={field.handleBlur}
-                                                onChange={(e) => field.handleChange(e.target.value)}
-                                                type="text"
-                                                className="input w-full font-bold"
-                                                placeholder="Write a preview title..."
-                                            />
-                                        </fieldset>
-                                        <FieldInfo field={field} />
-                                    </>
-                                )}
-                            />
-                            <form.Field
-                                name="subtitle"
-                                children={(field) => (
-                                    <>
-                                        <fieldset className="fieldset w-full">
-                                            <legend className="fieldset-legend text-base font-normal">Subtitle</legend>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    value={field.state.value}
-                                                    onBlur={field.handleBlur}
-                                                    onChange={(e) => field.handleChange(e.target.value)}
-                                                    type="text"
-                                                    className="input w-full"
-                                                    placeholder="Write a preview subtitle..."
-                                                />
-                                            </div>
-                                        </fieldset>
+                            {!isModalShow &&
+                                <>
+                                    <form.Field
+                                        name="title"
+                                        children={(field) => (
+                                            <>
+                                                <fieldset className="fieldset w-full">
+                                                    <legend className="fieldset-legend text-base font-normal">Title</legend>
+                                                    <input
+                                                        value={field.state.value}
+                                                        onBlur={field.handleBlur}
+                                                        onChange={(e) => field.handleChange(e.target.value)}
+                                                        type="text"
+                                                        className="input w-full font-bold"
+                                                        placeholder="Write a preview title..."
+                                                    />
+                                                </fieldset>
+                                                <FieldInfo field={field} />
+                                            </>
+                                        )}
+                                    />
+                                    <form.Field
+                                        name="subtitle"
+                                        children={(field) => (
+                                            <>
+                                                <fieldset className="fieldset w-full">
+                                                    <legend className="fieldset-legend text-base font-normal">Subtitle</legend>
+                                                    <div className="flex items-center gap-2">
+                                                        <input
+                                                            value={field.state.value}
+                                                            onBlur={field.handleBlur}
+                                                            onChange={(e) => field.handleChange(e.target.value)}
+                                                            type="text"
+                                                            className="input w-full"
+                                                            placeholder="Write a preview subtitle..."
+                                                        />
+                                                    </div>
+                                                </fieldset>
 
-                                        <FieldInfo field={field} />
-                                    </>
-                                )}
-                            />
+                                                <FieldInfo field={field} />
+                                            </>
+                                        )}
+                                    />
+                                </>
+                            }
                             <div className="w-full text-left content-center text-sm text-gray-500 mt-4">
                                 Note: Changes here will affect how your story appears in public places like Aedium’s homepage and in subscribers’ inboxes — not the contents of the story itself.
                             </div>
