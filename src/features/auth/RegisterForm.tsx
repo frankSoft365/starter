@@ -127,10 +127,10 @@ export default function RegisterForm() {
                     <input disabled={true} name="email" type="email" className="input" placeholder={email} />
 
                     <label className="label">Username</label>
-                    <input value={username} onChange={(e) => setUsername(e.target.value)} name="username" type="text" className="input" placeholder="Username" />
+                    <input value={username} onChange={(e) => setUsername(e.target.value)} name="username" type="text" className="input" placeholder="Username" minLength={6} maxLength={20} />
 
                     <label className="label">Password</label>
-                    <input value={password} onChange={(e) => setPassword(e.target.value)} name="password" type="password" className="input" placeholder="Password" />
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} name="password" type="password" className="input" placeholder="Password" minLength={6} maxLength={20} />
 
                     <button type="submit" className="btn btn-neutral mt-4" disabled={isRegister}>
                         {isRegister && <span className="loading loading-spinner"></span>}
