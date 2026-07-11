@@ -40,7 +40,7 @@ export default function Submission() {
     }, [articlePreview, navigate]);
 
     return (
-        <div className="card w-5xl bg-base-100 card-xl shadow-sm mx-auto mt-12">
+        <div className="card w-full card-md lg:w-5xl bg-base-100 lg:card-xl shadow-sm lg:mx-auto mt-12">
             <div className="card-body w-full">
                 <h2 className="card-title">Story preview</h2>
                 <form
@@ -49,7 +49,7 @@ export default function Submission() {
                         form.handleSubmit()
                     }}
                 >
-                    <div className="grid grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
                             <form.Field
                                 name="coverImage"
@@ -112,7 +112,7 @@ export default function Submission() {
                                 Note: Changes here will affect how your story appears in public places like Aedium’s homepage and in subscribers’ inboxes — not the contents of the story itself.
                             </div>
                         </div>
-                        <div className="relative">
+                        <div className="lg:relative">
                             <form.Field
                                 name="topicCandidate"
                                 children={(candidateField) => (
@@ -133,14 +133,14 @@ export default function Submission() {
                                     />
                                 )}
                             />
-                            <div className="absolute left-0 bottom-0">
-                                <button onClick={() => navigate({ to: editorRoute.to })} type="button" className="btn btn-neutral mr-3">
+                            <div className="lg:absolute left-0 bottom-0">
+                                <button onClick={() => navigate({ to: editorRoute.to })} type="button" className="btn btn-neutral mr-3 mt-4">
                                     Cancel
                                 </button>
                                 <form.Subscribe
                                     selector={(state) => [state.canSubmit, state.isSubmitting]}
                                     children={([canSubmit, isSubmitting]) => (
-                                        <button disabled={!canSubmit || isPublishing} type="submit" className="btn btn-success">
+                                        <button disabled={!canSubmit || isPublishing} type="submit" className="btn btn-success mt-4">
                                             {!isPublishing && !isSubmitting && 'Publish'}
                                             {(isPublishing || isSubmitting) && <span className="loading loading-spinner"></span>}
                                         </button>

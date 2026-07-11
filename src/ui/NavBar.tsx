@@ -56,10 +56,10 @@ export default function NavBar() {
                             Write
                         </button>}
                         {isEditorRoute && <>
-                            <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-2 btn-sm lg:btn-md lg:mr-4">
+                            <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-1 btn-xs lg:btn-md lg:mr-4">
                                 Publish
                             </button>
-                            <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-4 btn-sm lg:btn-md">
+                            <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-1 btn-xs lg:btn-md lg:mr-4">
                                 Discard drafts
                             </button>
                         </>}
