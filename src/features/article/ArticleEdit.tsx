@@ -78,7 +78,7 @@ export default function ArticleEdit() {
     return (
         <>
             {isLoading && <Loading />}
-            {isError && <main className="flex items-center justify-center min-h-screen">
+            {isError && !isLoading && <main className="flex items-center justify-center min-h-screen">
                 <div className="text-3xl text-red-600">
                     {error?.message || 'Failed to load article content.'}
                 </div>
