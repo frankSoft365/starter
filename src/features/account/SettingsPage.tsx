@@ -24,7 +24,7 @@ export default function SettingsPage() {
 
     return (
         <div className="p-3 relative w-full md:w-1/2">
-            <h1 className="text-4xl md:text-5xl font-bold m-4">Settings</h1>
+            <h1 className="text-3xl md:text-5xl font-bold m-4">Settings</h1>
             <p className="text-xl md:text-xl font-medium m-4">Profile</p>
             {/* user information show */}
             {(isUserProfileLoading || isLoadingError) && <div className="skeleton rounded-box h-64 m-4"></div>}
@@ -55,7 +55,7 @@ export default function SettingsPage() {
                             <div className="text-right">
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className="btn btn-primary"
+                                    className="btn btn-primary btn-sm md:btn-md"
                                 >
                                     Update
                                 </button>

@@ -22,7 +22,7 @@ export default function ChangePasswordForm() {
 
     return (
         <main className="mx-auto">
-            <div className="card w-3xl bg-base-100 card-xl shadow-sm mx-auto mt-8">
+            <div className="card w-11/12 md:w-3xl bg-base-100 md:card-xl shadow-sm mx-auto mt-8">
                 <div className="card-body w-full">
                     <h2 className="card-title">Change Password</h2>
                     <h3 className="text-xs">Enter your current password and a new password.</h3>
