@@ -35,7 +35,7 @@ export default function NavBar() {
     const isArticleEditRoute = location.pathname.includes(articleEditRoute.to.split('$')[0]);
 
     return (
-        <div className="max-lg:collapse bg-base-200 shadow-sm w-full rounded-md">
+        <div className="relative z-9999 max-lg:collapse bg-base-200 shadow-sm w-full rounded-md">
             <input id="navbar-1-toggle" className="peer hidden" type="checkbox" />
             <label htmlFor="navbar-1-toggle" className="fixed inset-0 hidden max-lg:peer-checked:block"></label>
             <div className="collapse-title navbar">
@@ -46,7 +46,7 @@ export default function NavBar() {
                     </label>
                     <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost btn-sm font-serif text-sm mr-2 lg:text-xl lg:btn-md">Aedium</button>
                     {/* search input field */}
-                    {isHomeRoute && <input type="text" placeholder="Search" className="input input-bordered w-36 lg:w-auto mr-2" />}
+                    {isHomeRoute && <input type="text" placeholder="Search" className="input input-bordered w-30 md:w-auto mr-2" />}
                 </div>
                 <div className="navbar-end">
                     {/* can write only when is login */}
@@ -59,7 +59,7 @@ export default function NavBar() {
                             <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-1 btn-xs lg:btn-md lg:mr-4">
                                 Publish
                             </button>
-                            <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-1 btn-xs lg:btn-md lg:mr-4">
+                            <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-2 btn-xs lg:btn-md lg:mr-4">
                                 Discard drafts
                             </button>
                         </>}
