@@ -32,9 +32,9 @@ export default function LoginForm() {
                 e.preventDefault()
                 form.handleSubmit()
             }}
-            className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-8"
+            className="fieldset bg-base-200 border-base-300 rounded-box w-xs md:w-sm border p-4 md:p-5"
         >
-            <legend className="fieldset-legend text-2xl">Login</legend>
+            <legend className="fieldset-legend text-xl md:text-2xl">Login</legend>
             <div className="text-left mb-4">Enter your email below to login to your account</div>
             <form.Field
                 name="email"

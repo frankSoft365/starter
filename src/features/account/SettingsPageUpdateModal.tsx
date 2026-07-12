@@ -35,13 +35,13 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
     return (
         <div className="modal modal-open">
             <div className="modal-box">
-                <h3 className="font-bold text-lg mb-4">Profile information</h3>
+                <h3 className="font-bold text-xl md:text-lg mb-4">Profile information</h3>
                 <form
                     onSubmit={(e) => {
                         e.preventDefault()
                         form.handleSubmit()
                     }}
-                    className="fieldset bg-base-200 border-base-300 w-xs md:w-full p-4"
+                    className="fieldset bg-base-200 border-base-300 w-11/12 md:w-full p-4"
                 >
                     <label className="label">Photo</label>
                     <div className="flex flex-row gap-4">

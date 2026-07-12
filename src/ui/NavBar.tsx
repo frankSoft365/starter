@@ -35,7 +35,7 @@ export default function NavBar() {
     const isArticleEditRoute = location.pathname.includes(articleEditRoute.to.split('$')[0]);
 
     return (
-        <div className="relative z-9999 max-lg:collapse bg-base-200 shadow-sm w-full rounded-md">
+        <div className="relative z-999 max-lg:collapse bg-base-200 shadow-sm w-full rounded-md">
             <input id="navbar-1-toggle" className="peer hidden" type="checkbox" />
             <label htmlFor="navbar-1-toggle" className="fixed inset-0 hidden max-lg:peer-checked:block"></label>
             <div className="collapse-title navbar">
