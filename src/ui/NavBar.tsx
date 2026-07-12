@@ -44,7 +44,7 @@ export default function NavBar() {
                         {/* Sidebar toggle icon */}
                         <SidebarIcon size={32} />
                     </label>
-                    <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost btn-sm font-serif text-sm mr-2 lg:text-xl lg:btn-md">Aedium</button>
+                    <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost btn-sm text-sm mr-2 lg:text-xl lg:btn-md">Aedium</button>
                     {/* search input field */}
                     {isHomeRoute && <input type="text" placeholder="Search" className="input input-bordered w-30 md:w-auto mr-2" />}
                 </div>
@@ -73,7 +73,7 @@ export default function NavBar() {
                     {/* login-button when is not login */}
                     {!isLoading && <>
                         <SignedOut>
-                            <button onClick={() => navigate({ to: loginRoute.to })} className="btn btn-info btn-sm lg:btn-md mr-4">Login</button>
+                            <button onClick={() => navigate({ to: loginRoute.to })} className="btn btn-info btn-sm md:btn-md mr-2 md:mr-4">Login</button>
                         </SignedOut>
                         {/* user avatar and dropdown */}
                         <SignedIn>
