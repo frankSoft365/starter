@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useForm } from "@tanstack/react-form";
+import { useForm, useStore } from "@tanstack/react-form";
 import { useAtomValue } from "jotai";
 import { articlePreviewAtom } from "@/atoms/editor";
 import { useNavigate } from "@tanstack/react-router";
@@ -8,6 +8,8 @@ import TopicInput from "@/ui/TopicInput";
 import FieldInfo from "@/ui/FieldInfo";
 import { useArticlePublish } from "./article";
 import { ArticleSubmissionSchema, type ArticleSubmissionForm } from "@/schemas/article";
+import AdjustImage from "@/ui/AdjustImage";
+import { focalRatioFromArea, objectPositionFromRatio } from '@/utils/coverFocus'
 
 export default function Submission() {
     const articlePreview = useAtomValue(articlePreviewAtom);
@@ -16,6 +18,7 @@ export default function Submission() {
 
     const defaultValues: ArticleSubmissionForm = {
         coverImage: articlePreview?.coverImage[0],
+        coverFocusY: 0.5,
         title: articlePreview?.title ?? 'Title',
         subtitle: articlePreview?.subtitle,
         topics: [],
@@ -37,6 +40,8 @@ export default function Submission() {
         },
     })
 
+    const coverFocusY = useStore(form.store, (state) => state.values.coverFocusY) ?? 0.5;
+
     useEffect(() => {
         if (!articlePreview) {
             navigate({ to: editorRoute.to });
@@ -44,7 +49,7 @@ export default function Submission() {
     }, [articlePreview, navigate]);
 
     return (
-        <div className="card w-full card-md lg:w-5xl bg-base-100 lg:card-xl shadow-sm lg:mx-auto mt-12">
+        <div className="card w-full card-md lg:w-4xl bg-base-100 lg:card-xl shadow-sm lg:mx-auto mt-12">
             <div className="card-body w-full">
                 <h2 className="card-title">Story preview</h2>
                 <form
@@ -66,15 +71,28 @@ export default function Submission() {
                                                     ?
                                                     <>
                                                         {!isModalShow && <div className="relative w-full">
-                                                            <img src={field.state.value} />
+                                                            <img
+                                                                src={field.state.value}
+                                                                className="w-full aspect-2/1 object-cover"
+                                                                style={{ objectPosition: objectPositionFromRatio(coverFocusY) }}
+                                                            />
+
                                                             {!isModalShow && <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
                                                                 <button onClick={() => setIsModalShow(true)} type="button" className="rounded-full btn btn-neutral bg-black/75 mb-2">Change preview image</button>
-                                                                <button type="button" className="rounded-full btn btn-neutral bg-black/75">Adjust image</button>
+                                                                <button onClick={() => {
+                                                                    const modal = document.getElementById('modal_adjust_coverImage');
+                                                                    if (modal instanceof HTMLDialogElement) {
+                                                                        modal.showModal();
+                                                                    }
+                                                                }} type="button" className="rounded-full btn btn-neutral bg-black/75">Adjust image</button>
+
                                                             </div>}
                                                         </div>}
+
                                                         {isModalShow &&
                                                             <div className="p-4 w-full bg-gray-100 min-h-84">
                                                                 <button className="btn btn-ghost mb-2" onClick={() => {
+                                                                    form.setFieldValue('coverFocusY', 0.5);
                                                                     field.handleChange(newImage);
                                                                     setIsModalShow(false);
                                                                 }} >Done</button>
@@ -89,6 +107,44 @@ export default function Submission() {
                                                                 </div>
                                                             </div>
                                                         }
+                                                        <dialog id="modal_adjust_coverImage" className="modal">
+                                                            <div className="modal-box w-11/12 md:w-xl flex flex-col items-center justify-between">
+                                                                <button
+                                                                    type="button"
+                                                                    className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                                                                    onClick={() => {
+                                                                        const modal = document.getElementById('modal_adjust_coverImage');
+                                                                        if (modal instanceof HTMLDialogElement) {
+                                                                            modal.close();
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    ✕
+                                                                </button>
+                                                                <h1 className="text-center font-bold text-xl md:text-2xl">Adjust image</h1>
+                                                                <p className="pt-2 pb-3 text-sm text-gray-500 text-center max-w-9/12">Drag the highlighted box to choose what stays in view when cropped.</p>
+                                                                <form.Field
+                                                                    name="coverFocusY"
+                                                                    children={(coverFocusYField) => {
+                                                                        return (
+                                                                            <AdjustImage
+                                                                                image={field.state.value || ''}
+                                                                                onSave={(area) => {
+                                                                                    const modal = document.getElementById('modal_adjust_coverImage');
+                                                                                    if (modal instanceof HTMLDialogElement) {
+                                                                                        modal.close();
+                                                                                    }
+                                                                                    const focalRatio = focalRatioFromArea(area);
+                                                                                    coverFocusYField.handleChange(focalRatio);
+                                                                                }}
+
+                                                                            />
+                                                                        );
+                                                                    }}
+                                                                />
+
+                                                            </div>
+                                                        </dialog>
                                                     </>
                                                     : <div className="bg-gray-100 w-full h-48 text-left content-center text-sm p-8 text-gray-500">Include a high-quality image in your story to make it more inviting to readers.</div>
                                             }

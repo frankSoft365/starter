@@ -25,14 +25,17 @@ export function useArticlePublish(articlePreview: ArticlePublishPreview | null) 
             }
             const content = articlePreview.content;
             const coverImage = value.coverImage;
+            const coverFocusY = value.coverFocusY;
             const title = value.title;
             const subtitle = value.subtitle;
             const topics = value.topics;
+
             const publishRequest: ArticlePublishRequest = {
                 title,
                 ...(subtitle && { subtitle }),
                 content,
                 ...(coverImage && { coverImage }),
+                ...(coverFocusY && { coverFocusY }),
                 topics,
                 status: 'published',
                 // publishAt: null

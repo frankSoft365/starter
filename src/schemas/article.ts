@@ -16,6 +16,8 @@ const TopicSchema = z.array(TopicCandidateSchema);
 
 export const ArticleSubmissionSchema = z.object({
     coverImage: z.string().optional(),
+    /** vertical focus point stored as decimal between 0 and 1 */
+    coverFocusY: z.number().min(0, 'coverFocusY must be >= 0').max(1, 'coverFocusY must be <= 1').optional(),
     title: TitleSchema,
     subtitle: SubtitleSchema.optional(),
     topics: TopicSchema,

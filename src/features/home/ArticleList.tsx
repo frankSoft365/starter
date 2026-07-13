@@ -1,9 +1,9 @@
 import ArticleListItem from "./ArticleListItem";
 import { useQuery } from "@tanstack/react-query";
-import { getArticleList } from "../../services/apiArticle";
-import Loading from "../../ui/Loading";
+import { getArticleList } from "@/services/apiArticle";
+import Loading from "@/ui/Loading";
 import { Link } from "@tanstack/react-router";
-import { Route } from "../../routes/_app/article.$articleId";
+import { Route } from "@/routes/_app/article.$articleId";
 
 export default function ArticleList() {
 

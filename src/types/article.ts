@@ -3,6 +3,8 @@ export type ArticlePublishRequest = {
     subtitle?: string;
     content: string;
     coverImage?: string;
+    /** vertical focus point (0-1) for frontend rendering, optional */
+    coverFocusY?: number;
     topics: string[];
     status: 'published' | 'scheduled';
     publishAt?: Date;
@@ -29,6 +31,8 @@ export type ArticleListItemVO = {
     title: string;
     subtitle: string;
     coverImage?: string;
+    /** vertical focus point returned by backend, range 0-1 (0 top, 1 bottom) */
+    coverFocusY?: number;
     clapNum?: number;
     responseNum?: number;
     repostNum?: number;
@@ -39,6 +43,7 @@ export type ArticleVO = {
     title: string;
     subtitle: string;
     coverImage: string;
+    coverFocusY?: number;
     content: string;
 
     clapNum?: number;
