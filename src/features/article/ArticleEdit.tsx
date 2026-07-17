@@ -54,6 +54,7 @@ export default function ArticleEdit() {
 
     // edit article base settings
     function onDone() {
+        form.handleSubmit();
         setIsDirty(true);
     }
     // change cover image
