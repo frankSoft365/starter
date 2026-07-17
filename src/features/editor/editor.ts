@@ -9,6 +9,15 @@ import type { PartialBlock } from '@blocknote/core';
 import { useEffect } from 'react';
 import { uploadImageApi } from '../../services/apiUpload';
 
+export async function uploadFile(file: File) {
+    if (!file) {
+        throw new Error('No file selected');
+    }
+    const formData = new FormData();
+    formData.append('image', file);
+    return await uploadImageApi(formData);
+}
+
 export function useEditor(
     draft: PartialBlock[] | undefined,
     saveDraft: DebouncedFunction<(document: any) => void>,
@@ -33,14 +42,7 @@ export function useEditor(
                 heading: "Title",
             },
         },
-        uploadFile: async (file) => {
-            if (!file) {
-                throw new Error('No file selected');
-            }
-            const formData = new FormData();
-            formData.append('image', file);
-            return await uploadImageApi(formData);
-        }
+        uploadFile: uploadFile
     }, []);
 
     function handleEditorChange(changedEditor: typeof editor) {

@@ -12,6 +12,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import type { DeleteRequest } from "@/types/DeleteRequest";
 import type { ArticleSubmissionForm } from "@/schemas/article";
+import { useState } from "react";
 
 export function useArticlePublish(articlePreview: ArticlePublishPreview | null) {
     const navigate = useNavigate();
@@ -130,5 +131,18 @@ export function useCurrentArticle(articleId: string, editor: BlockNoteEditor, de
         isLoading,
         isError,
         error
+    });
+}
+
+export function useChangeCoverImage(coverImages: string[] | undefined) {
+    const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
+
+    const [newImage, setNewImage] = useState(coverImages?.[0]);
+
+    return ({
+        newImage,
+        setNewImage,
+        isAdjustModalOpen,
+        setIsAdjustModalOpen
     });
 }

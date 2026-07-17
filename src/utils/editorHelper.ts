@@ -89,6 +89,18 @@ function getImages(contentBlocks: Block[]) {
     return images;
 }
 
+export function getImagesFromEditor(editor: BlockNoteEditor) {
+    const [_headingBlock, ...contentBlocks] = editor.document;
+    const images = contentBlocks.map((block) => {
+        if (block.type === 'image') {
+            return block.props.url;
+        }
+        return '';
+    }).filter(image => image);
+
+    return images;
+}
+
 function getSubtitle(contentBlocks: Block[], maxLength = 100) {
     let subtitle = '';
     subtitle = contentBlocks.map((block) => {

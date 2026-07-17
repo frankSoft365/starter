@@ -7,3 +7,9 @@ export type TopicSuggestionVO = {
     articlesCount: string;
     status: 'new' | 'existing';
 }
+
+export type TopicInArticleVO = {
+    id: string;
+    name: string;
+    slug: string;
+}

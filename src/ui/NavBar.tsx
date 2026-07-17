@@ -63,9 +63,13 @@ export default function NavBar() {
                                 Discard drafts
                             </button>
                         </>}
-                        {isArticleEditRoute && <button disabled={!isDirty} onClick={() => setEditorUpdateSignal(pre => pre + 1)} className="btn btn-primary mr-4">
-                            Update
-                        </button>}
+                        {isArticleEditRoute &&
+                            <>
+                                <button disabled={!isDirty} onClick={() => setEditorUpdateSignal(pre => pre + 1)} className="btn btn-primary mx-4">
+                                    Update
+                                </button>
+                            </>
+                        }
                     </SignedIn>
                     {isLoading && <button className="btn btn-square mr-3">
                         <span className="loading loading-spinner"></span>

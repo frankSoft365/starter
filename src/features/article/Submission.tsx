@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useForm, useStore } from "@tanstack/react-form";
+import { useForm } from "@tanstack/react-form";
 import { useAtomValue } from "jotai";
 import { articlePreviewAtom } from "@/atoms/editor";
 import { useNavigate } from "@tanstack/react-router";
@@ -8,8 +8,7 @@ import TopicInput from "@/ui/TopicInput";
 import FieldInfo from "@/ui/FieldInfo";
 import { useArticlePublish } from "./article";
 import { ArticleSubmissionSchema, type ArticleSubmissionForm } from "@/schemas/article";
-import AdjustImage from "@/ui/AdjustImage";
-import { focalRatioFromArea, objectPositionFromRatio } from '@/utils/coverFocus'
+import CoverImageInput from "./CoverImageInput";
 
 export default function Submission() {
     const articlePreview = useAtomValue(articlePreviewAtom);
@@ -25,9 +24,8 @@ export default function Submission() {
         topicCandidate: ''
     };
 
-    const [isModalShow, setIsModalShow] = useState(false);
-    const [newImage, setNewImage] = useState(articlePreview?.coverImage[0]);
-    const coverImages = articlePreview?.coverImage || [];
+    // cover image modal show and title/subtitle input show
+    const [isImageArraryModalShow, setIsImageArraryModalShow] = useState(false);
 
     const form = useForm({
         defaultValues: defaultValues,
@@ -38,9 +36,8 @@ export default function Submission() {
             onChange: ArticleSubmissionSchema,
             onSubmit: ArticleSubmissionSchema
         },
-    })
+    });
 
-    const coverFocusY = useStore(form.store, (state) => state.values.coverFocusY) ?? 0.5;
 
     useEffect(() => {
         if (!articlePreview) {
@@ -62,112 +59,36 @@ export default function Submission() {
                         <div>
                             <form.Field
                                 name="coverImage"
-                                children={(field) => (
+                                children={(coverImageField) => (
                                     <>
                                         <fieldset className="fieldset w-full">
-                                            <legend className="fieldset-legend text-base font-normal">Cover image</legend>
-                                            {
-                                                field.state.value
-                                                    ?
-                                                    <>
-                                                        {!isModalShow && <div className="relative w-full">
-                                                            <img
-                                                                src={field.state.value}
-                                                                className="w-full aspect-2/1 object-cover"
-                                                                style={{ objectPosition: objectPositionFromRatio(coverFocusY) }}
-                                                            />
-
-                                                            {!isModalShow && <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
-                                                                <button onClick={() => setIsModalShow(true)} type="button" className="rounded-full btn btn-neutral bg-black/75 mb-2">Change preview image</button>
-                                                                <button onClick={() => {
-                                                                    const modal = document.getElementById('modal_adjust_coverImage');
-                                                                    if (modal instanceof HTMLDialogElement) {
-                                                                        modal.showModal();
-                                                                    }
-                                                                }} type="button" className="rounded-full btn btn-neutral bg-black/75">Adjust image</button>
-
-                                                            </div>}
-                                                        </div>}
-
-                                                        {isModalShow &&
-                                                            <div className="p-4 w-full bg-gray-100 min-h-84">
-                                                                <button className="btn btn-ghost mb-2" onClick={() => {
-                                                                    form.setFieldValue('coverFocusY', 0.5);
-                                                                    field.handleChange(newImage);
-                                                                    setIsModalShow(false);
-                                                                }} >Done</button>
-                                                                <div className="grid grid-cols-3 gap-1 lg:gap-4">
-                                                                    {coverImages.map((imageUrl, index) => {
-                                                                        return (
-                                                                            <div key={index} className={`w-24 h-24 lg:w-30 lg:h-30 ${imageUrl === newImage && 'border-4 border-green-500'}`}>
-                                                                                <img onClick={() => setNewImage(imageUrl)} className="w-full h-full object-center object-cover" src={imageUrl} />
-                                                                            </div>
-                                                                        );
-                                                                    })}
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                        <dialog id="modal_adjust_coverImage" className="modal">
-                                                            <div className="modal-box w-11/12 md:w-xl flex flex-col items-center justify-between">
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                                                                    onClick={() => {
-                                                                        const modal = document.getElementById('modal_adjust_coverImage');
-                                                                        if (modal instanceof HTMLDialogElement) {
-                                                                            modal.close();
-                                                                        }
-                                                                    }}
-                                                                >
-                                                                    ✕
-                                                                </button>
-                                                                <h1 className="text-center font-bold text-xl md:text-2xl">Adjust image</h1>
-                                                                <p className="pt-2 pb-3 text-sm text-gray-500 text-center max-w-9/12">Drag the highlighted box to choose what stays in view when cropped.</p>
-                                                                <form.Field
-                                                                    name="coverFocusY"
-                                                                    children={(coverFocusYField) => {
-                                                                        return (
-                                                                            <AdjustImage
-                                                                                image={field.state.value || ''}
-                                                                                onSave={(area) => {
-                                                                                    const modal = document.getElementById('modal_adjust_coverImage');
-                                                                                    if (modal instanceof HTMLDialogElement) {
-                                                                                        modal.close();
-                                                                                    }
-                                                                                    const focalRatio = focalRatioFromArea(area);
-                                                                                    coverFocusYField.handleChange(focalRatio);
-                                                                                }}
-
-                                                                            />
-                                                                        );
-                                                                    }}
-                                                                />
-
-                                                            </div>
-                                                        </dialog>
-                                                    </>
-                                                    : <div className="bg-gray-100 w-full h-48 text-left content-center text-sm p-8 text-gray-500">Include a high-quality image in your story to make it more inviting to readers.</div>
-                                            }
-
+                                            <legend className="fieldset-legend text-sm font-normal">Cover image</legend>
+                                            <CoverImageInput
+                                                field={coverImageField}
+                                                form={form}
+                                                coverImages={articlePreview?.coverImage}
+                                                isImageArraryModalShow={isImageArraryModalShow}
+                                                setIsImageArraryModalShow={setIsImageArraryModalShow}
+                                            />
                                         </fieldset>
-                                        <FieldInfo field={field} />
+                                        <FieldInfo field={coverImageField} />
                                     </>
                                 )}
                             />
-                            {!isModalShow &&
+                            {!isImageArraryModalShow &&
                                 <>
                                     <form.Field
                                         name="title"
                                         children={(field) => (
                                             <>
                                                 <fieldset className="fieldset w-full">
-                                                    <legend className="fieldset-legend text-base font-normal">Title</legend>
+                                                    <legend className="fieldset-legend text-sm font-normal">Title</legend>
                                                     <input
                                                         value={field.state.value}
                                                         onBlur={field.handleBlur}
                                                         onChange={(e) => field.handleChange(e.target.value)}
                                                         type="text"
-                                                        className="input w-full font-bold"
+                                                        className="input w-full font-bold input-sm"
                                                         placeholder="Write a preview title..."
                                                     />
                                                 </fieldset>
@@ -180,26 +101,25 @@ export default function Submission() {
                                         children={(field) => (
                                             <>
                                                 <fieldset className="fieldset w-full">
-                                                    <legend className="fieldset-legend text-base font-normal">Subtitle</legend>
+                                                    <legend className="fieldset-legend text-sm font-normal">Subtitle</legend>
                                                     <div className="flex items-center gap-2">
                                                         <input
                                                             value={field.state.value}
                                                             onBlur={field.handleBlur}
                                                             onChange={(e) => field.handleChange(e.target.value)}
                                                             type="text"
-                                                            className="input w-full"
+                                                            className="input w-full input-sm"
                                                             placeholder="Write a preview subtitle..."
                                                         />
                                                     </div>
                                                 </fieldset>
-
                                                 <FieldInfo field={field} />
                                             </>
                                         )}
                                     />
                                 </>
                             }
-                            <div className="w-full text-left content-center text-sm text-gray-500 mt-4">
+                            <div className="w-full text-left content-center text-sm text-gray-500 mt-3">
                                 Note: Changes here will affect how your story appears in public places like Aedium’s homepage and in subscribers’ inboxes — not the contents of the story itself.
                             </div>
                         </div>
@@ -213,7 +133,7 @@ export default function Submission() {
                                         children={(topicsField) => (
                                             <>
                                                 <fieldset className="fieldset w-full">
-                                                    <legend className="fieldset-legend text-base font-normal">Topics</legend>
+                                                    <legend className="fieldset-legend text-sm font-normal">Topics</legend>
                                                     <p className="label mb-1">Add up to five topics to help readers find your story.</p>
                                                     <TopicInput topicsField={topicsField} candidateField={candidateField} />
                                                 </fieldset>

@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import Cropper, { type Area, type Point } from 'react-easy-crop'
-import { focalPercentFromArea, objectPositionFromRatio } from '@/utils/coverFocus'
+import { focalPercentFromArea, focalRatioFromArea, objectPositionFromRatio } from '@/utils/coverFocus'
 
 interface AdjustImageProps {
     image: string
-    onSave?: (area: Area | null) => void,
+    onSave?: (focalRatio: number) => void,
 }
 
 export default function AdjustImage({ image, onSave }: AdjustImageProps) {
@@ -21,7 +21,8 @@ export default function AdjustImage({ image, onSave }: AdjustImageProps) {
 
     function saveCrop() {
         if (onSave) {
-            onSave(croppedArea)
+            const focalRatio = focalRatioFromArea(croppedArea);
+            onSave(focalRatio);
         }
 
     }
