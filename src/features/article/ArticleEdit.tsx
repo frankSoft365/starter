@@ -15,7 +15,7 @@ import { DotsThreeIcon } from "@phosphor-icons/react";
 import Modal from "./ButtonModal";
 import { uploadFile } from "../editor/editor";
 import { ArticleSubmissionSchema, type ArticleSubmissionForm } from "@/schemas/article";
-import { useForm } from "@tanstack/react-form";
+import { useForm, useStore } from "@tanstack/react-form";
 import CoverImageInput from "./CoverImageInput";
 import FieldInfo from "@/ui/FieldInfo";
 import TopicInput from "@/ui/TopicInput";
@@ -53,8 +53,12 @@ export default function ArticleEdit() {
     });
 
     // edit article base settings
-    function onDone() {
-        form.handleSubmit();
+    const canSubmit = useStore(form.store, (state) => state.canSubmit)
+    async function onDone() {
+        await form.handleSubmit();
+        if (!form.state.isValid) {
+            return;
+        }
         setIsDirty(true);
     }
     // change cover image
@@ -170,7 +174,7 @@ export default function ArticleEdit() {
                                     form.resetField('coverFocusY');
                                 }}
                                 buttonName="Change featured image"
-                                disabled={isImageArraryModalShow}
+                                disabled={isImageArraryModalShow || !canSubmit}
                             >
                                 <h3 className="font-bold text-md mb-2">Select one of your images to feature.</h3>
                                 <form.Field
@@ -198,7 +202,9 @@ export default function ArticleEdit() {
                                     form.resetField('title');
                                     form.resetField('subtitle');
                                 }}
-                                buttonName="Change display title / subtitle">
+                                buttonName="Change display title / subtitle"
+                                disabled={!canSubmit}
+                            >
                                 <form.Field
                                     name="title"
                                     children={(field) => (
@@ -253,6 +259,7 @@ export default function ArticleEdit() {
                                     toast.success('感谢测试！你的topics现在是 ' + form.getFieldValue('topics') + ' 。不过修改topics功能暂未上线！')
                                 }}
                                 buttonName="Change topics"
+                                disabled={canSubmit}
                             >
                                 <p className="py-4 text-sm text-gray-500">Add or change topics (up to 5) so readers know what your story is about:</p>
                                 <form.Field
