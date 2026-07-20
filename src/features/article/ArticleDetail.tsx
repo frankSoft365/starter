@@ -152,7 +152,7 @@ export default function ArticleDetail() {
                                     <CurrentUser authorId={article.authorId}>
                                         <li>
                                             <button onClick={() => {
-                                                const modal = document.getElementById('my_modal_3');
+                                                const modal = document.getElementById('delete_article_modal');
                                                 if (modal instanceof HTMLDialogElement) {
                                                     modal.showModal();
                                                 }
