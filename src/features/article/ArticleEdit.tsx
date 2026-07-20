@@ -152,6 +152,7 @@ export default function ArticleEdit() {
                 </div>
             </main>}
             {!isLoading && article && <>
+                {/* Settings bar */}
                 <div className="m-2 shadow-xl rounded-xl border-2 border-gray-100 p-1">
                     <button className="btn btn-square btn-ghost mx-4" popoverTarget="popover-1" style={{ anchorName: "--anchor-1" }} >
                         <DotsThreeIcon size={24} color="#676565" weight="bold" />
@@ -284,6 +285,7 @@ export default function ArticleEdit() {
                         </li>
                     </ul>
                 </div>
+                {/* Editor area */}
                 <EditorComponent
                     editor={editor}
                     onChange={handleEditorChange}
