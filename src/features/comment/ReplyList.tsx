@@ -14,7 +14,6 @@ export default function ReplyList({
     setActiveReplyTarget: (value: ActiveReplyTarget | null) => void
 }) {
     const totalReplyCount = commentThreadDTO.totalReplyCount;
-
     const rootComment = commentThreadDTO.root;
     const repliesPreview = commentThreadDTO.replyPreview;
 
@@ -68,7 +67,7 @@ export default function ReplyList({
                 total {totalReplyCount} replies, click to expand
             </li>}
             {/* full reply list */}
-            {expanded && status === 'pending' && <div className="w-full h-8 flex items-center justify-center"><span className="loading loading-spinner"></span></div>}
+            {expanded && status === 'pending' && <div className="ml-5 border-gray-200 bg-base-200 pl-1 rounded-2xl flex h-24"><span className="loading loading-spinner m-auto"></span></div>}
             {status === 'error' && <p>Error: {error.message}</p>}
             {status === 'success' && expanded ?
                 <div className="ml-5 border-gray-200 bg-base-200 pl-1 rounded-2xl">
@@ -104,6 +103,10 @@ export default function ReplyList({
                         onClick={() => {
                             setExpanded(false);
                             setActiveReplyTarget(null);
+                            setTimeout(() => {
+                                const el = document.getElementById(`rootComment-area-${rootComment.id}`);
+                                el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 0);
                         }}
                         className="list-row w-full p-4 text-blue-400 hover:text-blue-600 cursor-pointer">
                         Click to collapse

@@ -1,12 +1,7 @@
-import { getRootComments } from "@/services/apiComment";
-import type { CursorPageRequest } from "@/types/comment";
 import Loading from "@/ui/Loading"
-import { useInfiniteQuery } from "@tanstack/react-query";
 import CommentItem from "./CommentItem";
-import { useForm, useStore } from "@tanstack/react-form";
-import { CreateCommentSchema, type CreateCommentForm } from "@/schemas/comment";
-import { useAddComment } from "./comment";
-import { useEffect, useRef, useState } from "react";
+import { useGetInfiniteRootCommentList, useReplyCommentForm } from "./comment";
+import { useEffect, useRef } from "react";
 import Avatar from "@/ui/Avatar";
 import FieldInfo from "@/ui/FieldInfo";
 import { useAtomValue } from "jotai";
@@ -25,74 +20,27 @@ export default function CommentList({
     articleId: string
 }) {
     const user = useAtomValue(userAtom);
-    const commentListBottomRef = useRef<HTMLLIElement | null>(null);
-
-    const [activeReplyTarget, setActiveReplyTarget] =
-        useState<ActiveReplyTarget | null>(null);
 
     const {
-        handleAddComment,
-        isAdding
-    } = useAddComment(articleId);
-
-    const defaultValues: CreateCommentForm = {
-        commentContent: ''
-    };
-
-    const replyForm = useForm({
-        defaultValues,
-        onSubmit: ({ value }) => {
-            if (!activeReplyTarget) {
-                return;
-            }
-
-            handleAddComment(
-                {
-                    params: {
-                        content: value.commentContent,
-                        parentId: activeReplyTarget.parentId
-                    }
-                },
-                {
-                    onSuccess: () => {
-                        replyForm.resetField('commentContent');
-                        setActiveReplyTarget(null);
-                    },
-                },
-            );
-        },
-        validators: {
-            onChange: CreateCommentSchema,
-            onSubmit: CreateCommentSchema,
-        },
-    });
-    const replyCanSubmit = useStore(replyForm.store, (state) => state.canSubmit);
+        isAddingComment,
+        activeReplyTarget,
+        setActiveReplyTarget,
+        replyForm,
+        replyCanSubmit
+    } = useReplyCommentForm(articleId);
 
     const {
         data,
-        error: getCommentsError,
+        error,
         fetchNextPage,
         hasNextPage,
         isFetching,
         isFetchingNextPage,
         status,
-    } = useInfiniteQuery({
-        queryKey: ['get-comment', articleId],
-        queryFn: async ({ pageParam }: { pageParam: CursorPageRequest }) => {
-            return await getRootComments({ params: pageParam, articleId });
-        },
-        initialPageParam: { lastCreatedAt: null, lastId: null } as CursorPageRequest,
-        getNextPageParam: (lastPage) => {
-            return lastPage.hasMore
-                ?
-                {
-                    lastCreatedAt: lastPage.nextCursorCreatedAt,
-                    lastId: lastPage.nextCursorId
-                }
-                : undefined;
-        }
-    });
+    } = useGetInfiniteRootCommentList(articleId);
 
+    // auto fetch comment list
+    const commentListBottomRef = useRef<HTMLLIElement | null>(null);
     useEffect(() => {
         const ref = commentListBottomRef.current;
         if (!ref) {
@@ -108,24 +56,17 @@ export default function CommentList({
         return () => observer.disconnect();
     }, [hasNextPage, isFetching, fetchNextPage]);
 
-    if (status === 'pending') {
-        return <Loading />
-    }
-    if (status === 'error') {
-        return <p>Error: {getCommentsError.message}</p>
-    }
-
-    const commentList = data.pages.flatMap((page) => page.items);
-
     return (
         <div className="w-full lg:w-4xl mx-auto">
-            {commentList.length > 0
+            {status === 'pending' && <Loading />}
+            {status === 'error' && <p>Error: {error.message}</p>}
+            {status === 'success' && data.pages.flatMap((page) => page.items).length > 0
                 ? (
                     <ul className="list bg-base-100">
-                        {commentList.map((comment) => {
+                        {data.pages.flatMap((page) => page.items).map((comment) => {
                             const rootComment = comment.root;
                             return (
-                                <div key={rootComment.id}>
+                                <div key={rootComment.id} id={`rootComment-area-${rootComment.id}`}>
                                     <CommentItem
                                         avatarUrl={rootComment.userAvatar || ''}
                                         username={rootComment.username || ''}
@@ -186,11 +127,11 @@ export default function CommentList({
                                                         Cancel
                                                     </button>
                                                     <button
-                                                        disabled={!replyCanSubmit || isAdding}
+                                                        disabled={!replyCanSubmit || isAddingComment}
                                                         type="submit"
                                                         className="btn btn-sm btn-neutral"
                                                     >
-                                                        {isAdding ? <span className="loading loading-spinner"></span> : 'Reply'}
+                                                        {isAddingComment ? <span className="loading loading-spinner"></span> : 'Reply'}
                                                     </button>
                                                 </div>
                                             </form>
@@ -201,7 +142,7 @@ export default function CommentList({
                         })}
                         <li ref={commentListBottomRef} className="list-row h-0.5" aria-hidden ></li>
                         {isFetchingNextPage && <li className="list-row">Loading more…</li>}
-                        {!hasNextPage && commentList.length > 0 && <li className="list-row text-center p-5">No more comments.</li>}
+                        {!hasNextPage && <li className="list-row text-center p-5">No more comments.</li>}
                     </ul>)
                 : (
                     <div className="h-48 text-gray-500 text-center p-5">

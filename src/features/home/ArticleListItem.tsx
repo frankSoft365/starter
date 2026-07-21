@@ -15,6 +15,7 @@ export default function ArticleListItem({ article }: { article: ArticleListItemV
                     <span className="ml-1.5">{article.authorName}</span>
                     <span>·</span>
                     <span className="text-gray-500">{getPublishDate(new Date(article.publishTime))}</span>
+                    {/* {isNew && <div className="badge badge-secondary ml-2">New</div>} */}
                 </div>
                 {/* article */}
                 <div>
@@ -33,10 +34,10 @@ export default function ArticleListItem({ article }: { article: ArticleListItemV
                                 3K
                             </ArticleMenuButton>
                         </div>
-                        <div className="lg:tooltip" data-tip="90 responses">
+                        <div className="lg:tooltip" data-tip={`${article.responseNum} responses`}>
                             <ArticleMenuButton>
                                 <ChatCircleDotsIcon weight="fill" size={20} color="#676565" />
-                                90
+                                {article.responseNum}
                             </ArticleMenuButton>
                         </div>
                         <div className="lg:tooltip" data-tip="20 reposts">

@@ -1,7 +1,79 @@
-import { addComment, getRepliesForRootComment } from "@/services/apiComment";
+import { addComment, getRepliesForRootComment, getRootComments } from "@/services/apiComment";
 import type { CommentThreadDTO, CommentView, CreateCommentRequest, CursorPage, CursorPageRequest } from "@/types/comment";
+import { useForm, useStore } from "@tanstack/react-form";
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { toast } from "sonner";
+import type { ActiveReplyTarget } from "./CommentList";
+import { CreateCommentSchema, type CreateCommentForm } from "@/schemas/comment";
+
+export function useGetInfiniteRootCommentList(articleId: string) {
+    return useInfiniteQuery({
+        queryKey: ['get-comment', articleId],
+        queryFn: async ({ pageParam }: { pageParam: CursorPageRequest }) => {
+            return await getRootComments({ params: pageParam, articleId });
+        },
+        initialPageParam: { lastCreatedAt: null, lastId: null } as CursorPageRequest,
+        getNextPageParam: (lastPage) => {
+            return lastPage.hasMore
+                ?
+                {
+                    lastCreatedAt: lastPage.nextCursorCreatedAt,
+                    lastId: lastPage.nextCursorId
+                }
+                : undefined;
+        }
+    });
+}
+
+export function useReplyCommentForm(articleId: string) {
+    const {
+        handleAddComment,
+        isAddingComment
+    } = useAddComment(articleId);
+
+    const [activeReplyTarget, setActiveReplyTarget] =
+        useState<ActiveReplyTarget | null>(null);
+
+    const defaultValues: CreateCommentForm = {
+        commentContent: ''
+    };
+
+    const replyForm = useForm({
+        defaultValues,
+        onSubmit: ({ value }) => {
+            if (!activeReplyTarget) {
+                return;
+            }
+            handleAddComment({
+                params: {
+                    content: value.commentContent,
+                    parentId: activeReplyTarget.parentId
+                }
+            }, {
+                onSuccess: () => {
+                    replyForm.resetField('commentContent');
+                    setActiveReplyTarget(null);
+                },
+            });
+        },
+        validators: {
+            onChange: CreateCommentSchema,
+            onSubmit: CreateCommentSchema,
+        },
+    });
+
+    const replyCanSubmit = useStore(replyForm.store, (state) => state.canSubmit);
+
+    return ({
+        isAddingComment,
+        activeReplyTarget,
+        setActiveReplyTarget,
+        replyForm,
+        replyCanSubmit
+    });
+
+}
 
 export function useGetRepliesForRoot(articleId: string, rootId: string, enabled: boolean) {
     return useInfiniteQuery({
@@ -30,7 +102,7 @@ export function useGetRepliesForRoot(articleId: string, rootId: string, enabled:
 export function useAddComment(articleId: string) {
     const queryClient = useQueryClient()
 
-    const { mutate: handleAddComment, isPending: isAdding } = useMutation({
+    const { mutate: handleAddComment, isPending: isAddingComment } = useMutation({
         mutationFn: async ({ params }: {
             params: CreateCommentRequest,
             rootId?: string
@@ -130,6 +202,6 @@ export function useAddComment(articleId: string) {
 
     return ({
         handleAddComment,
-        isAdding
+        isAddingComment
     });
 }

@@ -19,8 +19,8 @@ import FieldInfo from "@/ui/FieldInfo";
 import SignedIn from "@/ui/SignedIn";
 import SignedOut from "@/ui/SignedOut";
 import { CreateCommentSchema, type CreateCommentForm } from "@/schemas/comment";
-import { useAddComment } from "./comment";
-import CommentList from "./CommentList";
+import { useAddComment } from "../comment/comment";
+import CommentList from "../comment/CommentList";
 
 export default function ArticleDetail() {
     const navigate = useNavigate();
@@ -45,7 +45,7 @@ export default function ArticleDetail() {
 
     const {
         handleAddComment,
-        isAdding
+        isAddingComment
     } = useAddComment(articleId);
 
     // write your comment form
@@ -103,7 +103,7 @@ export default function ArticleDetail() {
                             <div className="lg:tooltip mx-1.5" data-tip="Respond">
                                 <ArticleMenuButton onClick={scrollToComments} type="button">
                                     <ChatCircleDotsIcon size={24} color="#676565" weight="light" />
-                                    {!isOwnStory && '90'}
+                                    {!isOwnStory && article.responseNum}
                                 </ArticleMenuButton>
                             </div>
                             <div className="lg:tooltip mx-1.5" data-tip={isOwnStory ? 'Your cannot repost your own story' : "20 reposts"}>
@@ -212,7 +212,7 @@ export default function ArticleDetail() {
                 <SignedIn>
                     {/* write your comment */}
                     <div ref={commentRef} className="flex flex-col items-start p-4 w-full lg:w-4xl mx-auto">
-                        <h2 className="text-lg md:text-2xl font-bold">Responses{`(${378})`}</h2>
+                        <h2 className="text-lg md:text-2xl font-bold">Responses{`(${article.responseNum})`}</h2>
                         <div className="flex flex-row items-center text-sm gap-1 my-3">
                             <Avatar imageUrl={user?.image ?? undefined} username={user?.username || ''} size="sm" />
                             <span className="ml-1.5">{user?.username}</span>
@@ -238,18 +238,17 @@ export default function ArticleDetail() {
                             />
                             <div className="w-full flex">
                                 <button
-                                    disabled={!canSubmit || isAdding}
+                                    disabled={!canSubmit || isAddingComment}
                                     type="submit"
                                     className="btn btn-sm md:btn-base btn-neutral my-3 ml-auto"
                                 >
-                                    {isAdding ? <span className="loading loading-spinner"></span> : 'Publish'}
+                                    {isAddingComment ? <span className="loading loading-spinner"></span> : 'Publish'}
                                 </button>
                             </div>
                         </form>
                     </div>
                     {/* comment list */}
                     <CommentList articleId={articleId} />
-
                 </SignedIn>
 
             </>}

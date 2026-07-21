@@ -4,13 +4,19 @@ import { getArticleList } from "@/services/apiArticle";
 import Loading from "@/ui/Loading";
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/_app/article.$articleId";
+import type { ArticleListRequest } from "@/types/article";
 
-export default function ArticleList() {
+export default function ArticleList({
+    author = 'allUser'
+}: {
+    author?: 'allUser' | 'myArticle' | 'oneUser'
+}) {
+    const params: ArticleListRequest = author === 'allUser' ? {} : author === 'myArticle' ? { isMyArticle: true } : {}
 
     const { data: articleList, isLoading, isError, error } = useQuery({
         queryKey: ['get-article-list'],
         queryFn: async () => {
-            return await getArticleList({});
+            return await getArticleList(params);
         },
     });
     return (

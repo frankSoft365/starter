@@ -12,7 +12,7 @@ import { useBlocker, useNavigate } from "@tanstack/react-router";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import { isDirtyAtom } from "@/atoms/article";
 import { DotsThreeIcon } from "@phosphor-icons/react";
-import Modal from "./ButtonModal";
+import Modal from "../../ui/ButtonModal";
 import { uploadFile } from "../editor/editor";
 import { ArticleSubmissionSchema, type ArticleSubmissionForm } from "@/schemas/article";
 import { useForm, useStore } from "@tanstack/react-form";
