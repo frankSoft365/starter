@@ -10,6 +10,10 @@ export async function getArticleList(params: ArticleListRequest) {
     return request.post<ArticleListRequest, ArticleListItemVO[]>('/article/public/list', params);
 }
 
+export async function getUserArticleList(params: ArticleListRequest) {
+    return request.post<ArticleListRequest, ArticleListItemVO[]>('/article/user/list', params);
+}
+
 export async function getArticleById(id: string) {
     return request.get<void, ArticleVO>(`/article/public/${id}`);
 }

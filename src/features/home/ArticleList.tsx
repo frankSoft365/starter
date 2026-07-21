@@ -1,6 +1,6 @@
 import ArticleListItem from "./ArticleListItem";
 import { useQuery } from "@tanstack/react-query";
-import { getArticleList } from "@/services/apiArticle";
+import { getArticleList, getUserArticleList } from "@/services/apiArticle";
 import Loading from "@/ui/Loading";
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/_app/article.$articleId";
@@ -9,14 +9,18 @@ import type { ArticleListRequest } from "@/types/article";
 export default function ArticleList({
     author = 'allUser'
 }: {
-    author?: 'allUser' | 'myArticle' | 'oneUser'
+    author?: 'allUser' | 'myArticle'
 }) {
-    const params: ArticleListRequest = author === 'allUser' ? {} : author === 'myArticle' ? { isMyArticle: true } : {}
+    const params: ArticleListRequest = author === 'allUser' ? { isMyArticle: false } : author === 'myArticle' ? { isMyArticle: true } : {}
 
     const { data: articleList, isLoading, isError, error } = useQuery({
         queryKey: ['get-article-list'],
         queryFn: async () => {
-            return await getArticleList(params);
+            if (author === 'allUser') {
+                return await getArticleList(params);
+            } else {
+                return await getUserArticleList(params);
+            }
         },
     });
     return (
