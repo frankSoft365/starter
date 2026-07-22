@@ -1,4 +1,4 @@
-import { SidebarIcon, NotePencilIcon } from "@phosphor-icons/react";
+import { SidebarIcon, NotePencilIcon, BellIcon } from "@phosphor-icons/react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";
@@ -11,6 +11,7 @@ import { editorEmptySignalAtom, editorSubmissionSignalAtom, editorUpdateSignalAt
 import { isLoadingAtom } from "../atoms/user";
 import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
 import { isDirtyAtom } from "@/atoms/article";
+import { Route as notificationsRoute } from "@/routes/_app/_protected/me/notifications";
 
 export default function NavBar() {
     const navigate = useNavigate();
@@ -33,6 +34,7 @@ export default function NavBar() {
     const isHomeRoute = location.pathname === homeRoute.to;
     const isEditorRoute = location.pathname === editorRoute.to;
     const isArticleEditRoute = location.pathname.includes(articleEditRoute.to.split('$')[0]);
+    const isNotificationRoute = location.pathname === notificationsRoute.to;
 
     return (
         <div className="relative z-999 max-lg:collapse bg-base-200 shadow-sm w-full rounded-md">
@@ -51,10 +53,17 @@ export default function NavBar() {
                 <div className="navbar-end">
                     {/* can write only when is login */}
                     <SignedIn>
-                        {!isEditorRoute && !isArticleEditRoute && <button onClick={() => navigate({ to: editorRoute.to })} className="btn btn-ghost hidden md:inline-flex mr-2">
-                            <NotePencilIcon size={24} />
-                            Write
-                        </button>}
+                        {!isEditorRoute && !isArticleEditRoute &&
+                            <>
+                                <button onClick={() => navigate({ to: editorRoute.to })} className="btn btn-ghost hidden md:inline-flex mr-1">
+                                    <NotePencilIcon size={24} />
+                                    Write
+                                </button>
+                                <button onClick={() => navigate({ to: notificationsRoute.to })} className="btn btn-square btn-ghost md:inline-flex mr-4">
+                                    {isNotificationRoute ? <BellIcon size={24} weight="fill" /> : <BellIcon size={24} />}
+                                </button>
+                            </>
+                        }
                         {isEditorRoute && <>
                             <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-1 btn-xs lg:btn-md lg:mr-4">
                                 Publish

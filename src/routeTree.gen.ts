@@ -21,6 +21,7 @@ import { Route as AppProtectedEditorRouteImport } from './routes/_app/_protected
 import { Route as AppProtectedEmailnameRouteImport } from './routes/_app/_protected/$emailname'
 import { Route as AppProtectedMeSettingsRouteImport } from './routes/_app/_protected/me/settings'
 import { Route as AppProtectedMePasswordRouteImport } from './routes/_app/_protected/me/password'
+import { Route as AppProtectedMeNotificationsRouteImport } from './routes/_app/_protected/me/notifications'
 import { Route as AppProtectedArticlesEditArticleIdRouteImport } from './routes/_app/_protected/articles.edit.$articleId'
 
 const RegisterRoute = RegisterRouteImport.update({
@@ -81,6 +82,12 @@ const AppProtectedMePasswordRoute = AppProtectedMePasswordRouteImport.update({
   path: '/me/password',
   getParentRoute: () => AppProtectedRouteRoute,
 } as any)
+const AppProtectedMeNotificationsRoute =
+  AppProtectedMeNotificationsRouteImport.update({
+    id: '/me/notifications',
+    path: '/me/notifications',
+    getParentRoute: () => AppProtectedRouteRoute,
+  } as any)
 const AppProtectedArticlesEditArticleIdRoute =
   AppProtectedArticlesEditArticleIdRouteImport.update({
     id: '/articles/edit/$articleId',
@@ -97,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/editor': typeof AppProtectedEditorRoute
   '/submission': typeof AppProtectedSubmissionRoute
   '/article/$articleId': typeof AppArticleArticleIdRoute
+  '/me/notifications': typeof AppProtectedMeNotificationsRoute
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
@@ -110,6 +118,7 @@ export interface FileRoutesByTo {
   '/editor': typeof AppProtectedEditorRoute
   '/submission': typeof AppProtectedSubmissionRoute
   '/article/$articleId': typeof AppArticleArticleIdRoute
+  '/me/notifications': typeof AppProtectedMeNotificationsRoute
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
@@ -126,6 +135,7 @@ export interface FileRoutesById {
   '/_app/_protected/editor': typeof AppProtectedEditorRoute
   '/_app/_protected/submission': typeof AppProtectedSubmissionRoute
   '/_app/article/$articleId': typeof AppArticleArticleIdRoute
+  '/_app/_protected/me/notifications': typeof AppProtectedMeNotificationsRoute
   '/_app/_protected/me/password': typeof AppProtectedMePasswordRoute
   '/_app/_protected/me/settings': typeof AppProtectedMeSettingsRoute
   '/_app/_protected/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/editor'
     | '/submission'
     | '/article/$articleId'
+    | '/me/notifications'
     | '/me/password'
     | '/me/settings'
     | '/articles/edit/$articleId'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/editor'
     | '/submission'
     | '/article/$articleId'
+    | '/me/notifications'
     | '/me/password'
     | '/me/settings'
     | '/articles/edit/$articleId'
@@ -169,6 +181,7 @@ export interface FileRouteTypes {
     | '/_app/_protected/editor'
     | '/_app/_protected/submission'
     | '/_app/article/$articleId'
+    | '/_app/_protected/me/notifications'
     | '/_app/_protected/me/password'
     | '/_app/_protected/me/settings'
     | '/_app/_protected/articles/edit/$articleId'
@@ -266,6 +279,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProtectedMePasswordRouteImport
       parentRoute: typeof AppProtectedRouteRoute
     }
+    '/_app/_protected/me/notifications': {
+      id: '/_app/_protected/me/notifications'
+      path: '/me/notifications'
+      fullPath: '/me/notifications'
+      preLoaderRoute: typeof AppProtectedMeNotificationsRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
+    }
     '/_app/_protected/articles/edit/$articleId': {
       id: '/_app/_protected/articles/edit/$articleId'
       path: '/articles/edit/$articleId'
@@ -280,6 +300,7 @@ interface AppProtectedRouteRouteChildren {
   AppProtectedEmailnameRoute: typeof AppProtectedEmailnameRoute
   AppProtectedEditorRoute: typeof AppProtectedEditorRoute
   AppProtectedSubmissionRoute: typeof AppProtectedSubmissionRoute
+  AppProtectedMeNotificationsRoute: typeof AppProtectedMeNotificationsRoute
   AppProtectedMePasswordRoute: typeof AppProtectedMePasswordRoute
   AppProtectedMeSettingsRoute: typeof AppProtectedMeSettingsRoute
   AppProtectedArticlesEditArticleIdRoute: typeof AppProtectedArticlesEditArticleIdRoute
@@ -289,6 +310,7 @@ const AppProtectedRouteRouteChildren: AppProtectedRouteRouteChildren = {
   AppProtectedEmailnameRoute: AppProtectedEmailnameRoute,
   AppProtectedEditorRoute: AppProtectedEditorRoute,
   AppProtectedSubmissionRoute: AppProtectedSubmissionRoute,
+  AppProtectedMeNotificationsRoute: AppProtectedMeNotificationsRoute,
   AppProtectedMePasswordRoute: AppProtectedMePasswordRoute,
   AppProtectedMeSettingsRoute: AppProtectedMeSettingsRoute,
   AppProtectedArticlesEditArticleIdRoute:

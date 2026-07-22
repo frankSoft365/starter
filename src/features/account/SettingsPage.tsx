@@ -67,7 +67,7 @@ export default function SettingsPage() {
             <p className="text-xl md:text-xl font-medium m-4">Account</p>
             <div className="m-4">
                 <ul className="list bg-base-100 rounded-box shadow-md w-full">
-                    <li className="list-row hover:bg-gray-50 cursor-pointer relative" onClick={() => navigate({ to: mePasswordRoute.to })}>
+                    <li className="list-row hover:bg-base-300 cursor-pointer relative" onClick={() => navigate({ to: mePasswordRoute.to })}>
                         <div className="text-left cursor-pointer">Change Password</div>
                         <div className="text-right cursor-pointer w-12 absolute right-0">
                             <ArrowSquareOutIcon size={24} />

@@ -12,7 +12,7 @@ const request = axios.create({
     // dev: http://localhost:8070
     baseURL: 'https://aedium.franksoft.top',
     withCredentials: true,
-    timeout: 10000
+    timeout: 15000
 })
 
 request.interceptors.request.use((config) => {
