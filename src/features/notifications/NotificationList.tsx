@@ -127,11 +127,10 @@ export default function NotificationList({
                             const replyNotification = type === 'reply' ? notification as ReplyNotificationVO : notification as ReplyNotificationVO;
 
                             return (
-                                <>
+                                <div key={notification.id}>
                                     {index !== 0 && notification.id === watermarkRef.current && <div className="divider">Last time I saw this</div>}
                                     <NotificationRow notification={notification} >
                                         <li
-                                            key={notification.id}
                                             className='list-row'
                                         >
                                             <div className="indicator">
@@ -200,7 +199,7 @@ export default function NotificationList({
                                         </li>
                                     </NotificationRow>
 
-                                </>
+                                </div>
                             );
                         })}
                         <li ref={notificationListBottomRef} className="list-row h-0.5" aria-hidden></li>

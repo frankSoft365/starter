@@ -64,8 +64,6 @@ export default function CommentList({
         async function fetchPinnedComment() {
             if (targetReplyId) {
                 const commentThreadDTO = await getRootCommentAndContextById({ replyId: targetReplyId });
-                console.log(commentThreadDTO);
-                console.log(commentThreadDTO.pinned);
 
                 queryClient.setQueryData(
                     ['get-comment', articleId],
@@ -89,6 +87,16 @@ export default function CommentList({
         }
         fetchPinnedComment();
     }, [targetReplyId, status]);
+
+    useEffect(() => {
+        const handleVisible = () => {
+            if (document.visibilityState === 'visible') {
+                location.reload();
+            }
+        }
+        document.addEventListener('visibilitychange', handleVisible);
+        return () => document.removeEventListener('visibilitychange', handleVisible);
+    }, []);
 
     useEffect(() => {
         if (pinnedComment) {

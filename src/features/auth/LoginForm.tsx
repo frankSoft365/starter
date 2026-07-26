@@ -46,7 +46,7 @@ export default function LoginForm() {
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
-                            className="input"
+                            className="input w-full"
                             type="email"
                             placeholder="Email"
                         />
@@ -65,7 +65,7 @@ export default function LoginForm() {
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
                             type="password"
-                            className="input"
+                            className="input w-full"
                             placeholder="Password"
                         />
                         <FieldInfo field={field} />
