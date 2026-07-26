@@ -100,7 +100,7 @@ export function useGetRepliesForRoot(articleId: string, rootId: string, enabled:
 }
 
 export function useAddComment(articleId: string) {
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
 
     const { mutate: handleAddComment, isPending: isAddingComment } = useMutation({
         mutationFn: async ({ params }: {

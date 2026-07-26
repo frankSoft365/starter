@@ -11,6 +11,14 @@ export async function getRootComments({
     return request.post<CursorPageRequest, CursorPage<CommentThreadDTO>>(`/article/${articleId}/comment/getList`, params);
 }
 
+export async function getRootCommentAndContextById({
+    replyId
+}: {
+    replyId: string
+}) {
+    return request.get<void, CommentThreadDTO>(`comment/getOne/${replyId}`);
+}
+
 export async function addComment({
     params,
     articleId

@@ -6,12 +6,16 @@ import type { ActiveReplyTarget } from "./CommentList";
 
 export default function ReplyList({
     articleId,
+    authorId,
     commentThreadDTO,
-    setActiveReplyTarget
+    setActiveReplyTarget,
+    targetReplyId = null
 }: {
     articleId: string,
+    authorId: string,
     commentThreadDTO: CommentThreadDTO,
-    setActiveReplyTarget: (value: ActiveReplyTarget | null) => void
+    setActiveReplyTarget: (value: ActiveReplyTarget | null) => void,
+    targetReplyId?: string | null
 }) {
     const totalReplyCount = commentThreadDTO.totalReplyCount;
     const rootComment = commentThreadDTO.root;
@@ -36,10 +40,11 @@ export default function ReplyList({
             {repliesPreview.length > 0 && !expanded && (
                 <div className="ml-5 border-gray-200 bg-base-200 pl-1 rounded-2xl">
                     {repliesPreview.map(reply => (
-                        <div key={reply.id} className="space-y-2">
+                        <div key={reply.id} className={`space-y-2 ${targetReplyId && reply.id === targetReplyId ? 'animate-highlight-fade' : ''}`}>
                             <CommentItem
                                 avatarUrl={reply.userAvatar || ''}
                                 username={reply.username || ''}
+                                isAuthor={authorId === reply.userId}
                                 replyToUsername={rootComment.id !== reply.parentId ? reply.replyToUsername : null}
                                 createdAt={new Date(reply.createdAt).toLocaleString()}
                                 body={reply.content}
@@ -58,7 +63,7 @@ export default function ReplyList({
                     ))}
                 </div>
             )}
-            {!expanded && totalReplyCount > 3 && <li
+            {!expanded && totalReplyCount > 0 && <li
                 onClick={() => {
                     setExpanded(true);
                     setActiveReplyTarget(null);
@@ -76,6 +81,7 @@ export default function ReplyList({
                             <CommentItem
                                 avatarUrl={reply.userAvatar || ''}
                                 username={reply.username || ''}
+                                isAuthor={authorId === reply.userId}
                                 replyToUsername={rootComment.id !== reply.parentId ? reply.replyToUsername : null}
                                 createdAt={new Date(reply.createdAt).toLocaleString()}
                                 body={reply.content}

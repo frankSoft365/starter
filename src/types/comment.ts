@@ -10,6 +10,7 @@ export type CommentThreadDTO = {
     replyPreview: CommentView[];
     totalReplyCount: number;
     hasMoreReplies: boolean;
+    pinned: boolean;
 }
 
 export type CommentView = {

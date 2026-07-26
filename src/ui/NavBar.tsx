@@ -1,4 +1,4 @@
-import { SidebarIcon, NotePencilIcon, BellIcon } from "@phosphor-icons/react";
+import { SidebarIcon, NotePencilIcon } from "@phosphor-icons/react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";
@@ -12,6 +12,7 @@ import { isLoadingAtom } from "../atoms/user";
 import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
 import { isDirtyAtom } from "@/atoms/article";
 import { Route as notificationsRoute } from "@/routes/_app/_protected/me/notifications";
+import NotificationBell from "./NotificationBell";
 
 export default function NavBar() {
     const navigate = useNavigate();
@@ -59,9 +60,10 @@ export default function NavBar() {
                                     <NotePencilIcon size={24} />
                                     Write
                                 </button>
-                                <button onClick={() => navigate({ to: notificationsRoute.to })} className="btn btn-square btn-ghost md:inline-flex mr-4">
-                                    {isNotificationRoute ? <BellIcon size={24} weight="fill" /> : <BellIcon size={24} />}
-                                </button>
+                                <NotificationBell
+                                    isNotificationRoute={isNotificationRoute}
+                                    hanleClick={() => navigate({ to: notificationsRoute.to })}
+                                />
                             </>
                         }
                         {isEditorRoute && <>

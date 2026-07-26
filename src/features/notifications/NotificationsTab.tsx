@@ -1,23 +1,25 @@
-import { useAtomValue } from "jotai";
-import { userAtom } from "@/atoms/user";
+import NotificationList from "./NotificationList";
 
 export default function NotificationsTab() {
-    const user = useAtomValue(userAtom);
 
     return (
         <div className="w-full md:w-3xl">
             <div className="w-full text-3xl md:text-4xl m-4 font-bold">Notifications</div>
             <div className="tabs tabs-lift w-full">
-                <input type="radio" name="profile_tabs_5" className="tab" aria-label="Home" defaultChecked />
+                <input type="radio" name="profile_tabs_5" className="tab" aria-label="Reply" defaultChecked />
                 <div className="tab-content bg-base-100 border-base-300">
-                    Home
+                    <NotificationList type="reply" />
                 </div>
 
-                <input type="radio" name="profile_tabs_5" className="tab" aria-label="Reposts" />
-                <div className="tab-content bg-base-100 border-base-300 p-6">Reposts</div>
+                <input type="radio" name="profile_tabs_5" className="tab" aria-label="Like" />
+                <div className="tab-content bg-base-100 border-base-300 p-6">
+                    Like
+                </div>
 
-                <input type="radio" name="profile_tabs_5" className="tab" aria-label="Activity" />
-                <div className="tab-content bg-base-100 border-base-300 p-6">Activity</div>
+                <input type="radio" name="profile_tabs_5" className="tab" aria-label="Follow" />
+                <div className="tab-content bg-base-100 border-base-300 p-6">
+                    Follow
+                </div>
             </div>
         </div>
     );

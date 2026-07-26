@@ -43,6 +43,7 @@ export default function ArticleDetail() {
         commentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
+
     const {
         handleAddComment,
         isAddingComment
@@ -248,7 +249,7 @@ export default function ArticleDetail() {
                         </form>
                     </div>
                     {/* comment list */}
-                    <CommentList articleId={articleId} />
+                    <CommentList articleId={articleId} authorId={article.authorId} />
                 </SignedIn>
 
             </>}

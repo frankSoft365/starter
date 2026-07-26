@@ -4,6 +4,7 @@ import { ChatCircleDotsIcon, ThumbsUpIcon } from "@phosphor-icons/react";
 type CommentItemProps = {
     avatarUrl?: string;
     username: string;
+    isAuthor: boolean;
     replyToUsername?: string | null;
     createdAt?: string;
     body: string;
@@ -15,6 +16,7 @@ type CommentItemProps = {
 export default function CommentItem({
     avatarUrl,
     username,
+    isAuthor,
     replyToUsername,
     createdAt,
     body,
@@ -32,18 +34,20 @@ export default function CommentItem({
             <div><Avatar imageUrl={avatarUrl} username={username} size={size} /></div>
             <div>
                 <div className={headingSize}>
-                    <strong>{username}</strong>
+                    <span><strong>{username}</strong></span>
+                    {isAuthor && <div className="badge badge-xs badge-primary ml-2">Author</div>}
                     {replyToUsername
                         ?
-                        <span>
+                        <span className={headingSize}>
                             <em> reply to </em>
                             <span className="text-blue-500">
                                 {replyToUsername}
                             </span>
                         </span>
-                        : ''
+                        : null
                     }
                 </div>
+
                 {createdAt ? <div className="text-xs text-gray-500">{createdAt}</div> : null}
             </div>
             <p className={`list-col-wrap ${bodySize} mb-2`}>
