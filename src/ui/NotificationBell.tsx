@@ -22,7 +22,7 @@ export default function NotificationBell({
     }, []);
 
     return (
-        <div className="indicator mr-4">
+        <div className="indicator mr-3">
             {totalUnreadCount > 0 && <span className="indicator-item badge badge-xs badge-primary">{totalUnreadCount}</span>}
             <button onClick={hanleClick} className="btn btn-square md:inline-flex">
                 {isNotificationRoute ? <BellIcon size={24} weight="fill" /> : <BellIcon size={24} />}

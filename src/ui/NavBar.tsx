@@ -49,7 +49,7 @@ export default function NavBar() {
                     </label>
                     <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost btn-sm text-sm mr-2 lg:text-xl lg:btn-md">Aedium</button>
                     {/* search input field */}
-                    {isHomeRoute && <input type="text" placeholder="Search" className="input input-bordered w-30 md:w-auto mr-2" />}
+                    {isHomeRoute && <input type="text" placeholder="Search" className="input input-bordered w-28 md:w-auto mr-1" />}
                 </div>
                 <div className="navbar-end">
                     {/* can write only when is login */}
