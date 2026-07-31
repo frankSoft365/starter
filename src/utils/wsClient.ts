@@ -6,7 +6,7 @@ export function getStompClient(): Client {
     if (client) return client;
 
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const brokerURL = `${protocol}://localhost:8070/ws`;
+    const brokerURL = `${protocol}://${import.meta.env.VITE_WS_HOST}/ws`;
 
     client = new Client({
         brokerURL,
