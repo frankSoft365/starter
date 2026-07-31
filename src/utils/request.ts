@@ -10,7 +10,7 @@ const jotaiStore = getDefaultStore()
 const request = axios.create({
     // prod: https://aedium.franksoft.top
     // dev: http://localhost:8070
-    baseURL: 'https://aedium.franksoft.top',
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8070',
     withCredentials: true,
     timeout: 15000
 })
