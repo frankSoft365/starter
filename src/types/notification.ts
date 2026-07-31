@@ -11,10 +11,24 @@ export interface NotificationVO {
     createTime: string;
 }
 
+export interface ReplyNotificationVO extends NotificationVO {
+    rootComment: CommentBriefDTO;
+    parentComment: CommentBriefDTO;
+    reply: CommentBriefDTO;
+    article: ArticleBriefDTO;
+}
+
 export type UnreadCountVO = {
     replyCount: string;
     likeCount: string;
     followCount: string;
+}
+
+export type NotificationPushEvent<T extends NotificationVO> = {
+    recipientId: string;
+    type: string;
+    unreadCount: string;
+    notificationVO: T;
 }
 
 export type NotificationCursorPage<T> = {
@@ -38,12 +52,4 @@ export interface CommentBriefDTO {
 export interface ArticleBriefDTO {
     id: string;
     title: string;
-}
-
-
-export interface ReplyNotificationVO extends NotificationVO {
-    rootComment: CommentBriefDTO;
-    parentComment: CommentBriefDTO;
-    reply: CommentBriefDTO;
-    article: ArticleBriefDTO;
 }

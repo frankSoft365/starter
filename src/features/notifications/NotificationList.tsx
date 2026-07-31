@@ -12,7 +12,7 @@ import { unreadCountAtom } from "@/atoms/notification";
 
 
 type NotificationListType = 'reply' | 'like' | 'follow';
-type NotificationItem = ReplyNotificationVO;
+export type NotificationItem = ReplyNotificationVO;
 const replyNotificationTextMap = {
     ARTICLE: 'commented to my article',
     COMMENT: 'reply to my comment',
@@ -63,7 +63,10 @@ export default function NotificationList({
         },
     });
 
+    // ensure the markAsRead only once
     const hasMarkedRead = useRef(false);
+    const lastMarkedId = useRef<string | null>(null);
+    const latestSeenId = useRef<string | null>(null);
 
     useEffect(() => {
         if (!hasMarkedRead.current && data && data.pages[0]?.items?.length > 0) {
@@ -76,6 +79,24 @@ export default function NotificationList({
             hasMarkedRead.current = true;
         }
     }, [data]);
+
+    useEffect(() => {
+        if (data && data.pages[0]?.items?.length > 0) {
+            latestSeenId.current = data.pages[0].items[0].id;
+        }
+    }, [data]);
+
+    useEffect(() => {
+        return () => {
+            if (latestSeenId.current !== null && latestSeenId.current !== lastMarkedId.current) {
+                markNotificationAsRead(type, latestSeenId.current);
+                setUnreadCount({
+                    ...unreadCount,
+                    replyCount: '0'
+                } as UnreadCountVO);
+            }
+        };
+    }, [type]);
 
     const notificationListBottomRef = useRef<HTMLLIElement | null>(null);
 

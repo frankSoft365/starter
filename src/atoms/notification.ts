@@ -1,7 +1,11 @@
 import type { UnreadCountVO } from '@/types/notification';
 import { atom } from 'jotai'
 
-export const unreadCountAtom = atom<UnreadCountVO | null>(null);
+export const unreadCountAtom = atom<UnreadCountVO>({
+    replyCount: '0',
+    likeCount: '0',
+    followCount: '0'
+} as UnreadCountVO);
 
 export const totalUnreadCountAtom = atom(
     (get) => {

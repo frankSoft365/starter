@@ -12,7 +12,7 @@ import { isLoadingAtom } from "../atoms/user";
 import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
 import { isDirtyAtom } from "@/atoms/article";
 import { Route as notificationsRoute } from "@/routes/_app/_protected/me/notifications";
-import NotificationBell from "./NotificationBell";
+import NotificationBell from "../features/notifications/NotificationBell";
 
 export default function NavBar() {
     const navigate = useNavigate();

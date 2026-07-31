@@ -1,8 +1,8 @@
-import { totalUnreadCountAtom, unreadCountAtom } from "@/atoms/notification";
-import { getUnreadCount } from "@/services/apiNotification";
+import { totalUnreadCountAtom } from "@/atoms/notification";
 import { BellIcon } from "@phosphor-icons/react";
-import { useAtomValue, useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useAtomValue } from "jotai";
+import { useUnreadCountQuery } from "./notification";
+import { useNotificationSocket } from "@/hooks/useNotificationSocket";
 
 export default function NotificationBell({
     isNotificationRoute,
@@ -11,15 +11,9 @@ export default function NotificationBell({
     isNotificationRoute: boolean,
     hanleClick: () => void
 }) {
-    const setUnreadCount = useSetAtom(unreadCountAtom);
     const totalUnreadCount = useAtomValue(totalUnreadCountAtom);
-    useEffect(() => {
-        async function fetchUnreadCount() {
-            const unreadCount = await getUnreadCount();
-            setUnreadCount(unreadCount);
-        }
-        fetchUnreadCount();
-    }, []);
+    useUnreadCountQuery();
+    useNotificationSocket();
 
     return (
         <div className="indicator mr-3">
