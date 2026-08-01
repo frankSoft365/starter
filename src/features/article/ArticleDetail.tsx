@@ -3,7 +3,7 @@ import Loading from "@/ui/Loading";
 import Avatar from "@/ui/Avatar";
 import { getPublishDate } from "@/utils/dateHelper";
 import EditorComponent from "@/ui/EditorComponent";
-import { BookmarkIcon, ChatCircleDotsIcon, DotsThreeIcon, ExportIcon, HandsClappingIcon, RepeatIcon, ThumbsDownIcon } from "@phosphor-icons/react";
+import { BookmarkIcon, ChatCircleDotsIcon, DotsThreeIcon, HandsClappingIcon, RepeatIcon, ThumbsDownIcon } from "@phosphor-icons/react";
 import ArticleMenuButton from "@/ui/ArticleMenuButton";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
@@ -21,6 +21,7 @@ import SignedOut from "@/ui/SignedOut";
 import { CreateCommentSchema, type CreateCommentForm } from "@/schemas/comment";
 import { useAddComment } from "../comment/comment";
 import CommentList from "../comment/CommentList";
+import ShareButton from "./ShareButton";
 
 export default function ArticleDetail() {
     const navigate = useNavigate();
@@ -94,43 +95,43 @@ export default function ArticleDetail() {
                     {/* Interaction Bar */}
                     <div className="divider mb-0"></div>
                     <div className="flex flex-row items-center justify-around w-full">
+                        {/* left buttons */}
                         <div className="flex flex-row">
-                            <div className="lg:tooltip mx-1.5" data-tip={isOwnStory ? 'Your cannot applaud your own story' : "3K claps"}>
+                            <div className="lg:tooltip mx-1" data-tip={isOwnStory ? 'Your cannot applaud your own story' : "3K claps"}>
                                 <ArticleMenuButton disable={isOwnStory}>
                                     <HandsClappingIcon size={24} color={meneButtonColor} weight="light" />
                                     {!isOwnStory && '3K'}
                                 </ArticleMenuButton>
                             </div>
-                            <div className="lg:tooltip mx-1.5" data-tip="Respond">
+                            <div className="lg:tooltip mx-1" data-tip="Respond">
                                 <ArticleMenuButton onClick={scrollToComments} type="button">
                                     <ChatCircleDotsIcon size={24} color="#676565" weight="light" />
                                     {!isOwnStory && article.responseNum}
                                 </ArticleMenuButton>
                             </div>
-                            <div className="lg:tooltip mx-1.5" data-tip={isOwnStory ? 'Your cannot repost your own story' : "20 reposts"}>
+                            <div className="lg:tooltip mx-1" data-tip={isOwnStory ? 'Your cannot repost your own story' : "20 reposts"}>
                                 <ArticleMenuButton disable={isOwnStory}>
                                     <RepeatIcon size={24} color={meneButtonColor} weight="light" />
                                     {!isOwnStory && '20'}
                                 </ArticleMenuButton>
                             </div>
                         </div>
+                        {/* right buttons */}
                         <div className="flex flex-row">
-                            <div className="lg:tooltip mx-2" data-tip="Save">
+                            <div className="lg:tooltip mx-1.5" data-tip="Save">
                                 <button className="btn btn-square btn-ghost">
                                     <BookmarkIcon size={24} color="#676565" weight="light" />
                                 </button>
                             </div>
-                            <div className="lg:tooltip mx-2" data-tip="Share">
-                                <button className="btn btn-square btn-ghost">
-                                    <ExportIcon size={24} color="#676565" weight="light" />
-                                </button>
+                            <div className="lg:tooltip mx-1.5" data-tip="Share">
+                                <ShareButton articleId={articleId} title={title ?? 'No title'} />
                             </div>
-                            <div className="lg:tooltip mx-2" data-tip="More">
-                                <button className="btn btn-square btn-ghost" popoverTarget="popover-1" style={{ anchorName: "--anchor-1" }} >
+                            <div className="lg:tooltip mx-1.5" data-tip="More">
+                                <button className="btn btn-square btn-ghost" popoverTarget="popover-more" style={{ anchorName: "--anchor-more" }} >
                                     <DotsThreeIcon size={24} color="#676565" weight="bold" />
                                 </button>
                                 <ul className="dropdown menu w-52 bg-base-100 shadow-lg"
-                                    popover="auto" id="popover-1" style={{ positionAnchor: "--anchor-1" }}>
+                                    popover="auto" id="popover-more" style={{ positionAnchor: "--anchor-more" }}>
                                     {!isOwnStory && <li>
                                         <button className="btn btn-ghost justify-start">
                                             <ThumbsDownIcon size={24} color="#676565" weight="light" />
