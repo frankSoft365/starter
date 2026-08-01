@@ -44,6 +44,7 @@ export default function ArticleList({
                 el.scrollIntoView({ behavior: "auto", block: "center" });
             }
         }, 0);
+        setEscapeArticleId(null);
         hasJumpRef.current = true;
     }, [articleList]);
 
