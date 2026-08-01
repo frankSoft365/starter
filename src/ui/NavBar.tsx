@@ -1,4 +1,4 @@
-import { SidebarIcon, NotePencilIcon } from "@phosphor-icons/react";
+import { SidebarIcon, NotePencilIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";
@@ -13,6 +13,7 @@ import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edi
 import { isDirtyAtom } from "@/atoms/article";
 import { Route as notificationsRoute } from "@/routes/_app/_protected/me/notifications";
 import NotificationBell from "../features/notifications/NotificationBell";
+import { toast } from "sonner";
 
 export default function NavBar() {
     const navigate = useNavigate();
@@ -49,7 +50,12 @@ export default function NavBar() {
                     </label>
                     <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost btn-sm text-sm mr-2 lg:text-xl lg:btn-md">Aedium</button>
                     {/* search input field */}
-                    {isHomeRoute && <input type="text" placeholder="Search" className="input input-bordered w-28 md:w-auto mr-1" />}
+                    {isHomeRoute && <>
+                        <input type="text" placeholder="Search" className="input input-bordered hidden md:inline-flex md:w-56 mr-1" />
+                        <button onClick={() => toast.error('还没有功能呢!')} className="btn btn-ghost btn-square inline-flex md:hidden mr-1">
+                            <MagnifyingGlassIcon size={24} />
+                        </button>
+                    </>}
                 </div>
                 <div className="navbar-end">
                     {/* can write only when is login */}
@@ -60,10 +66,12 @@ export default function NavBar() {
                                     <NotePencilIcon size={24} />
                                     Write
                                 </button>
-                                <NotificationBell
-                                    isNotificationRoute={isNotificationRoute}
-                                    hanleClick={() => navigate({ to: notificationsRoute.to })}
-                                />
+                                <div className="tooltip tooltip-bottom" data-tip="Notifications">
+                                    <NotificationBell
+                                        isNotificationRoute={isNotificationRoute}
+                                        hanleClick={() => navigate({ to: notificationsRoute.to })}
+                                    />
+                                </div>
                             </>
                         }
                         {isEditorRoute && <>

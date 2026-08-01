@@ -5,12 +5,16 @@ import Loading from "@/ui/Loading";
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/_app/article.$articleId";
 import type { ArticleListRequest } from "@/types/article";
+import { useAtom } from "jotai";
+import { escapeArticleIdAtom } from "@/atoms/article";
+import { useLayoutEffect, useRef } from "react";
 
 export default function ArticleList({
     author = 'allUser'
 }: {
     author?: 'allUser' | 'myArticle'
 }) {
+    const [escapeArticleId, setEscapeArticleId] = useAtom(escapeArticleIdAtom);
     const params: ArticleListRequest = author === 'allUser' ? { isMyArticle: false } : author === 'myArticle' ? { isMyArticle: true } : {}
 
     const { data: articleList, isLoading, isError, error } = useQuery({
@@ -23,6 +27,26 @@ export default function ArticleList({
             }
         },
     });
+
+    const hasJumpRef = useRef(false);
+
+    useLayoutEffect(() => {
+        if (hasJumpRef.current) {
+            return;
+        }
+        if (!articleList || !escapeArticleId) {
+            return;
+        }
+        setTimeout(() => {
+            const el = document.getElementById(`article-list-item-${escapeArticleId}`);
+
+            if (el) {
+                el.scrollIntoView({ behavior: "auto", block: "center" });
+            }
+        }, 0);
+        hasJumpRef.current = true;
+    }, [articleList]);
+
     return (
         <>
             {isLoading && !isError && <Loading />}
@@ -40,7 +64,7 @@ export default function ArticleList({
                 </main>}
                 {articleList.map((article) => {
                     return (
-                        <Link key={article.id} to={Route.to} params={{ articleId: article.id }}>
+                        <Link onClick={() => setEscapeArticleId(article.id)} key={article.id} to={Route.to} params={{ articleId: article.id }}>
                             <ArticleListItem
                                 article={article}
                             />

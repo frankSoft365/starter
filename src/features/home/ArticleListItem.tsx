@@ -8,7 +8,7 @@ import { objectPositionFromRatio } from "@/utils/coverFocus";
 export default function ArticleListItem({ article }: { article: ArticleListItemVO }) {
 
     return (
-        <li className="list-row min-h-64 cursor-pointer grid-cols-5">
+        <li id={`article-list-item-${article.id}`} className="list-row min-h-64 cursor-pointer grid-cols-5">
             <div className='flex flex-col justify-between col-span-3'>
                 <div className="flex flex-row items-center text-sm gap-1">
                     <Avatar imageUrl={article.authorAvatar} username={article.authorName} size="sm" />
@@ -49,17 +49,17 @@ export default function ArticleListItem({ article }: { article: ArticleListItemV
                     </div>
                     <div className="flex flex-row">
                         <div className="lg:tooltip" data-tip="I'm not interested in this story">
-                            <button className="btn btn-square btn-ghost">
+                            <button className="btn btn-square btn-ghost mr-2">
                                 <ThumbsDownIcon size={24} color="#676565" weight="light" />
                             </button>
                         </div>
                         <div className="lg:tooltip" data-tip="Save">
-                            <button className="btn btn-square btn-ghost">
+                            <button className="btn btn-square btn-ghost mr-2">
                                 <BookmarkIcon size={24} color="#676565" weight="light" />
                             </button>
                         </div>
                         <div className="lg:tooltip" data-tip="More">
-                            <button className="btn btn-square btn-ghost">
+                            <button className="btn btn-square btn-ghost mr-2">
                                 <DotsThreeIcon size={24} color="#676565" weight="bold" />
                             </button>
                         </div>
