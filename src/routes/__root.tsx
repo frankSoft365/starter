@@ -17,7 +17,6 @@ const RootLayout = () => (
             <Auth>
                 <Outlet />
                 <Toaster position="top-center" richColors duration={2000} gap={28} />
-
             </Auth>
             <TanStackRouterDevtools />
             <DevTools position='bottom-right' />

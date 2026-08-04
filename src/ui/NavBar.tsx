@@ -39,7 +39,7 @@ export default function NavBar() {
     const isNotificationRoute = location.pathname === notificationsRoute.to;
 
     return (
-        <div className="relative z-999 max-lg:collapse bg-base-200 shadow-sm w-full rounded-md">
+        <div className="relative z-999 max-lg:collapse bg-base-200 shadow-sm w-full">
             <input id="navbar-1-toggle" className="peer hidden" type="checkbox" />
             <label htmlFor="navbar-1-toggle" className="fixed inset-0 hidden max-lg:peer-checked:block"></label>
             <div className="collapse-title navbar">
@@ -66,7 +66,7 @@ export default function NavBar() {
                                     <NotePencilIcon size={24} />
                                     Write
                                 </button>
-                                <div className="tooltip tooltip-bottom" data-tip="Notifications">
+                                <div className="md:tooltip md:tooltip-bottom" data-tip="Notifications">
                                     <NotificationBell
                                         isNotificationRoute={isNotificationRoute}
                                         hanleClick={() => navigate({ to: notificationsRoute.to })}

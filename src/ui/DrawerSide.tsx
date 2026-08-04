@@ -3,15 +3,10 @@ import { useNavigate } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as homeRoute } from "../routes/_app/index";
-import { Route as profileRoute } from "../routes/_app/_protected/$emailname";
-import { useAtomValue } from "jotai";
-import { userAtom } from "../atoms/user";
-import useProfilePathHelper from "../utils/profilePathHelper";
+import { Route as profileRoute } from "../routes/_app/_protected/_profile/@";
 
 export default function DrawerSide() {
     const navigate = useNavigate();
-    const user = useAtomValue(userAtom);
-    const { handleProfilePath } = useProfilePathHelper();
     return (
         <div className="z-1000 drawer-side is-drawer-close:overflow-visible">
             <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
@@ -39,7 +34,7 @@ export default function DrawerSide() {
                     </li>
                     {/* List item : user profile */}
                     <li>
-                        <button onClick={() => navigate({ to: profileRoute.to, params: { emailname: handleProfilePath(user?.email) } })} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Profile">
+                        <button onClick={() => navigate({ to: profileRoute.to })} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Profile">
                             {/* Profile icon */}
                             <UserCircleIcon size={24} />
                             <span className="is-drawer-close:hidden">Profile</span>
