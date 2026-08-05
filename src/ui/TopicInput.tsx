@@ -4,6 +4,7 @@ import { debounce } from "es-toolkit/function";
 import { getTopicSuggestion } from "../services/apiTopic";
 import type { TopicSuggestionVO } from "../types/topic";
 import { TopicCandidateSchema } from "@/schemas/article";
+import { useTranslation } from "react-i18next";
 
 function formatArticlesCount(count: string) {
     const num = Number(count);
@@ -22,6 +23,7 @@ function getSuggestionLabel(suggestion: TopicSuggestionVO) {
 }
 
 export default function TopicInput({ topicsField, candidateField, max = 5 }: { topicsField: any; candidateField: any; max?: number }) {
+    const { t } = useTranslation();
     const [suggestions, setSuggestions] = useState<TopicSuggestionVO[]>([]);
     const [isDropdownShow, setIsDropdownShow] = useState(false);
     const topic = String(candidateField.state.value ?? '');
@@ -43,10 +45,13 @@ export default function TopicInput({ topicsField, candidateField, max = 5 }: { t
                     <input
                         value={topic}
                         type="text"
-                        placeholder={topicsField.state.value.length === 0 ? 'Add a topic...' : 'Add more topics...'}
+                        placeholder={topicsField.state.value.length === 0
+                            ? t('submission.topicsInput.placeholderEmpty')
+                            : t('submission.topicsInput.placeholderHasItem')}
                         className="text-sm bg-transparent border-none focus:outline-none focus:shadow-none hover:border-none active:border-none flex-1 min-w-32 max-w-full h-7 p-0"
                         onBlur={() => {
                             handleInputChange.cancel();
+                            candidateField.handleBlur();
                             candidateField.handleChange('');
                             setIsDropdownShow(false);
                         }}
@@ -80,9 +85,6 @@ export default function TopicInput({ topicsField, candidateField, max = 5 }: { t
                 )}
             </div>
 
-            {candidateField.state.meta.isTouched && candidateField.state.meta.errors[0]?.message && (
-                <div className="mt-1 text-xs text-red-500">{candidateField.state.meta.errors[0]?.message}</div>
-            )}
             {isDropdownShow && suggestions.length > 0 && (
                 <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg">
                     {suggestions.map((suggestion) => (

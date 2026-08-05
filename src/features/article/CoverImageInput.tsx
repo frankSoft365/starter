@@ -3,6 +3,7 @@ import { useStore, type AnyFieldApi, type FormState } from "@tanstack/react-form
 import { useChangeCoverImage } from "./article";
 import AdjustImage from "@/ui/AdjustImage";
 import { createPortal } from 'react-dom'
+import { useTranslation } from "react-i18next";
 
 export default function CoverImageInput({
     form,
@@ -17,6 +18,7 @@ export default function CoverImageInput({
     isImageArraryModalShow: boolean,
     setIsImageArraryModalShow: (value: boolean) => void
 }) {
+    const { t } = useTranslation();
     const {
         newImage,
         setNewImage,
@@ -40,8 +42,8 @@ export default function CoverImageInput({
                             />
 
                             <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
-                                <button onClick={() => setIsImageArraryModalShow(true)} type="button" className="rounded-full btn btn-neutral bg-black/75 mb-2">Change preview image</button>
-                                <button onClick={() => setIsAdjustModalOpen(true)} type="button" className="rounded-full btn btn-neutral bg-black/75">Adjust image</button>
+                                <button onClick={() => setIsImageArraryModalShow(true)} type="button" className="rounded-full btn btn-neutral bg-black/75 mb-2">{t('btn.change')}</button>
+                                <button onClick={() => setIsAdjustModalOpen(true)} type="button" className="rounded-full btn btn-neutral bg-black/75">{t('btn.adjust')}</button>
                             </div>
                         </div>}
                         {/* image arrary */}
@@ -55,7 +57,7 @@ export default function CoverImageInput({
 
                                         field.handleChange(newImage);
                                         setIsImageArraryModalShow(false);
-                                    }} >Done</button>
+                                    }} >{t('btn.done')}</button>
                                 <div className="grid grid-cols-3 gap-1 lg:gap-4">
                                     {coverImages && coverImages.map((imageUrl, index) => {
                                         return (
@@ -84,8 +86,8 @@ export default function CoverImageInput({
                                         >
                                             ✕
                                         </button>
-                                        <h1 className="text-center font-bold text-xl md:text-2xl">Adjust image</h1>
-                                        <p className="pt-2 pb-3 text-sm text-gray-500 text-center max-w-9/12">Drag the highlighted box to choose what stays in view when cropped.</p>
+                                        <h1 className="text-center font-bold text-xl md:text-2xl">{t('submission.coverImage.adjust.legend')}</h1>
+                                        <p className="pt-2 pb-3 text-sm text-gray-500 text-center max-w-9/12">{t('submission.coverImage.adjust.des')}</p>
                                         <form.Field
                                             name="coverFocusY"
                                             children={(coverFocusYField: AnyFieldApi) => {
@@ -110,7 +112,7 @@ export default function CoverImageInput({
                     <div
                         className="bg-gray-100 w-full h-48 text-left content-center text-sm p-8 text-gray-500"
                     >
-                        Include a high-quality image in your story to make it more inviting to readers.
+                        {t('submission.coverImage.emptyDes')}
                     </div>
             }
         </>

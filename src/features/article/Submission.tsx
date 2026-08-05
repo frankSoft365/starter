@@ -9,8 +9,10 @@ import FieldInfo from "@/ui/FieldInfo";
 import { useArticlePublish } from "./article";
 import { ArticleSubmissionSchema, type ArticleSubmissionForm } from "@/schemas/article";
 import CoverImageInput from "./CoverImageInput";
+import { useTranslation } from "react-i18next";
 
 export default function Submission() {
+    const { t } = useTranslation();
     const articlePreview = useAtomValue(articlePreviewAtom);
     const navigate = useNavigate();
     const { handlePublish, isPublishing } = useArticlePublish(articlePreview);
@@ -48,7 +50,7 @@ export default function Submission() {
     return (
         <div className="card w-full card-md lg:w-4xl bg-base-100 lg:card-xl shadow-sm lg:mx-auto mt-12">
             <div className="card-body w-full">
-                <h2 className="card-title">Story preview</h2>
+                <h2 className="card-title">{t('submission.storyPreview')}</h2>
                 <form
                     onSubmit={(e) => {
                         e.preventDefault()
@@ -62,7 +64,7 @@ export default function Submission() {
                                 children={(coverImageField) => (
                                     <>
                                         <fieldset className="fieldset w-full">
-                                            <legend className="fieldset-legend text-sm font-normal">Cover image</legend>
+                                            <legend className="fieldset-legend text-sm font-normal">{t('submission.coverImage.legend')}</legend>
                                             <CoverImageInput
                                                 field={coverImageField}
                                                 form={form}
@@ -82,14 +84,14 @@ export default function Submission() {
                                         children={(field) => (
                                             <>
                                                 <fieldset className="fieldset w-full">
-                                                    <legend className="fieldset-legend text-sm font-normal">Title</legend>
+                                                    <legend className="fieldset-legend text-sm font-normal">{t('submission.titleInput.legend')}</legend>
                                                     <input
                                                         value={field.state.value}
                                                         onBlur={field.handleBlur}
                                                         onChange={(e) => field.handleChange(e.target.value)}
                                                         type="text"
                                                         className="input w-full font-bold input-sm"
-                                                        placeholder="Write a preview title..."
+                                                        placeholder={t('submission.titleInput.placeholder')}
                                                     />
                                                 </fieldset>
                                                 <FieldInfo field={field} />
@@ -101,7 +103,7 @@ export default function Submission() {
                                         children={(field) => (
                                             <>
                                                 <fieldset className="fieldset w-full">
-                                                    <legend className="fieldset-legend text-sm font-normal">Subtitle</legend>
+                                                    <legend className="fieldset-legend text-sm font-normal">{t('submission.subtitleInput.legend')}</legend>
                                                     <div className="flex items-center gap-2">
                                                         <input
                                                             value={field.state.value}
@@ -109,7 +111,7 @@ export default function Submission() {
                                                             onChange={(e) => field.handleChange(e.target.value)}
                                                             type="text"
                                                             className="input w-full input-sm"
-                                                            placeholder="Write a preview subtitle..."
+                                                            placeholder={t('submission.subtitleInput.placeholder')}
                                                         />
                                                     </div>
                                                 </fieldset>
@@ -120,39 +122,40 @@ export default function Submission() {
                                 </>
                             }
                             <div className="w-full text-left content-center text-sm text-gray-500 mt-3">
-                                Note: Changes here will affect how your story appears in public places like Aedium’s homepage and in subscribers’ inboxes — not the contents of the story itself.
+                                {t('submission.note')}
                             </div>
                         </div>
                         <div className="lg:relative">
                             <form.Field
-                                name="topicCandidate"
-                                children={(candidateField) => (
+                                name="topics"
+                                mode="array"
+                                children={(topicsField) => (
                                     <form.Field
-                                        name="topics"
-                                        mode="array"
-                                        children={(topicsField) => (
+                                        name="topicCandidate"
+                                        children={(candidateField) => (
                                             <>
                                                 <fieldset className="fieldset w-full">
-                                                    <legend className="fieldset-legend text-sm font-normal">Topics</legend>
-                                                    <p className="label mb-1">Add up to five topics to help readers find your story.</p>
+                                                    <legend className="fieldset-legend text-sm font-normal">{t('submission.topicsInput.legend')}</legend>
+                                                    <p className="label mb-1">{t('submission.topicsInput.des')}</p>
                                                     <TopicInput topicsField={topicsField} candidateField={candidateField} />
                                                 </fieldset>
 
-                                                <FieldInfo field={topicsField} />
+                                                <FieldInfo field={candidateField} />
                                             </>
                                         )}
                                     />
                                 )}
                             />
+
                             <div className="lg:absolute left-0 bottom-0">
-                                <button onClick={() => navigate({ to: editorRoute.to })} type="button" className="btn btn-neutral mr-3 mt-4">
-                                    Cancel
+                                <button onClick={() => navigate({ to: editorRoute.to })} type="button" className="btn btn-outline mr-3 mt-4">
+                                    {t('btn.cancel')}
                                 </button>
                                 <form.Subscribe
                                     selector={(state) => [state.canSubmit, state.isSubmitting]}
                                     children={([canSubmit, isSubmitting]) => (
                                         <button disabled={!canSubmit || isPublishing} type="submit" className="btn btn-success mt-4">
-                                            {!isPublishing && !isSubmitting && 'Publish'}
+                                            {!isPublishing && !isSubmitting && t('btn.publish')}
                                             {(isPublishing || isSubmitting) && <span className="loading loading-spinner"></span>}
                                         </button>
                                     )}

@@ -4,8 +4,10 @@ import SignedIn from "./SignedIn";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as homeRoute } from "../routes/_app/index";
 import { Route as profileRoute } from "../routes/_app/_protected/_profile/@";
+import { useTranslation } from "react-i18next";
 
 export default function DrawerSide() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     return (
         <div className="z-1000 drawer-side is-drawer-close:overflow-visible">
@@ -17,27 +19,27 @@ export default function DrawerSide() {
                     <SignedIn>
                         {/* List item : write button */}
                         <li>
-                            <button onClick={() => navigate({ to: editorRoute.to })} className="write-btn-sidebar-bg is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Write">
+                            <button onClick={() => navigate({ to: editorRoute.to })} className="write-btn-sidebar-bg is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip={t('btn.write')}>
                                 {/* Write icon */}
                                 <NotePencilIcon size={24} />
-                                <span className="is-drawer-close:hidden">Write</span>
+                                <span className="is-drawer-close:hidden">{t('btn.write')}</span>
                             </button>
                         </li>
                     </SignedIn>
                     {/* List item : home page */}
                     <li>
-                        <button onClick={() => navigate({ to: homeRoute.to })} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Home">
+                        <button onClick={() => navigate({ to: homeRoute.to })} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip={t('btn.home')}>
                             {/* Home icon */}
                             <HouseIcon size={24} />
-                            <span className="is-drawer-close:hidden">Home</span>
+                            <span className="is-drawer-close:hidden">{t('btn.home')}</span>
                         </button>
                     </li>
                     {/* List item : user profile */}
                     <li>
-                        <button onClick={() => navigate({ to: profileRoute.to })} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Profile">
+                        <button onClick={() => navigate({ to: profileRoute.to })} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip={t('btn.profile')}>
                             {/* Profile icon */}
                             <UserCircleIcon size={24} />
-                            <span className="is-drawer-close:hidden">Profile</span>
+                            <span className="is-drawer-close:hidden">{t('btn.profile')}</span>
                         </button>
                     </li>
                 </ul>

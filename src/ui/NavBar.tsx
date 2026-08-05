@@ -14,8 +14,11 @@ import { isDirtyAtom } from "@/atoms/article";
 import { Route as notificationsRoute } from "@/routes/_app/_protected/me/notifications";
 import NotificationBell from "../features/notifications/NotificationBell";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import LanguageBtn from "./LanguageBtn";
 
 export default function NavBar() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -51,22 +54,23 @@ export default function NavBar() {
                     <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost btn-sm text-sm mr-2 lg:text-xl lg:btn-md">Aedium</button>
                     {/* search input field */}
                     {isHomeRoute && <>
-                        <input type="text" placeholder="Search" className="input input-bordered hidden md:inline-flex md:w-56 mr-1" />
+                        <input type="text" placeholder={t('nav.searchInput.placeholder')} className="input input-bordered hidden md:inline-flex md:w-56 mr-1" />
                         <button onClick={() => toast.error('还没有功能呢!')} className="btn btn-ghost btn-square inline-flex md:hidden mr-1">
                             <MagnifyingGlassIcon size={24} />
                         </button>
                     </>}
                 </div>
                 <div className="navbar-end">
+                    <LanguageBtn />
                     {/* can write only when is login */}
                     <SignedIn>
                         {!isEditorRoute && !isArticleEditRoute &&
                             <>
                                 <button onClick={() => navigate({ to: editorRoute.to })} className="btn btn-ghost hidden md:inline-flex mr-1">
                                     <NotePencilIcon size={24} />
-                                    Write
+                                    {t('btn.write')}
                                 </button>
-                                <div className="md:tooltip md:tooltip-bottom" data-tip="Notifications">
+                                <div className="md:tooltip md:tooltip-bottom" data-tip={t('nav.notificationBell.tooltip')}>
                                     <NotificationBell
                                         isNotificationRoute={isNotificationRoute}
                                         hanleClick={() => navigate({ to: notificationsRoute.to })}
@@ -75,17 +79,17 @@ export default function NavBar() {
                             </>
                         }
                         {isEditorRoute && <>
-                            <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-1 btn-xs lg:btn-md lg:mr-4">
-                                Publish
+                            <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-1 btn-xs lg:btn-md lg:mr-3">
+                                {t('btn.publish')}
                             </button>
                             <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-2 btn-xs lg:btn-md lg:mr-4">
-                                Discard drafts
+                                {t('nav.discardDraftsBtn')}
                             </button>
                         </>}
                         {isArticleEditRoute &&
                             <>
                                 <button disabled={!isDirty} onClick={() => setEditorUpdateSignal(pre => pre + 1)} className="btn btn-primary mx-4">
-                                    Update
+                                    {t('nav.updateBtn')}
                                 </button>
                             </>
                         }
@@ -96,7 +100,7 @@ export default function NavBar() {
                     {/* login-button when is not login */}
                     {!isLoading && <>
                         <SignedOut>
-                            <button onClick={() => navigate({ to: loginRoute.to })} className="btn btn-info btn-sm md:btn-md mr-2 md:mr-4">Login</button>
+                            <button onClick={() => navigate({ to: loginRoute.to })} className="btn btn-info btn-sm md:btn-md mr-2 md:mr-4">{t('nav.loginBtn')}</button>
                         </SignedOut>
                         {/* user avatar and dropdown */}
                         <SignedIn>

@@ -1,23 +1,25 @@
 import * as z from "zod";
 
 const TitleSchema = z.string()
-    .min(1, "Please enter a title")
-    .max(100, "The title cannot exceed 100 characters.");
+    .min(1, "article.validate.titleRequired")
+    .max(100, "article.validate.titleMax");
 
 const SubtitleSchema = z.string()
-    .max(140, "The subtitle cannot exceed 140 characters.");
+    .max(140, "article.validate.subtitleMax");
 
 export const TopicCandidateSchema = z.string()
     .trim()
-    .regex(/^[\p{L}0-9\s-]*$/u, "Tags only support letters, numbers, spaces and dashes.")
-    .max(25, "A tag name must be 25 characters max.");
+    .regex(/^[\p{L}0-9\s-]*$/u, "article.validate.topicRegex")
+    .max(25, "article.validate.topicMax");
 
 const TopicSchema = z.array(TopicCandidateSchema);
 
 export const ArticleSubmissionSchema = z.object({
     coverImage: z.string().optional(),
-    /** vertical focus point stored as decimal between 0 and 1 */
-    coverFocusY: z.number().min(0, 'coverFocusY must be >= 0').max(1, 'coverFocusY must be <= 1').optional(),
+    coverFocusY: z.number()
+        .min(0, "article.validate.coverFocusYMin")
+        .max(1, "article.validate.coverFocusYMax")
+        .optional(),
     title: TitleSchema,
     subtitle: SubtitleSchema.optional(),
     topics: TopicSchema,

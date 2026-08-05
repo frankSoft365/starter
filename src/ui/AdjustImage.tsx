@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Cropper, { type Area, type Point } from 'react-easy-crop'
 import { focalPercentFromArea, focalRatioFromArea, objectPositionFromRatio } from '@/utils/coverFocus'
+import { useTranslation } from 'react-i18next'
 
 interface AdjustImageProps {
     image: string
@@ -8,6 +9,7 @@ interface AdjustImageProps {
 }
 
 export default function AdjustImage({ image, onSave }: AdjustImageProps) {
+    const { t } = useTranslation();
     const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
     const [zoom, setZoom] = useState(1)
 
@@ -54,7 +56,7 @@ export default function AdjustImage({ image, onSave }: AdjustImageProps) {
 
             {/* 实时预览区域 */}
             <div className="w-full mt-6 pt-4">
-                <p className="text-sm font-medium text-gray-400 mb-2 text-left">Link preview</p>
+                <p className="text-sm font-medium text-gray-400 mb-2 text-left">{t('submission.coverImage.adjust.preview')}</p>
                 <div className="w-4/5 border border-gray-200 overflow-hidden bg-gray-50 shadow-inner">
                     <img
                         src={image}
@@ -72,14 +74,14 @@ export default function AdjustImage({ image, onSave }: AdjustImageProps) {
                     type="button"
                     className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium rounded-lg transition-colors"
                 >
-                    Reset to center
+                    {t('btn.resetToCenter')}
                 </button>
                 <button
                     onClick={saveCrop}
                     type="button"
                     className="px-4 py-2 bg-gray-900 text-white hover:bg-gray-800 text-sm font-medium rounded-lg transition-colors shadow-sm"
                 >
-                    Save
+                    {t('btn.save')}
                 </button>
             </div>
         </div>

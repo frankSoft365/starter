@@ -4,8 +4,11 @@ import Avatar from "@/ui/Avatar";
 import { getPublishDate } from "@/utils/dateHelper";
 import ArticleMenuButton from "@/ui/ArticleMenuButton";
 import { objectPositionFromRatio } from "@/utils/coverFocus";
+import { useTranslation } from "react-i18next";
+import { formatLargeNumber } from "@/utils/number";
 
 export default function ArticleListItem({ article }: { article: ArticleListItemVO }) {
+    const { t } = useTranslation();
 
     return (
         <li id={`article-list-item-${article.id}`} className="list-row min-h-64 cursor-pointer grid-cols-5">
@@ -15,7 +18,6 @@ export default function ArticleListItem({ article }: { article: ArticleListItemV
                     <span className="ml-1.5">{article.authorName}</span>
                     <span>·</span>
                     <span className="text-gray-500">{getPublishDate(new Date(article.publishTime))}</span>
-                    {/* {isNew && <div className="badge badge-secondary ml-2">New</div>} */}
                 </div>
                 {/* article */}
                 <div>
@@ -28,39 +30,39 @@ export default function ArticleListItem({ article }: { article: ArticleListItemV
                 </div>
                 <div className="flex flex-col lg:flex-row justify-between lg:items-center">
                     <div className="flex flex-row">
-                        <div className="lg:tooltip" data-tip="3K claps">
+                        <div className="lg:tooltip" data-tip={t('btn.clap', { count: 3034 })}>
                             <ArticleMenuButton>
-                                <HandsClappingIcon weight="fill" size={20} color="#676565" />
-                                3K
+                                <HandsClappingIcon weight="fill" size={20} />
+                                {formatLargeNumber(3034)}
                             </ArticleMenuButton>
                         </div>
-                        <div className="lg:tooltip" data-tip={`${article.responseNum} responses`}>
+                        <div className="lg:tooltip" data-tip={t('btn.response', { count: article.responseNum })}>
                             <ArticleMenuButton>
-                                <ChatCircleDotsIcon weight="fill" size={20} color="#676565" />
+                                <ChatCircleDotsIcon weight="fill" size={20} />
                                 {article.responseNum}
                             </ArticleMenuButton>
                         </div>
-                        <div className="lg:tooltip" data-tip="20 reposts">
+                        <div className="lg:tooltip" data-tip={t('btn.repost', { count: 20 })}>
                             <ArticleMenuButton>
-                                <RepeatIcon size={20} color="#676565" weight="light" />
+                                <RepeatIcon size={20} weight="light" />
                                 20
                             </ArticleMenuButton>
                         </div>
                     </div>
                     <div className="flex flex-row">
-                        <div className="lg:tooltip" data-tip="I'm not interested in this story">
+                        <div className="lg:tooltip" data-tip={t('btn.notInterested')}>
                             <button className="btn btn-square btn-ghost mr-2">
-                                <ThumbsDownIcon size={24} color="#676565" weight="light" />
+                                <ThumbsDownIcon size={24} weight="light" />
                             </button>
                         </div>
-                        <div className="lg:tooltip" data-tip="Save">
+                        <div className="lg:tooltip" data-tip={t('btn.favorite')}>
                             <button className="btn btn-square btn-ghost mr-2">
-                                <BookmarkIcon size={24} color="#676565" weight="light" />
+                                <BookmarkIcon size={24} weight="light" />
                             </button>
                         </div>
-                        <div className="lg:tooltip" data-tip="More">
+                        <div className="lg:tooltip" data-tip={t('btn.more')}>
                             <button className="btn btn-square btn-ghost mr-2">
-                                <DotsThreeIcon size={24} color="#676565" weight="bold" />
+                                <DotsThreeIcon size={24} weight="bold" />
                             </button>
                         </div>
                     </div>

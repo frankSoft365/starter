@@ -8,8 +8,10 @@ import { isLoadingAtom, userAtom } from "../atoms/user";
 import { Route as LoginRoute } from "../routes/login";
 import { toast } from "sonner";
 import { useUserLogout } from "@/features/auth/userLogin";
+import { useTranslation } from "react-i18next";
 
 export default function AvatarDropdown() {
+    const { t } = useTranslation();
     const { handleOverflow } = useOverflowHelper();
     const navigate = useNavigate();
     const user = useAtomValue(userAtom);
@@ -45,7 +47,9 @@ export default function AvatarDropdown() {
                         </div>
                     </a>
                 </li>
-                <li onClick={() => navigate({ to: meSettingsRoute.to })} className="list-row"><a><GearIcon size={24} />Settings</a></li>
+                <li onClick={() => navigate({ to: meSettingsRoute.to })} className="list-row">
+                    <a><GearIcon size={24} />{t('nav.avatarDropdown.settings')}</a>
+                </li>
                 <li onClick={() => {
                     userLogout();
                     toast.success('Logout successful');
@@ -53,7 +57,7 @@ export default function AvatarDropdown() {
                 }} className="list-row">
                     <div>
                         <SignOutIcon size={24} />
-                        Logout
+                        {t('nav.avatarDropdown.logout')}
                     </div>
                 </li>
             </ul>
