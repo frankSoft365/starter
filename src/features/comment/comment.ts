@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import type { ActiveReplyTarget } from "./CommentList";
 import { CreateCommentSchema, type CreateCommentForm } from "@/schemas/comment";
+import i18n from "@/i18n";
 
 export function useGetInfiniteRootCommentList(articleId: string) {
     return useInfiniteQuery({
@@ -193,10 +194,10 @@ export function useAddComment(articleId: string) {
                     }
                 }
             );
-            toast.success('Reply posted — view the full thread to see it.');
+            toast.success(i18n.t('common.toast.replyPosted'));
         },
         onError: (error) => {
-            toast.error(error.message || 'An error occurred while publishing the article.');
+            toast.error(error.message || i18n.t('common.toast.publishError'));
         }
     })
 

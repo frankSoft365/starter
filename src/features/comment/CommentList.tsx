@@ -9,6 +9,7 @@ import ReplyList from "./ReplyList";
 import { getRootCommentAndContextById } from "@/services/apiComment";
 import type { CommentThreadDTO, CursorPage, CursorPageRequest } from "@/types/comment";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 export type ActiveReplyTarget = {
     rootId: string;
@@ -23,6 +24,7 @@ export default function CommentList({
     articleId: string,
     authorId: string
 }) {
+    const { t } = useTranslation();
     const user = useAtomValue(userAtom);
     const queryClient = useQueryClient();
 
@@ -125,8 +127,17 @@ export default function CommentList({
 
     return (
         <div className="w-full lg:w-4xl mx-auto">
-            {status === 'pending' && <div className="w-full p-6 m-auto flex items-center justify-center"><span className="loading loading-spinner loading-xl"></span></div>}
-            {status === 'error' && <p className="text-red-500 text-xl text-center">Error: {error.message}</p>}
+            {status === 'pending' && <div className="w-full p-6 m-auto flex items-center justify-center gap-2"><span className="loading loading-spinner loading-xl"></span><span>{t('common.loading')}</span></div>}
+            {status === 'error' && (
+                <div className="flex flex-col items-center justify-center gap-3 p-6">
+                    <p className="text-red-500 text-xl">
+                        {t('common.error')}: {error.message}
+                    </p>
+                    <button onClick={() => queryClient.invalidateQueries({ queryKey: ['get-comment', articleId] })} className="btn btn-sm btn-outline">
+                        {t('common.retry')}
+                    </button>
+                </div>
+            )}
             {status === 'success' && (
                 data.pages.flatMap((page) => page.items).length > 0
                     ? (
@@ -183,7 +194,7 @@ export default function CommentList({
                                                         children={(field) => (
                                                             <>
                                                                 <textarea
-                                                                    placeholder={`Replying to @${activeReplyTarget.replyToUsername}`}
+                                                                    placeholder={t('comment.commentInput.replyTo', { username: activeReplyTarget.replyToUsername })}
                                                                     className="textarea w-full textarea-md lg:textarea-lg xl:textarea-xl"
                                                                     value={field.state.value}
                                                                     onBlur={field.handleBlur}
@@ -202,14 +213,14 @@ export default function CommentList({
                                                                 setActiveReplyTarget(null);
                                                             }}
                                                         >
-                                                            Cancel
+                                                            {t('btn.cancel')}
                                                         </button>
                                                         <button
                                                             disabled={!replyCanSubmit || isAddingComment}
                                                             type="submit"
                                                             className="btn btn-sm btn-neutral"
                                                         >
-                                                            {isAddingComment ? <span className="loading loading-spinner"></span> : 'Reply'}
+                                                            {isAddingComment ? <span className="loading loading-spinner"></span> : t('btn.reply')}
                                                         </button>
                                                     </div>
                                                 </form>
@@ -219,12 +230,12 @@ export default function CommentList({
                                 );
                             })}
                             <li ref={commentListBottomRef} className="list-row h-0.5" aria-hidden ></li>
-                            {isFetchingNextPage && <li className="list-row">Loading more…</li>}
-                            {!hasNextPage && <li className="list-row text-center p-5">No more comments.</li>}
+                            {isFetchingNextPage && <li className="list-row">{t('common.loadingMore')}</li>}
+                            {!hasNextPage && <li className="list-row text-center h-24 p-5">{t('comment.noMoreComment')}</li>}
                         </ul>)
                     : (
                         <div className="h-48 text-gray-500 text-center p-5">
-                            There are currently no responses for this story. Be the first to respond.
+                            {t('comment.noComment')}
                         </div>)
             )}
         </div>

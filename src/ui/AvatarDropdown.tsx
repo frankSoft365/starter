@@ -9,6 +9,7 @@ import { Route as LoginRoute } from "../routes/login";
 import { toast } from "sonner";
 import { useUserLogout } from "@/features/auth/userLogin";
 import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 
 export default function AvatarDropdown() {
     const { t } = useTranslation();
@@ -48,16 +49,16 @@ export default function AvatarDropdown() {
                     </a>
                 </li>
                 <li onClick={() => navigate({ to: meSettingsRoute.to })} className="list-row">
-                    <a><GearIcon size={24} />{t('nav.avatarDropdown.settings')}</a>
+                    <a><GearIcon size={24} />{t('btn.settings')}</a>
                 </li>
                 <li onClick={() => {
                     userLogout();
-                    toast.success('Logout successful');
+                    toast.success(i18n.t('settings.toast.logoutSuccess'));
                     navigate({ to: LoginRoute.to });
                 }} className="list-row">
                     <div>
                         <SignOutIcon size={24} />
-                        {t('nav.avatarDropdown.logout')}
+                        {t('btn.logout')}
                     </div>
                 </li>
             </ul>

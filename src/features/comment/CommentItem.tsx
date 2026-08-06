@@ -1,5 +1,6 @@
 import Avatar from "@/ui/Avatar";
 import { ChatCircleDotsIcon, ThumbsUpIcon } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 type CommentItemProps = {
     avatarUrl?: string;
@@ -24,6 +25,7 @@ export default function CommentItem({
     size = "md",
     onReply,
 }: CommentItemProps) {
+    const { t } = useTranslation();
     const isSmall = size === "sm";
     const actionSize = isSmall ? "btn-xs" : "btn-sm";
     const headingSize = isSmall ? "text-xs" : "text-sm";
@@ -35,11 +37,11 @@ export default function CommentItem({
             <div>
                 <div className={headingSize}>
                     <span><strong>{username}</strong></span>
-                    {isAuthor && <div className="badge badge-xs badge-primary ml-2">Author</div>}
+                    {isAuthor && <div className="badge badge-xs badge-primary ml-2">{t('badge.author')}</div>}
                     {replyToUsername
                         ?
                         <span className={headingSize}>
-                            <em> reply to </em>
+                            <em> {t('comment.replyTo')} </em>
                             <span className="text-blue-500">
                                 {replyToUsername}
                             </span>

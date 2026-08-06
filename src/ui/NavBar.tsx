@@ -55,7 +55,7 @@ export default function NavBar() {
                     {/* search input field */}
                     {isHomeRoute && <>
                         <input type="text" placeholder={t('nav.searchInput.placeholder')} className="input input-bordered hidden md:inline-flex md:w-56 mr-1" />
-                        <button onClick={() => toast.error('还没有功能呢!')} className="btn btn-ghost btn-square inline-flex md:hidden mr-1">
+                        <button onClick={() => toast.error(t('common.toast.featureNotAvailable'))} className="btn btn-ghost btn-square inline-flex md:hidden mr-1">
                             <MagnifyingGlassIcon size={24} />
                         </button>
                     </>}
@@ -83,13 +83,13 @@ export default function NavBar() {
                                 {t('btn.publish')}
                             </button>
                             <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-2 btn-xs lg:btn-md lg:mr-4">
-                                {t('nav.discardDraftsBtn')}
+                                {t('btn.discardDrafts')}
                             </button>
                         </>}
                         {isArticleEditRoute &&
                             <>
                                 <button disabled={!isDirty} onClick={() => setEditorUpdateSignal(pre => pre + 1)} className="btn btn-primary mx-4">
-                                    {t('nav.updateBtn')}
+                                    {t('btn.update')}
                                 </button>
                             </>
                         }
@@ -100,7 +100,7 @@ export default function NavBar() {
                     {/* login-button when is not login */}
                     {!isLoading && <>
                         <SignedOut>
-                            <button onClick={() => navigate({ to: loginRoute.to })} className="btn btn-info btn-sm md:btn-md mr-2 md:mr-4">{t('nav.loginBtn')}</button>
+                            <button onClick={() => navigate({ to: loginRoute.to })} className="btn btn-info btn-sm md:btn-md mr-2 md:mr-4">{t('btn.login')}</button>
                         </SignedOut>
                         {/* user avatar and dropdown */}
                         <SignedIn>

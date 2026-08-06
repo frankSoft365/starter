@@ -22,8 +22,10 @@ import { CreateCommentSchema, type CreateCommentForm } from "@/schemas/comment";
 import { useAddComment } from "../comment/comment";
 import CommentList from "../comment/CommentList";
 import ShareButton from "./ShareButton";
+import { useTranslation } from "react-i18next";
 
 export default function ArticleDetail() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { articleId } = articleRoute.useParams();
     const user = useAtomValue(userAtom);
@@ -97,19 +99,19 @@ export default function ArticleDetail() {
                     <div className="flex flex-row items-center justify-around w-full">
                         {/* left buttons */}
                         <div className="flex flex-row">
-                            <div className="lg:tooltip mx-1" data-tip={isOwnStory ? 'Your cannot applaud your own story' : "3K claps"}>
+                            <div className="lg:tooltip mx-1" data-tip={isOwnStory ? t('btn.clapIsOwn') : t('btn.clap', { count: 3034 })}>
                                 <ArticleMenuButton disable={isOwnStory}>
                                     <HandsClappingIcon size={24} color={meneButtonColor} weight="light" />
                                     {!isOwnStory && '3K'}
                                 </ArticleMenuButton>
                             </div>
-                            <div className="lg:tooltip mx-1" data-tip="Respond">
+                            <div className="lg:tooltip mx-1" data-tip={t('btn.respond')}>
                                 <ArticleMenuButton onClick={scrollToComments} type="button">
                                     <ChatCircleDotsIcon size={24} color="#676565" weight="light" />
                                     {!isOwnStory && article.responseNum}
                                 </ArticleMenuButton>
                             </div>
-                            <div className="lg:tooltip mx-1" data-tip={isOwnStory ? 'Your cannot repost your own story' : "20 reposts"}>
+                            <div className="lg:tooltip mx-1" data-tip={isOwnStory ? t('btn.repostIsOwn') : t('btn.repost', { count: 20 })}>
                                 <ArticleMenuButton disable={isOwnStory}>
                                     <RepeatIcon size={24} color={meneButtonColor} weight="light" />
                                     {!isOwnStory && '20'}
@@ -118,15 +120,18 @@ export default function ArticleDetail() {
                         </div>
                         {/* right buttons */}
                         <div className="flex flex-row">
-                            <div className="lg:tooltip mx-1.5" data-tip="Save">
+                            {/* like button */}
+                            <div className="lg:tooltip mx-1.5" data-tip={t('btn.favorite')}>
                                 <button className="btn btn-square btn-ghost">
                                     <BookmarkIcon size={24} color="#676565" weight="light" />
                                 </button>
                             </div>
-                            <div className="lg:tooltip mx-1.5" data-tip="Share">
+                            {/* share button */}
+                            <div className="lg:tooltip mx-1.5" data-tip={t('btn.share')}>
                                 <ShareButton articleId={articleId} title={title ?? 'No title'} />
                             </div>
-                            <div className="lg:tooltip mx-1.5" data-tip="More">
+                            {/* more button */}
+                            <div className="lg:tooltip mx-1.5" data-tip={t('btn.more')}>
                                 <button className="btn btn-square btn-ghost" popoverTarget="popover-more" style={{ anchorName: "--anchor-more" }} >
                                     <DotsThreeIcon size={24} color="#676565" weight="bold" />
                                 </button>
@@ -141,7 +146,7 @@ export default function ArticleDetail() {
                                     <CurrentUser authorId={article.authorId}>
                                         <li>
                                             <button onClick={() => navigate({ to: articleEditRoute.to, params: { articleId: article.id } })} className="btn btn-ghost justify-start">
-                                                Edit story
+                                                {t('btn.editArticle')}
                                             </button>
                                         </li>
                                     </CurrentUser>
@@ -159,7 +164,7 @@ export default function ArticleDetail() {
                                                     modal.showModal();
                                                 }
                                             }} className="btn btn-ghost justify-start text-red-600">
-                                                Delete story
+                                                {t('btn.deleteArticle')}
                                             </button>
                                         </li>
                                     </CurrentUser>
@@ -201,7 +206,6 @@ export default function ArticleDetail() {
                 {/* editor */}
                 <div className="w-full md:w-4xl mx-auto">
                     <EditorComponent
-
                         editor={editor}
                         editable={false}
                     />
@@ -209,12 +213,12 @@ export default function ArticleDetail() {
                 {/* comment area */}
                 <div className="divider mb-0"></div>
                 <SignedOut>
-                    <div className="w-full h-48 bg-gray-100 items-center text-center">You need to login to view comments</div>
+                    <div className="w-full lg:w-4xl mx-auto h-48 bg-base-200 text-xl items-center text-center p-6">{t('comment.noAuth')}</div>
                 </SignedOut>
                 <SignedIn>
                     {/* write your comment */}
                     <div ref={commentRef} className="flex flex-col items-start p-4 w-full lg:w-4xl mx-auto">
-                        <h2 className="text-lg md:text-2xl font-bold">Responses{`(${article.responseNum})`}</h2>
+                        <h2 className="text-lg md:text-2xl font-bold">{t('comment.response', { count: article.responseNum })}</h2>
                         <div className="flex flex-row items-center text-sm gap-1 my-3">
                             <Avatar imageUrl={user?.image ?? undefined} username={user?.username || ''} size="sm" />
                             <span className="ml-1.5">{user?.username}</span>
@@ -228,7 +232,7 @@ export default function ArticleDetail() {
                                 children={(field) => (
                                     <>
                                         <textarea
-                                            placeholder="What are your thoughts?"
+                                            placeholder={t('comment.commentInput.placeholder')}
                                             className="textarea w-full textarea-md lg:textarea-lg xl:textarea-xl"
                                             value={field.state.value}
                                             onBlur={field.handleBlur}
@@ -244,7 +248,7 @@ export default function ArticleDetail() {
                                     type="submit"
                                     className="btn btn-sm md:btn-base btn-neutral my-3 ml-auto"
                                 >
-                                    {isAddingComment ? <span className="loading loading-spinner"></span> : 'Publish'}
+                                    {isAddingComment ? <span className="loading loading-spinner"></span> : t('btn.publish')}
                                 </button>
                             </div>
                         </form>

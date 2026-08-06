@@ -1,6 +1,6 @@
 import Loading from "@/ui/Loading";
 import Avatar from "@/ui/Avatar";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { getNotificationList, markAsRead as markNotificationAsRead } from "@/services/apiNotification";
 import type { CursorPageRequest } from "@/types/comment";
@@ -9,13 +9,14 @@ import { useRouter } from "@tanstack/react-router";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import { useAtom } from "jotai";
 import { unreadCountAtom } from "@/atoms/notification";
+import { useTranslation } from "react-i18next";
 
 
 type NotificationListType = 'reply' | 'like' | 'follow';
 export type NotificationItem = ReplyNotificationVO;
 const replyNotificationTextMap = {
-    ARTICLE: 'commented to my article',
-    COMMENT: 'reply to my comment',
+    ARTICLE: 'notification.action.commentedArticle',
+    COMMENT: 'notification.action.repliedComment',
 }
 
 export default function NotificationList({
@@ -25,6 +26,8 @@ export default function NotificationList({
 }) {
     const [unreadCount, setUnreadCount] = useAtom(unreadCountAtom);
     const router = useRouter();
+    const { t } = useTranslation();
+    const queryClient = useQueryClient();
 
     const watermarkRef = useRef<string | null>(null);
 
@@ -140,7 +143,16 @@ export default function NotificationList({
     return (
         <div className="w-full">
             {status === 'pending' && <Loading />}
-            {status === 'error' && <p>Error: {error.message}</p>}
+            {status === 'error' && (
+                <div className="flex flex-col items-center justify-center gap-3 p-6">
+                    <p className="text-red-500">
+                        {t('common.error')}: {error.message}
+                    </p>
+                    <button onClick={() => queryClient.invalidateQueries({ queryKey: ['notification-list', type] })} className="btn btn-sm btn-outline">
+                        {t('common.retry')}
+                    </button>
+                </div>
+            )}
             {status === 'success' && (
                 notificationItems.length > 0 ?
                     <ul className="list space-y-3">
@@ -149,7 +161,7 @@ export default function NotificationList({
 
                             return (
                                 <div key={notification.id}>
-                                    {index !== 0 && notification.id === watermarkRef.current && <div className="divider">Last time I saw this</div>}
+                                    {index !== 0 && notification.id === watermarkRef.current && <div className="divider">{t('notification.watermark')}</div>}
                                     <NotificationRow notification={notification} >
                                         <li
                                             className='list-row'
@@ -171,7 +183,7 @@ export default function NotificationList({
                                                         {notification.actorUsername}
                                                     </span>
                                                     <span className="opacity-65">
-                                                        {replyNotificationTextMap[notification.targetType]}
+                                                        {t(replyNotificationTextMap[notification.targetType])}
                                                     </span>
                                                 </div>
                                                 {/* core content */}
@@ -180,7 +192,7 @@ export default function NotificationList({
                                                         {replyNotification.parentComment && replyNotification.parentComment.parentId
                                                             ?
                                                             <span className='opacity-60'>
-                                                                <em> reply to </em>
+                                                                <em> {t('notification.replyTo')} </em>
                                                                 <span className="text-blue-500">
                                                                     {replyNotification.reply.replyToUsername}
                                                                 </span>
@@ -195,7 +207,7 @@ export default function NotificationList({
                                                 {type === 'reply' && replyNotification && replyNotification.parentComment && replyNotification.parentComment.parentId && (
                                                     <div className="text-xs bg-base-300 p-2 opacity-70 mb-1">
                                                         <span>{`${replyNotification.parentComment.username} : `}</span>
-                                                        <span>{replyNotification.parentComment.parentId !== replyNotification.rootComment.id && `reply to ${replyNotification.parentComment.replyToUsername} : `}</span>
+                                                        <span>{replyNotification.parentComment.parentId !== replyNotification.rootComment.id && `${t('notification.replyTo')} ${replyNotification.parentComment.replyToUsername} : `}</span>
                                                         <span>{replyNotification.parentComment.content}</span>
                                                     </div>
                                                 )}
@@ -206,13 +218,13 @@ export default function NotificationList({
                                             {type === 'reply' && replyNotification && <div className="font-bold w-24 md:w-32">
                                                 {notification.targetType === 'ARTICLE' &&
                                                     <div>
-                                                        <span className="opacity-70 text-xs">related article : </span>
+                                                        <span className="opacity-70 text-xs">{t('notification.relatedArticle')} </span>
                                                         <span>{replyNotification.article.title}</span>
                                                     </div>
                                                 }
                                                 {notification.targetType === 'COMMENT' &&
                                                     <div>
-                                                        <span className="opacity-70 text-xs">related rootComment : </span>
+                                                        <span className="opacity-70 text-xs">{t('notification.relatedRootComment')} </span>
                                                         <span>{replyNotification.rootComment.content}</span>
                                                     </div>
                                                 }
@@ -224,12 +236,12 @@ export default function NotificationList({
                             );
                         })}
                         <li ref={notificationListBottomRef} className="list-row h-0.5" aria-hidden></li>
-                        {isFetchingNextPage && <li className="list-row">Loading more…</li>}
-                        {!hasNextPage && <li className="list-row text-center p-5">No more notifications.</li>}
+                        {isFetchingNextPage && <li className="list-row">{t('common.loadingMore')}</li>}
+                        {!hasNextPage && <li className="list-row h-24 text-center p-5">{t('notification.noMore')}</li>}
                     </ul>
                     :
                     <div className="h-48 text-gray-500 text-center p-5">
-                        There are no notifications for this category yet.
+                        {t('notification.empty')}
                     </div>
             )}
         </div>

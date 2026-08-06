@@ -8,6 +8,7 @@ import type { UserUpdateRequest, UserVO } from "@/types/user";
 import type { Dispatch, SetStateAction } from "react";
 import { useUploadAvatar } from "./userAvatar";
 import { useUserLogout } from "../auth/userLogin";
+import i18n from "@/i18n";
 
 export function useUserProfile() {
     const setUserInfo = useSetAtom(userAtom);
@@ -50,7 +51,7 @@ export function useUserUpdate(
                 newUserName = username;
             }
             if (!newUserName && !currentAvatarFile && !isRemoveAvatar) {
-                throw new Error('Nothing to update');
+                throw new Error(i18n.t('settings.toast.nothingToUpdate'));
             }
             if (currentAvatarFile) {
                 const avatarURL = await uploadAvatar();
@@ -71,7 +72,7 @@ export function useUserUpdate(
             await updateUserProfile(updateRequest);
         },
         onSuccess: () => {
-            toast.success('update successfully');
+            toast.success(i18n.t('settings.toast.updateSuccess'));
             queryClient.invalidateQueries({ queryKey: ['get-user-profile'] });
             setIsModalOpen(false);
         },
@@ -93,12 +94,12 @@ export function useChangePassword() {
     const { isPending: isChanging, mutate: handleChangePassword } = useMutation({
         mutationFn: async ({ currentPassword, newPassword }: { currentPassword: string, newPassword: string }) => {
             if (currentPassword === newPassword) {
-                throw new Error('The old and new passwords are the same.');
+                throw new Error(i18n.t('settings.toast.samePassword'));
             }
             await changePassword({ currentPassword, newPassword });
         },
         onSuccess: () => {
-            toast.success('Password changed successfully');
+            toast.success(i18n.t('settings.toast.passwordChanged'));
             userLogout();
         },
         onError: (error) => {

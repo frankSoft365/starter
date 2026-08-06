@@ -1,8 +1,9 @@
 import { ExportIcon, LinkIcon, XLogoIcon } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 export default function ShareButton({ articleId, title }: { articleId: string, title: string }) {
-
+    const { t } = useTranslation();
     const url = `${window.location.origin}/article/${articleId}`;
 
     async function handleShareCopyLink() {
@@ -33,13 +34,13 @@ export default function ShareButton({ articleId, title }: { articleId: string, t
                 <li>
                     <button className="btn btn-ghost justify-start" onClick={handleShareCopyLink}>
                         <LinkIcon size={24} weight="light" />
-                        Copy link
+                        {t('btn.copyLink')}
                     </button>
                 </li>
                 <li>
                     <button className="btn btn-ghost justify-start" onClick={handleShareToX} >
                         <XLogoIcon size={24} weight="light" />
-                        Share on X
+                        {t('btn.shareOnX')}
                     </button>
                 </li>
             </ul>

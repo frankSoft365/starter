@@ -6,8 +6,10 @@ import Avatar from "@/ui/Avatar";
 import { useForm, useStore } from "@tanstack/react-form";
 import FieldInfo from "@/ui/FieldInfo";
 import { AccountUpdateSchema, type AccountUpdateForm } from "@/schemas/account";
+import { useTranslation } from "react-i18next";
 
 export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user: UserVO, setIsModalOpen: Dispatch<SetStateAction<boolean>> }) {
+    const { t } = useTranslation();
     const { imageUploadRef, image, setImage, handleImageChange, currentAvatarFile } = useChangeAvatar(user);
 
     const {
@@ -35,15 +37,15 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
     return (
         <div className="modal modal-open">
             <div className="modal-box">
-                <h3 className="font-bold text-xl md:text-lg mb-4">Profile information</h3>
+                <h3 className="font-bold text-xl md:text-lg mb-4">{t('settings.modal.profileInfo')}</h3>
                 <form
                     onSubmit={(e) => {
                         e.preventDefault()
                         form.handleSubmit()
                     }}
-                    className="fieldset bg-base-200 border-base-300 w-11/12 md:w-full p-4"
+                    className="fieldset bg-base-200 border-base-300 w-full p-4"
                 >
-                    <label className="label">Photo</label>
+                    <label className="label">{t('settings.page.photo')}</label>
                     <div className="flex flex-row gap-4">
                         {/* click the avatar and open your file management */}
                         <label htmlFor="avatar">
@@ -62,7 +64,7 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
                                     }}
                                     className="btn btn-ghost btn-xs btn-success mr-2"
                                 >
-                                    Update
+                                    {t('settings.modal.update')}
                                 </button>
                                 <button
                                     type="button"
@@ -73,7 +75,7 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
                                     }}
                                     className="btn btn-ghost btn-xs btn-error"
                                 >
-                                    Remove
+                                    {t('settings.modal.remove')}
                                 </button>
                                 {/* upload your file */}
                                 <input
@@ -85,7 +87,7 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
                                     onChange={handleImageChange}
                                 />
                             </div>
-                            <div className="text-xs">Recommended: Square JPG, PNG, or GIF, at least 1,000 pixels per side.</div>
+                            <div className="text-xs">{t('settings.modal.uploadHint')}</div>
                         </div>
                     </div>
 
@@ -94,7 +96,7 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
                         children={(field) => (
                             <>
                                 <fieldset className="fieldset">
-                                    <label className="label">Username</label>
+                                    <label className="label">{t('settings.page.username')}</label>
                                     <input
                                         disabled={isUpdating}
                                         value={field.state.value}
@@ -102,8 +104,7 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
                                         onChange={(e) => field.handleChange(e.target.value)}
                                         type="text"
                                         className="input"
-                                        placeholder="Username"
-                                        title="Only letters, numbers, underscores, or dash"
+                                        placeholder={t('settings.page.username')}
                                     />
                                 </fieldset>
                                 <FieldInfo field={field} />
@@ -117,7 +118,7 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
                             onClick={() => {
                                 setIsModalOpen(false);
                             }}
-                            className="btn">Close</button>
+                            className="btn">{t('settings.modal.close')}</button>
                         <button
                             type="submit"
                             disabled={((username.trim() === user.username) &&
@@ -125,7 +126,7 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
                             className="btn btn-success"
                         >
                             {(isUpdating || isUploading) && <span className="loading loading-spinner"></span>}
-                            {(!isUpdating && !isUploading) && 'Save'}
+                            {(!isUpdating && !isUploading) && t('btn.save')}
                         </button>
                     </div>
                 </form>
