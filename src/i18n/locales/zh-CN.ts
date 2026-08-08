@@ -44,6 +44,11 @@ export default {
         loadingMore: '加载更多中...',
         error: '错误',
         retry: '重试',
+        noPermission: '当前操作没有权限。',
+        serverError: '服务器发生错误，请稍后重试。',
+        networkErrorWithCode: '网络错误，错误码：{{code}}',
+        timeout: '请求超时，请检查您的网络。',
+        networkConnection: '网络连接错误',
         toast: {
             replyPosted: '回复已发布，查看完整讨论以查看。',
             publishError: '发布文章时发生错误。',
@@ -60,7 +65,12 @@ export default {
             topicMax: "单个标签最多25个字符",
             coverFocusYMin: "垂直焦点必须大于等于 0",
             coverFocusYMax: "垂直焦点必须小于等于 1"
-        }
+        },
+        list: {
+            loadFailed: '加载文章列表失败。',
+            empty: '暂无文章。',
+        },
+        coverAlt: '文章封面图',
     },
     nav: {
         searchInput: {
@@ -109,7 +119,51 @@ export default {
             passwordRequired: '密码不能为空',
             passwordLength: '密码长度需在 6 到 20 个字符之间',
             passwordRegex: '密码格式不正确',
-        }
+            emailInvalid: '邮箱地址不正确',
+        },
+        login: {
+            title: '登录',
+            subtitle: '请输入您的邮箱以登录账户',
+            emailLabel: '邮箱',
+            emailPlaceholder: '邮箱',
+            passwordLabel: '密码',
+            passwordPlaceholder: '密码',
+            noAccount: '还没有账号？',
+            signUp: '注册',
+        },
+        register: {
+            title: '注册',
+            subtitle: '请输入您的信息以创建账户',
+            emailLabel: '邮箱',
+            emailPlaceholder: '邮箱',
+            usernameLabel: '用户名',
+            usernamePlaceholder: '用户名',
+            passwordLabel: '密码',
+            passwordPlaceholder: '密码',
+            registerWithEmail: '通过邮箱注册',
+            verifyCodeLabel: '验证码',
+            verifyCodePlaceholder: '验证码',
+            verify: '验证',
+            resendCode: '重新发送验证码',
+            resendIn: '{{seconds}}秒后可重新发送',
+            createAccount: '创建账户',
+            reRegister: '重新注册',
+            hasAccount: '已有账号？',
+            signIn: '登录',
+        },
+        needLogin: {
+            title: '此页面需要登录后才能查看。',
+            goToLogin: '前往登录',
+        },
+        toast: {
+            loginSuccess: '登录成功',
+            verificationCodeSent: '验证码已发送',
+            emailVerificationSuccess: '邮箱验证成功',
+            registerSuccess: '注册成功',
+        },
+        error: {
+            loginExpired: '登录已过期，请重新登录。',
+        },
     },
     settings: {
         page: {
@@ -146,6 +200,21 @@ export default {
             samePassword: '新旧密码相同',
         },
     },
+    profile: {
+        tab: {
+            home: '我的',
+            reposts: '转发',
+            activity: '最近',
+            lists: '收藏',
+            about: '关于',
+        },
+        unknownUsername: '未知用户名',
+        menu: {
+            copyLink: '复制主页链接',
+            designProfile: '设计你的主页',
+        },
+        editProfile: '编辑资料',
+    },
     notification: {
         title: '通知中心',
         tab: {
@@ -156,6 +225,8 @@ export default {
         action: {
             commentedArticle: '评论了我的文章',
             repliedComment: '回复了我的评论',
+            likedArticle: '赞了我的文章',
+            likedComment: '赞了我的评论',
         },
         replyTo: '回复',
         relatedArticle: '相关文章：',

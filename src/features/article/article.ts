@@ -1,9 +1,9 @@
 import { deleteArticle, getArticleById, updateArticle } from "@/services/apiArticle";
+import { getLikeBatchStatus, likeAction } from "@/services/apiLike";
 import type { BlockNoteEditor } from "@blocknote/core";
-import { useQuery } from "@tanstack/react-query";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { ArticlePublishPreview, ArticlePublishRequest, ArticleUpdateRequest } from "../../types/article";
+import type { ArticlePublishPreview, ArticlePublishRequest, ArticleUpdateRequest, ArticleVO } from "../../types/article";
 import { useSetAtom } from "jotai";
 import { editorPublishSignalAtom } from "../../atoms/editor";
 import { publishArticle } from "../../services/apiArticle";
@@ -145,4 +145,72 @@ export function useChangeCoverImage(coverImages: string[] | undefined) {
         isAdjustModalOpen,
         setIsAdjustModalOpen
     });
+}
+
+export function useLikeStatus(articleId: string, enabled: boolean) {
+    return useQuery({
+        queryKey: ['get-like-status', 'article', articleId],
+        queryFn: async () => {
+            const res = await getLikeBatchStatus({ targetType: 1, targetIds: [articleId] });
+            return res.likedMap[articleId] ?? false;
+        },
+        enabled,
+    });
+}
+
+export function useLikeArticle(articleId: string) {
+    const queryClient = useQueryClient();
+    const likeStatusKey = ['get-like-status', 'article', articleId];
+    const articleKey = ['get-article', articleId];
+
+    const { mutate: toggleLike, isPending: isLiking } = useMutation({
+        mutationFn: async ({ action }: { action: 1 | 2 }) => {
+            await likeAction({ targetType: 1, targetId: articleId, action });
+        },
+        onMutate: async ({ action }) => {
+            const newLiked = action === 1;
+            const previousLiked = !newLiked;
+
+            await queryClient.cancelQueries({ queryKey: likeStatusKey });
+
+            queryClient.setQueryData<boolean>(likeStatusKey, newLiked);
+
+            queryClient.setQueryData<{ title: string; article: ArticleVO } | undefined>(
+                articleKey,
+                (old) => {
+                    if (!old) return old;
+                    return {
+                        ...old,
+                        article: {
+                            ...old.article,
+                            likeCount: old.article.likeCount + (newLiked ? 1 : -1),
+                        },
+                    };
+                }
+            );
+
+            return { previousLiked };
+        },
+        onError: (error, _vars, context) => {
+            if (context) {
+                queryClient.setQueryData(likeStatusKey, context.previousLiked);
+                queryClient.setQueryData<{ title: string; article: ArticleVO } | undefined>(
+                    articleKey,
+                    (old) => {
+                        if (!old) return old;
+                        return {
+                            ...old,
+                            article: {
+                                ...old.article,
+                                likeCount: old.article.likeCount + (context.previousLiked ? 1 : -1),
+                            },
+                        };
+                    }
+                );
+            }
+            toast.error(error.message);
+        },
+    });
+
+    return { toggleLike, isLiking };
 }

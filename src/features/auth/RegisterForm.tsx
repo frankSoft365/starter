@@ -2,10 +2,12 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTimer, useVerificationEmail } from './verificationEmail';
 import { Route as LoginRoute } from "@/routes/login";
+import { useTranslation } from "react-i18next";
 
 export type RegisterStep = 'EMAIL' | 'VERIFY' | 'USERINFO';
 
 export default function RegisterForm() {
+    const { t } = useTranslation();
     const [step, setStep] = useState<RegisterStep>('EMAIL');
     const navigate = useNavigate();
 
@@ -69,11 +71,11 @@ export default function RegisterForm() {
         <div>
             {step === 'EMAIL' && (
                 <form onSubmit={handleEmailSubmit} className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-8">
-                    <legend className="fieldset-legend text-2xl">Register</legend>
-                    <div className="text-left mb-4">Enter your information to create an account</div>
+                    <legend className="fieldset-legend text-2xl">{t('auth.register.title')}</legend>
+                    <div className="text-left mb-4">{t('auth.register.subtitle')}</div>
 
-                    <label className="label">Email</label>
-                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="input" placeholder="Email" />
+                    <label className="label">{t('auth.register.emailLabel')}</label>
+                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="input" placeholder={t('auth.register.emailPlaceholder')} />
 
                     <button
                         type="submit"
@@ -81,23 +83,23 @@ export default function RegisterForm() {
                         className="btn btn-neutral mt-4"
                     >
                         {isSending && <span className="loading loading-spinner"></span>}
-                        {!isSending && 'Register with Email'}
+                        {!isSending && t('auth.register.registerWithEmail')}
                     </button>
 
-                    <div className="text-center mt-4">Already have an account? <Link className="link link-error font-bold" to="/login">Sign In</Link></div>
+                    <div className="text-center mt-4">{t('auth.register.hasAccount')} <Link className="link link-error font-bold" to="/login">{t('auth.register.signIn')}</Link></div>
                 </form>
             )}
             {step === 'VERIFY' && (
                 <form onSubmit={handleVerifySubmit} className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-8">
-                    <legend className="fieldset-legend text-2xl">Register</legend>
-                    <div className="text-left mb-4">Enter your information to create an account</div>
+                    <legend className="fieldset-legend text-2xl">{t('auth.register.title')}</legend>
+                    <div className="text-left mb-4">{t('auth.register.subtitle')}</div>
 
-                    <label className="label">Verify Code</label>
-                    <input value={code} onChange={(e) => setCode(e.target.value)} name="code" type="text" maxLength={6} className="input" placeholder="Verify Code" />
+                    <label className="label">{t('auth.register.verifyCodeLabel')}</label>
+                    <input value={code} onChange={(e) => setCode(e.target.value)} name="code" type="text" maxLength={6} className="input" placeholder={t('auth.register.verifyCodePlaceholder')} />
 
                     <button type="submit" disabled={!code || isVerifying} className="btn btn-neutral mt-4">
                         {isVerifying && <span className="loading loading-spinner"></span>}
-                        {!isVerifying && 'Verify'}
+                        {!isVerifying && t('auth.register.verify')}
                     </button>
 
                     <button
@@ -112,29 +114,29 @@ export default function RegisterForm() {
                             }
                         })}
                     >
-                        {canResend ? 'Resend Code' : `Resend in ${timer}s`}
+                        {canResend ? t('auth.register.resendCode') : t('auth.register.resendIn', { seconds: timer })}
                     </button>
 
-                    <div className="text-center mt-4">Already have an account? <Link className="link link-error font-bold" to="/login">Sign In</Link></div>
+                    <div className="text-center mt-4">{t('auth.register.hasAccount')} <Link className="link link-error font-bold" to="/login">{t('auth.register.signIn')}</Link></div>
                 </form>
             )}
             {step === 'USERINFO' && (
                 <form onSubmit={handleUserInfoSubmit} className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-8">
-                    <legend className="fieldset-legend text-2xl">Register</legend>
-                    <div className="text-left mb-4">Enter your information to create an account</div>
+                    <legend className="fieldset-legend text-2xl">{t('auth.register.title')}</legend>
+                    <div className="text-left mb-4">{t('auth.register.subtitle')}</div>
 
-                    <label className="label">Email</label>
+                    <label className="label">{t('auth.register.emailLabel')}</label>
                     <input disabled={true} name="email" type="email" className="input" placeholder={email} />
 
-                    <label className="label">Username</label>
-                    <input value={username} onChange={(e) => setUsername(e.target.value)} name="username" type="text" className="input" placeholder="Username" minLength={6} maxLength={20} />
+                    <label className="label">{t('auth.register.usernameLabel')}</label>
+                    <input value={username} onChange={(e) => setUsername(e.target.value)} name="username" type="text" className="input" placeholder={t('auth.register.usernamePlaceholder')} minLength={6} maxLength={20} />
 
-                    <label className="label">Password</label>
-                    <input value={password} onChange={(e) => setPassword(e.target.value)} name="password" type="password" className="input" placeholder="Password" minLength={6} maxLength={20} />
+                    <label className="label">{t('auth.register.passwordLabel')}</label>
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} name="password" type="password" className="input" placeholder={t('auth.register.passwordPlaceholder')} minLength={6} maxLength={20} />
 
                     <button type="submit" className="btn btn-neutral mt-4" disabled={isRegister}>
                         {isRegister && <span className="loading loading-spinner"></span>}
-                        {!isRegister && 'Create account'}
+                        {!isRegister && t('auth.register.createAccount')}
                     </button>
 
                     <button
@@ -142,10 +144,10 @@ export default function RegisterForm() {
                         className="btn btn-outline btn-accent mt-4"
                         onClick={() => location.reload()}
                     >
-                        Re-register
+                        {t('auth.register.reRegister')}
                     </button>
 
-                    <div className="text-center mt-4">Already have an account? <Link className="link link-error font-bold" to="/login">Sign In</Link></div>
+                    <div className="text-center mt-4">{t('auth.register.hasAccount')} <Link className="link link-error font-bold" to="/login">{t('auth.register.signIn')}</Link></div>
                 </form>
             )}
         </div>

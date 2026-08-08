@@ -4,7 +4,7 @@ export interface NotificationVO {
     actorId: string;
     actorAvatar: string;
     actorUsername: string;
-    type: 'NEW_COMMENT' | 'NEW_REPLY';
+    type: 'NEW_COMMENT' | 'NEW_REPLY' | 'LIKE_ARTICLE' | 'LIKE_COMMENT';
     targetType: 'ARTICLE' | 'COMMENT';
     targetId: string;
     isNew: number; // 0 is new ; 1 is old
@@ -16,6 +16,11 @@ export interface ReplyNotificationVO extends NotificationVO {
     parentComment: CommentBriefDTO;
     reply: CommentBriefDTO;
     article: ArticleBriefDTO;
+}
+
+export interface LikeNotificationVO extends NotificationVO {
+    article: ArticleBriefDTO;
+    comment: CommentBriefDTO | null;
 }
 
 export type UnreadCountVO = {

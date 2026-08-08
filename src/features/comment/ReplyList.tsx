@@ -1,23 +1,32 @@
 import { useState } from "react";
-import { useGetRepliesForRoot } from "./comment";
+import { useGetRepliesForRoot, useCommentLikeStatus } from "./comment";
 import type { CommentThreadDTO } from "@/types/comment";
 import CommentItem from "./CommentItem";
 import type { ActiveReplyTarget } from "./CommentList";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 
+type ToggleLikeFn = (vars: { commentId: string; action: 1 | 2 }) => void;
+type LikeVariables = { commentId: string; action: 1 | 2 } | undefined;
+
 export default function ReplyList({
     articleId,
     authorId,
     commentThreadDTO,
     setActiveReplyTarget,
-    targetReplyId = null
+    targetReplyId = null,
+    toggleLike,
+    isLiking = false,
+    likeVariables,
 }: {
     articleId: string,
     authorId: string,
     commentThreadDTO: CommentThreadDTO,
     setActiveReplyTarget: (value: ActiveReplyTarget | null) => void,
-    targetReplyId?: string | null
+    targetReplyId?: string | null,
+    toggleLike: ToggleLikeFn,
+    isLiking?: boolean,
+    likeVariables: LikeVariables,
 }) {
     const { t } = useTranslation();
     const queryClient = useQueryClient();
@@ -38,9 +47,25 @@ export default function ReplyList({
         status
     } = useGetRepliesForRoot(articleId, rootComment.id, expanded);
 
+    // Batch query like status for replies in preview (not expanded)
+    const previewReplyIds = repliesPreview.map(r => r.id);
+    const { data: previewLikeStatusMap = {} } = useCommentLikeStatus(
+        `preview-${rootComment.id}`,
+        previewReplyIds,
+        !expanded,
+    );
+
+    // Batch query like status for expanded replies
+    const expandedReplyIds = data?.pages.flatMap(p => p.items.map(r => r.id)) ?? [];
+    const { data: expandedLikeStatusMap = {} } = useCommentLikeStatus(
+        `replies-${rootComment.id}`,
+        expandedReplyIds,
+        expanded,
+    );
+
     return (
         <>
-            {/* reply preview */}
+            {/* reply preview (only newly added replies when not expanded) */}
             {repliesPreview.length > 0 && !expanded && (
                 <div className="ml-5 border-gray-200 bg-base-200 pl-1 rounded-2xl">
                     {repliesPreview.map(reply => (
@@ -52,7 +77,13 @@ export default function ReplyList({
                                 replyToUsername={rootComment.id !== reply.parentId ? reply.replyToUsername : null}
                                 createdAt={new Date(reply.createdAt).toLocaleString()}
                                 body={reply.content}
-                                likes={0}
+                                likes={reply.likeCount}
+                                liked={!!previewLikeStatusMap[reply.id]}
+                                isLiking={isLiking && !!likeVariables && likeVariables.commentId === reply.id}
+                                onLike={() => toggleLike({
+                                    commentId: reply.id,
+                                    action: previewLikeStatusMap[reply.id] ? 2 : 1,
+                                })}
                                 size="sm"
                                 onReply={() => {
                                     setActiveReplyTarget({ rootId: rootComment.id, replyToUsername: reply.username ?? '', parentId: reply.id });
@@ -96,7 +127,13 @@ export default function ReplyList({
                                 replyToUsername={rootComment.id !== reply.parentId ? reply.replyToUsername : null}
                                 createdAt={new Date(reply.createdAt).toLocaleString()}
                                 body={reply.content}
-                                likes={0}
+                                likes={reply.likeCount}
+                                liked={!!expandedLikeStatusMap[reply.id]}
+                                isLiking={isLiking && !!likeVariables && likeVariables.commentId === reply.id}
+                                onLike={() => toggleLike({
+                                    commentId: reply.id,
+                                    action: expandedLikeStatusMap[reply.id] ? 2 : 1,
+                                })}
                                 size="sm"
                                 onReply={() => {
                                     setActiveReplyTarget({ rootId: rootComment.id, replyToUsername: reply.username ?? '', parentId: reply.id });

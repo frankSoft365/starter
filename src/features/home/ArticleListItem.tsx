@@ -30,10 +30,10 @@ export default function ArticleListItem({ article }: { article: ArticleListItemV
                 </div>
                 <div className="flex flex-col lg:flex-row justify-between lg:items-center">
                     <div className="flex flex-row">
-                        <div className="lg:tooltip" data-tip={t('btn.clap', { count: 3034 })}>
+                        <div className="lg:tooltip" data-tip={t('btn.clap', { count: article.likeCount })}>
                             <ArticleMenuButton>
                                 <HandsClappingIcon weight="fill" size={20} />
-                                {formatLargeNumber(3034)}
+                                {formatLargeNumber(article.likeCount)}
                             </ArticleMenuButton>
                         </div>
                         <div className="lg:tooltip" data-tip={t('btn.response', { count: article.responseNum })}>
@@ -72,7 +72,7 @@ export default function ArticleListItem({ article }: { article: ArticleListItemV
                 <div className="content-center col-start-4 col-end-6">
                     <img
                         src={article.coverImage}
-                        alt="cover image of article"
+                        alt={t('article.coverAlt')}
                         className="w-full aspect-2/1 object-cover"
                         style={{ objectPosition: objectPositionFromRatio(article.coverFocusY ?? 0.5) }}
                     />

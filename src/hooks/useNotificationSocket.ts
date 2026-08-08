@@ -39,6 +39,11 @@ export function useNotificationSocket() {
                     };
                 }
             );
+        } else if (payload.type === 'like') {
+            setUnreadCount((prev) => ({
+                ...prev,
+                likeCount: payload.unreadCount
+            }));
         }
     }, [setUnreadCount, queryClient]);
 

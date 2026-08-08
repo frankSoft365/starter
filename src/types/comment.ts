@@ -22,6 +22,8 @@ export type CommentView = {
 
     content: string;
 
+    likeCount: number;
+
     parentId: string;
 
     replyToUserId: string | null; // null for root comments

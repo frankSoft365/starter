@@ -39,7 +39,7 @@ export default function NavBar() {
     const isHomeRoute = location.pathname === homeRoute.to;
     const isEditorRoute = location.pathname === editorRoute.to;
     const isArticleEditRoute = location.pathname.includes(articleEditRoute.to.split('$')[0]);
-    const isNotificationRoute = location.pathname === notificationsRoute.to;
+    const isNotificationRoute = location.pathname === notificationsRoute.to || location.pathname.startsWith(notificationsRoute.to + '/');
 
     return (
         <div className="relative z-999 max-lg:collapse bg-base-200 shadow-sm w-full">

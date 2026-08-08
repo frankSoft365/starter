@@ -10,7 +10,7 @@ export const PasswordSchema = z.string()
     .regex(PASSWORD_REGEX, "auth.validate.passwordRegex");
 
 export const LoginSchema = z.object({
-    email: z.email(),
+    email: z.email("auth.validate.emailInvalid"),
     password: PasswordSchema
 })
 

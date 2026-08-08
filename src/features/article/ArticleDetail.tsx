@@ -6,13 +6,13 @@ import EditorComponent from "@/ui/EditorComponent";
 import { BookmarkIcon, ChatCircleDotsIcon, DotsThreeIcon, HandsClappingIcon, RepeatIcon, ThumbsDownIcon } from "@phosphor-icons/react";
 import ArticleMenuButton from "@/ui/ArticleMenuButton";
 import { useAtomValue } from "jotai";
-import { userAtom } from "@/atoms/user";
+import { userAtom, isLoginAtom } from "@/atoms/user";
 import { useNavigate } from "@tanstack/react-router";
 import { useRef } from "react";
 import { useForm, useStore } from "@tanstack/react-form";
 import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
 import { useCreateBlockNote } from "@blocknote/react";
-import { useCurrentArticle, useDeleteArticle } from "./article";
+import { useCurrentArticle, useDeleteArticle, useLikeStatus, useLikeArticle } from "./article";
 import { Route as homeRoute } from "@/routes/_app/index";
 import CurrentUser from "@/ui/CurrentUser";
 import FieldInfo from "@/ui/FieldInfo";
@@ -33,6 +33,9 @@ export default function ArticleDetail() {
 
     const { processedArticle, isLoading, isError, error } = useCurrentArticle(articleId, editor);
     const { handleDelete, isDeleting } = useDeleteArticle();
+    const isLogin = useAtomValue(isLoginAtom);
+    const { data: isLiked } = useLikeStatus(articleId, isLogin);
+    const { toggleLike, isLiking } = useLikeArticle(articleId);
 
     const article = processedArticle?.article;
     const title = processedArticle?.title;
@@ -99,10 +102,14 @@ export default function ArticleDetail() {
                     <div className="flex flex-row items-center justify-around w-full">
                         {/* left buttons */}
                         <div className="flex flex-row">
-                            <div className="lg:tooltip mx-1" data-tip={isOwnStory ? t('btn.clapIsOwn') : t('btn.clap', { count: 3034 })}>
-                                <ArticleMenuButton disable={isOwnStory}>
-                                    <HandsClappingIcon size={24} color={meneButtonColor} weight="light" />
-                                    {!isOwnStory && '3K'}
+                            <div className="lg:tooltip mx-1" data-tip={isOwnStory ? t('btn.clapIsOwn') : t('btn.clap', { count: article.likeCount })}>
+                                <ArticleMenuButton
+                                    type="button"
+                                    disable={isOwnStory || isLiking}
+                                    onClick={() => toggleLike({ action: isLiked ? 2 : 1 })}
+                                >
+                                    <HandsClappingIcon size={24} color={isLiked ? '#676565' : meneButtonColor} weight={isLiked ? 'fill' : 'light'} />
+                                    {!isOwnStory && article.likeCount}
                                 </ArticleMenuButton>
                             </div>
                             <div className="lg:tooltip mx-1" data-tip={t('btn.respond')}>

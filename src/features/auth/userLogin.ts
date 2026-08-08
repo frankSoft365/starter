@@ -6,6 +6,7 @@ import { Route as HomeRoute } from "@/routes/_app";
 import { toast } from "sonner";
 import { login, logout } from "@/services/apiUserLogin";
 import type { LoginForm } from "@/schemas/auth";
+import i18n from "@/i18n";
 
 export function useUserLogin() {
     const setUserInfo = useSetAtom(userAtom);
@@ -18,7 +19,7 @@ export function useUserLogin() {
             return userInfo;
         },
         onSuccess: async (userInfo) => {
-            toast.success('Login successful');
+            toast.success(i18n.t('auth.toast.loginSuccess'));
             setIsLogin(true);
             setUserInfo(userInfo);
             navigate({ to: HomeRoute.to });

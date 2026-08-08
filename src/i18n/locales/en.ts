@@ -44,6 +44,11 @@ export default {
         loadingMore: 'Loading more...',
         error: 'Error',
         retry: 'Retry',
+        noPermission: 'No permission is granted for the current operation.',
+        serverError: 'A server error has occurred. Please try again later.',
+        networkErrorWithCode: 'Network error, error code : {{code}}',
+        timeout: 'Request timed out, please check your network.',
+        networkConnection: 'Network connection error',
         toast: {
             replyPosted: 'Reply posted — view the full thread to see it.',
             publishError: 'An error occurred while publishing the article.',
@@ -60,7 +65,12 @@ export default {
             topicMax: "A tag name must be 25 characters max.",
             coverFocusYMin: "coverFocusY must be >= 0",
             coverFocusYMax: "coverFocusY must be <= 1"
-        }
+        },
+        list: {
+            loadFailed: 'Failed to load article list.',
+            empty: 'Article not found.',
+        },
+        coverAlt: 'cover image of article',
     },
     nav: {
         searchInput: {
@@ -109,7 +119,51 @@ export default {
             passwordRequired: 'Password is required',
             passwordLength: 'Password must be between 6 and 20 characters',
             passwordRegex: 'Password does not match required format',
-        }
+            emailInvalid: 'Invalid email address',
+        },
+        login: {
+            title: 'Login',
+            subtitle: 'Enter your email below to login to your account',
+            emailLabel: 'Email',
+            emailPlaceholder: 'Email',
+            passwordLabel: 'Password',
+            passwordPlaceholder: 'Password',
+            noAccount: "Don't have an account?",
+            signUp: 'Sign Up',
+        },
+        register: {
+            title: 'Register',
+            subtitle: 'Enter your information to create an account',
+            emailLabel: 'Email',
+            emailPlaceholder: 'Email',
+            usernameLabel: 'Username',
+            usernamePlaceholder: 'Username',
+            passwordLabel: 'Password',
+            passwordPlaceholder: 'Password',
+            registerWithEmail: 'Register with Email',
+            verifyCodeLabel: 'Verify Code',
+            verifyCodePlaceholder: 'Verify Code',
+            verify: 'Verify',
+            resendCode: 'Resend Code',
+            resendIn: 'Resend in {{seconds}}s',
+            createAccount: 'Create account',
+            reRegister: 'Re-register',
+            hasAccount: 'Already have an account?',
+            signIn: 'Sign In',
+        },
+        needLogin: {
+            title: 'This page requires login to view.',
+            goToLogin: 'Go to Login',
+        },
+        toast: {
+            loginSuccess: 'Login successful',
+            verificationCodeSent: 'Verification code has been sent',
+            emailVerificationSuccess: 'Email verification successful',
+            registerSuccess: 'Registration successful',
+        },
+        error: {
+            loginExpired: 'Your login has expired. Please log in again.',
+        },
     },
     settings: {
         page: {
@@ -146,6 +200,21 @@ export default {
             samePassword: 'The old and new passwords are the same.',
         },
     },
+    profile: {
+        tab: {
+            home: 'Home',
+            reposts: 'Reposts',
+            activity: 'Activity',
+            lists: 'Lists',
+            about: 'About',
+        },
+        unknownUsername: 'Unknown username',
+        menu: {
+            copyLink: 'Copy link to profile',
+            designProfile: 'Design your profile',
+        },
+        editProfile: 'Edit profile',
+    },
     notification: {
         title: 'Notifications',
         tab: {
@@ -156,6 +225,8 @@ export default {
         action: {
             commentedArticle: 'commented to my article',
             repliedComment: 'reply to my comment',
+            likedArticle: 'liked my article',
+            likedComment: 'liked my comment',
         },
         replyTo: 'reply to',
         relatedArticle: 'related article :',

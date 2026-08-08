@@ -1,7 +1,8 @@
 import { addComment, getRepliesForRootComment, getRootComments } from "@/services/apiComment";
+import { getLikeBatchStatus, likeAction } from "@/services/apiLike";
 import type { CommentThreadDTO, CommentView, CreateCommentRequest, CursorPage, CursorPageRequest } from "@/types/comment";
 import { useForm, useStore } from "@tanstack/react-form";
-import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { ActiveReplyTarget } from "./CommentList";
@@ -205,4 +206,122 @@ export function useAddComment(articleId: string) {
         handleAddComment,
         isAddingComment
     });
+}
+
+/**
+ * Batch query like status for a set of comment IDs.
+ * `scope` distinguishes root-comment queries from reply queries.
+ * When commentIds change (e.g. infinite scroll loads more), the queryKey
+ * changes and TanStack Query automatically refetches with the full ID set.
+ */
+export function useCommentLikeStatus(
+    scope: string,
+    commentIds: string[],
+    enabled: boolean,
+) {
+    return useQuery({
+        queryKey: ['get-like-status', 'comment', scope, commentIds],
+        queryFn: async () => {
+            const res = await getLikeBatchStatus({ targetType: 2, targetIds: commentIds });
+            return res.likedMap;
+        },
+        enabled: enabled && commentIds.length > 0,
+    });
+}
+
+export function useLikeComment(articleId: string) {
+    const queryClient = useQueryClient();
+
+    const { mutate: toggleLike, isPending, variables } = useMutation({
+        mutationFn: async ({ commentId, action }: { commentId: string; action: 1 | 2 }) => {
+            await likeAction({ targetType: 2, targetId: commentId, action });
+        },
+        onMutate: async ({ commentId, action }) => {
+            // Snapshot like-status queries for rollback
+            const likeStatusQueries = queryClient.getQueriesData<Record<string, boolean>>(
+                { queryKey: ['get-like-status', 'comment'] }
+            );
+
+            // Optimistic: flip like status in all matching queries
+            queryClient.setQueriesData<Record<string, boolean>>(
+                { queryKey: ['get-like-status', 'comment'] },
+                (old) => {
+                    if (!old) return old;
+                    return { ...old, [commentId]: action === 1 };
+                }
+            );
+
+            const delta = action === 1 ? 1 : -1;
+
+            // Optimistic: update likeCount in root-comment cache (root + replyPreview)
+            queryClient.setQueryData(
+                ['get-comment', articleId],
+                (old: { pages: CursorPage<CommentThreadDTO>[]; pageParams: CursorPageRequest[] } | undefined) => {
+                    if (!old) return old;
+                    return {
+                        ...old,
+                        pages: old.pages.map(page => ({
+                            ...page,
+                            items: page.items.map(thread => {
+                                // root comment
+                                if (thread.root.id === commentId) {
+                                    return {
+                                        ...thread,
+                                        root: { ...thread.root, likeCount: thread.root.likeCount + delta },
+                                    };
+                                }
+                                // reply in replyPreview
+                                if (thread.replyPreview.some(r => r.id === commentId)) {
+                                    return {
+                                        ...thread,
+                                        replyPreview: thread.replyPreview.map(r =>
+                                            r.id === commentId
+                                                ? { ...r, likeCount: r.likeCount + delta }
+                                                : r
+                                        ),
+                                    };
+                                }
+                                return thread;
+                            }),
+                        })),
+                    };
+                }
+            );
+
+            // Optimistic: update likeCount in expanded-replies cache
+            queryClient.setQueriesData<{ pages: CursorPage<CommentView>[]; pageParams: CursorPageRequest[] }>(
+                { queryKey: ['get-comments', 'replies'] },
+                (old) => {
+                    if (!old) return old;
+                    return {
+                        ...old,
+                        pages: old.pages.map(page => ({
+                            ...page,
+                            items: page.items.map(reply =>
+                                reply.id === commentId
+                                    ? { ...reply, likeCount: reply.likeCount + delta }
+                                    : reply
+                            ),
+                        })),
+                    };
+                }
+            );
+
+            return { likeStatusQueries };
+        },
+        onError: (error, _vars, context) => {
+            // Rollback like-status queries
+            if (context?.likeStatusQueries) {
+                context.likeStatusQueries.forEach(([key, data]) => {
+                    queryClient.setQueryData(key, data);
+                });
+            }
+            // Refetch comment caches to restore correct likeCount
+            queryClient.invalidateQueries({ queryKey: ['get-comment', articleId] });
+            queryClient.invalidateQueries({ queryKey: ['get-comments', 'replies'] });
+            toast.error(error.message);
+        },
+    });
+
+    return { toggleLike, isPending, variables };
 }

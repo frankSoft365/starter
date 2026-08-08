@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { isLoginAtom, userAtom } from '../atoms/user';
 import type { BaseResponse } from '../types/BaseResponse';
 import { logout } from '../services/apiUserLogin';
+import i18n from '@/i18n';
 
 const jotaiStore = getDefaultStore()
 
@@ -26,7 +27,7 @@ request.interceptors.response.use(
             return data;
         }
         // bussiness error
-        return Promise.reject(new Error(description || 'Error'));
+        return Promise.reject(new Error(description || i18n.t('common.error')));
     },
     async (err) => {
         let msg = '';
@@ -34,7 +35,7 @@ request.interceptors.response.use(
         if (response) {
             switch (response.status) {
                 case 401:
-                    msg = "Your login has expired. Please log in again.";
+                    msg = i18n.t('auth.error.loginExpired');
                     jotaiStore.set(isLoginAtom, false);
                     jotaiStore.set(userAtom, null);
                     try {
@@ -46,19 +47,19 @@ request.interceptors.response.use(
                     }
                     return Promise.reject(new Error());
                 case 403:
-                    msg = "No permission is granted for the current operation.";
+                    msg = i18n.t('common.noPermission');
                     break;
                 case 500:
-                    msg = "A server error has occurred. Please try again later.";
+                    msg = i18n.t('common.serverError');
                     break;
                 default:
-                    msg = `Network error, error code : ${response.status}`;
+                    msg = i18n.t('common.networkErrorWithCode', { code: response.status });
             }
         } else {
             if (err.message.includes('timeout')) {
-                msg = 'Request timed out, please check your network.';
+                msg = i18n.t('common.timeout');
             } else {
-                msg = 'Network connection error';
+                msg = i18n.t('common.networkConnection');
             }
         }
         return Promise.reject(new Error(msg));

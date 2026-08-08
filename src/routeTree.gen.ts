@@ -21,8 +21,11 @@ import { Route as AppProtectedEditorRouteImport } from './routes/_app/_protected
 import { Route as AppProtectedProfileRouteRouteImport } from './routes/_app/_protected/_profile/route'
 import { Route as AppProtectedMeSettingsRouteImport } from './routes/_app/_protected/me/settings'
 import { Route as AppProtectedMePasswordRouteImport } from './routes/_app/_protected/me/password'
-import { Route as AppProtectedMeNotificationsRouteImport } from './routes/_app/_protected/me/notifications'
+import { Route as AppProtectedMeNotificationsRouteRouteImport } from './routes/_app/_protected/me/notifications/route'
+import { Route as AppProtectedMeNotificationsIndexRouteImport } from './routes/_app/_protected/me/notifications/index'
 import { Route as AppProtectedProfileAtIndexRouteImport } from './routes/_app/_protected/_profile/@/index'
+import { Route as AppProtectedMeNotificationsLikeRouteImport } from './routes/_app/_protected/me/notifications/like'
+import { Route as AppProtectedMeNotificationsFollowRouteImport } from './routes/_app/_protected/me/notifications/follow'
 import { Route as AppProtectedArticlesEditArticleIdRouteImport } from './routes/_app/_protected/articles.edit.$articleId'
 import { Route as AppProtectedProfileAtRepostsRouteImport } from './routes/_app/_protected/_profile/@/reposts'
 import { Route as AppProtectedProfileAtListsRouteImport } from './routes/_app/_protected/_profile/@/lists'
@@ -87,17 +90,35 @@ const AppProtectedMePasswordRoute = AppProtectedMePasswordRouteImport.update({
   path: '/me/password',
   getParentRoute: () => AppProtectedRouteRoute,
 } as any)
-const AppProtectedMeNotificationsRoute =
-  AppProtectedMeNotificationsRouteImport.update({
+const AppProtectedMeNotificationsRouteRoute =
+  AppProtectedMeNotificationsRouteRouteImport.update({
     id: '/me/notifications',
     path: '/me/notifications',
     getParentRoute: () => AppProtectedRouteRoute,
+  } as any)
+const AppProtectedMeNotificationsIndexRoute =
+  AppProtectedMeNotificationsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppProtectedMeNotificationsRouteRoute,
   } as any)
 const AppProtectedProfileAtIndexRoute =
   AppProtectedProfileAtIndexRouteImport.update({
     id: '/@/',
     path: '/@/',
     getParentRoute: () => AppProtectedProfileRouteRoute,
+  } as any)
+const AppProtectedMeNotificationsLikeRoute =
+  AppProtectedMeNotificationsLikeRouteImport.update({
+    id: '/like',
+    path: '/like',
+    getParentRoute: () => AppProtectedMeNotificationsRouteRoute,
+  } as any)
+const AppProtectedMeNotificationsFollowRoute =
+  AppProtectedMeNotificationsFollowRouteImport.update({
+    id: '/follow',
+    path: '/follow',
+    getParentRoute: () => AppProtectedMeNotificationsRouteRoute,
   } as any)
 const AppProtectedArticlesEditArticleIdRoute =
   AppProtectedArticlesEditArticleIdRouteImport.update({
@@ -138,7 +159,7 @@ export interface FileRoutesByFullPath {
   '/editor': typeof AppProtectedEditorRoute
   '/submission': typeof AppProtectedSubmissionRoute
   '/article/$articleId': typeof AppArticleArticleIdRoute
-  '/me/notifications': typeof AppProtectedMeNotificationsRoute
+  '/me/notifications': typeof AppProtectedMeNotificationsRouteRouteWithChildren
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
   '/@/about': typeof AppProtectedProfileAtAboutRoute
@@ -146,7 +167,10 @@ export interface FileRoutesByFullPath {
   '/@/lists': typeof AppProtectedProfileAtListsRoute
   '/@/reposts': typeof AppProtectedProfileAtRepostsRoute
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
+  '/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
+  '/me/notifications/like': typeof AppProtectedMeNotificationsLikeRoute
   '/@/': typeof AppProtectedProfileAtIndexRoute
+  '/me/notifications/': typeof AppProtectedMeNotificationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -156,7 +180,6 @@ export interface FileRoutesByTo {
   '/editor': typeof AppProtectedEditorRoute
   '/submission': typeof AppProtectedSubmissionRoute
   '/article/$articleId': typeof AppArticleArticleIdRoute
-  '/me/notifications': typeof AppProtectedMeNotificationsRoute
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
   '/@/about': typeof AppProtectedProfileAtAboutRoute
@@ -164,7 +187,10 @@ export interface FileRoutesByTo {
   '/@/lists': typeof AppProtectedProfileAtListsRoute
   '/@/reposts': typeof AppProtectedProfileAtRepostsRoute
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
+  '/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
+  '/me/notifications/like': typeof AppProtectedMeNotificationsLikeRoute
   '/@': typeof AppProtectedProfileAtIndexRoute
+  '/me/notifications': typeof AppProtectedMeNotificationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -178,7 +204,7 @@ export interface FileRoutesById {
   '/_app/_protected/editor': typeof AppProtectedEditorRoute
   '/_app/_protected/submission': typeof AppProtectedSubmissionRoute
   '/_app/article/$articleId': typeof AppArticleArticleIdRoute
-  '/_app/_protected/me/notifications': typeof AppProtectedMeNotificationsRoute
+  '/_app/_protected/me/notifications': typeof AppProtectedMeNotificationsRouteRouteWithChildren
   '/_app/_protected/me/password': typeof AppProtectedMePasswordRoute
   '/_app/_protected/me/settings': typeof AppProtectedMeSettingsRoute
   '/_app/_protected/_profile/@/about': typeof AppProtectedProfileAtAboutRoute
@@ -186,7 +212,10 @@ export interface FileRoutesById {
   '/_app/_protected/_profile/@/lists': typeof AppProtectedProfileAtListsRoute
   '/_app/_protected/_profile/@/reposts': typeof AppProtectedProfileAtRepostsRoute
   '/_app/_protected/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
+  '/_app/_protected/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
+  '/_app/_protected/me/notifications/like': typeof AppProtectedMeNotificationsLikeRoute
   '/_app/_protected/_profile/@/': typeof AppProtectedProfileAtIndexRoute
+  '/_app/_protected/me/notifications/': typeof AppProtectedMeNotificationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -206,7 +235,10 @@ export interface FileRouteTypes {
     | '/@/lists'
     | '/@/reposts'
     | '/articles/edit/$articleId'
+    | '/me/notifications/follow'
+    | '/me/notifications/like'
     | '/@/'
+    | '/me/notifications/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -216,7 +248,6 @@ export interface FileRouteTypes {
     | '/editor'
     | '/submission'
     | '/article/$articleId'
-    | '/me/notifications'
     | '/me/password'
     | '/me/settings'
     | '/@/about'
@@ -224,7 +255,10 @@ export interface FileRouteTypes {
     | '/@/lists'
     | '/@/reposts'
     | '/articles/edit/$articleId'
+    | '/me/notifications/follow'
+    | '/me/notifications/like'
     | '/@'
+    | '/me/notifications'
   id:
     | '__root__'
     | '/_app'
@@ -245,7 +279,10 @@ export interface FileRouteTypes {
     | '/_app/_protected/_profile/@/lists'
     | '/_app/_protected/_profile/@/reposts'
     | '/_app/_protected/articles/edit/$articleId'
+    | '/_app/_protected/me/notifications/follow'
+    | '/_app/_protected/me/notifications/like'
     | '/_app/_protected/_profile/@/'
+    | '/_app/_protected/me/notifications/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -344,8 +381,15 @@ declare module '@tanstack/react-router' {
       id: '/_app/_protected/me/notifications'
       path: '/me/notifications'
       fullPath: '/me/notifications'
-      preLoaderRoute: typeof AppProtectedMeNotificationsRouteImport
+      preLoaderRoute: typeof AppProtectedMeNotificationsRouteRouteImport
       parentRoute: typeof AppProtectedRouteRoute
+    }
+    '/_app/_protected/me/notifications/': {
+      id: '/_app/_protected/me/notifications/'
+      path: '/'
+      fullPath: '/me/notifications/'
+      preLoaderRoute: typeof AppProtectedMeNotificationsIndexRouteImport
+      parentRoute: typeof AppProtectedMeNotificationsRouteRoute
     }
     '/_app/_protected/_profile/@/': {
       id: '/_app/_protected/_profile/@/'
@@ -353,6 +397,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/@/'
       preLoaderRoute: typeof AppProtectedProfileAtIndexRouteImport
       parentRoute: typeof AppProtectedProfileRouteRoute
+    }
+    '/_app/_protected/me/notifications/like': {
+      id: '/_app/_protected/me/notifications/like'
+      path: '/like'
+      fullPath: '/me/notifications/like'
+      preLoaderRoute: typeof AppProtectedMeNotificationsLikeRouteImport
+      parentRoute: typeof AppProtectedMeNotificationsRouteRoute
+    }
+    '/_app/_protected/me/notifications/follow': {
+      id: '/_app/_protected/me/notifications/follow'
+      path: '/follow'
+      fullPath: '/me/notifications/follow'
+      preLoaderRoute: typeof AppProtectedMeNotificationsFollowRouteImport
+      parentRoute: typeof AppProtectedMeNotificationsRouteRoute
     }
     '/_app/_protected/articles/edit/$articleId': {
       id: '/_app/_protected/articles/edit/$articleId'
@@ -414,11 +472,31 @@ const AppProtectedProfileRouteRouteWithChildren =
     AppProtectedProfileRouteRouteChildren,
   )
 
+interface AppProtectedMeNotificationsRouteRouteChildren {
+  AppProtectedMeNotificationsFollowRoute: typeof AppProtectedMeNotificationsFollowRoute
+  AppProtectedMeNotificationsLikeRoute: typeof AppProtectedMeNotificationsLikeRoute
+  AppProtectedMeNotificationsIndexRoute: typeof AppProtectedMeNotificationsIndexRoute
+}
+
+const AppProtectedMeNotificationsRouteRouteChildren: AppProtectedMeNotificationsRouteRouteChildren =
+  {
+    AppProtectedMeNotificationsFollowRoute:
+      AppProtectedMeNotificationsFollowRoute,
+    AppProtectedMeNotificationsLikeRoute: AppProtectedMeNotificationsLikeRoute,
+    AppProtectedMeNotificationsIndexRoute:
+      AppProtectedMeNotificationsIndexRoute,
+  }
+
+const AppProtectedMeNotificationsRouteRouteWithChildren =
+  AppProtectedMeNotificationsRouteRoute._addFileChildren(
+    AppProtectedMeNotificationsRouteRouteChildren,
+  )
+
 interface AppProtectedRouteRouteChildren {
   AppProtectedProfileRouteRoute: typeof AppProtectedProfileRouteRouteWithChildren
   AppProtectedEditorRoute: typeof AppProtectedEditorRoute
   AppProtectedSubmissionRoute: typeof AppProtectedSubmissionRoute
-  AppProtectedMeNotificationsRoute: typeof AppProtectedMeNotificationsRoute
+  AppProtectedMeNotificationsRouteRoute: typeof AppProtectedMeNotificationsRouteRouteWithChildren
   AppProtectedMePasswordRoute: typeof AppProtectedMePasswordRoute
   AppProtectedMeSettingsRoute: typeof AppProtectedMeSettingsRoute
   AppProtectedArticlesEditArticleIdRoute: typeof AppProtectedArticlesEditArticleIdRoute
@@ -428,7 +506,8 @@ const AppProtectedRouteRouteChildren: AppProtectedRouteRouteChildren = {
   AppProtectedProfileRouteRoute: AppProtectedProfileRouteRouteWithChildren,
   AppProtectedEditorRoute: AppProtectedEditorRoute,
   AppProtectedSubmissionRoute: AppProtectedSubmissionRoute,
-  AppProtectedMeNotificationsRoute: AppProtectedMeNotificationsRoute,
+  AppProtectedMeNotificationsRouteRoute:
+    AppProtectedMeNotificationsRouteRouteWithChildren,
   AppProtectedMePasswordRoute: AppProtectedMePasswordRoute,
   AppProtectedMeSettingsRoute: AppProtectedMeSettingsRoute,
   AppProtectedArticlesEditArticleIdRoute:

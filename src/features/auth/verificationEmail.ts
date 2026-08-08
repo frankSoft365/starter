@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getVerificationCode, userRegister, verifyVerificationCode } from "@/services/apiUserRegister";
 import { toast } from "sonner";
 import type { SendCodeRequest, UserRegisterRequest, VerifyCodeRequest } from "@/types/user";
+import i18n from "@/i18n";
 
 export function useVerificationEmail() {
     const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ export function useVerificationEmail() {
         },
         mutationKey: ['send-verification-code'],
         onSuccess: () => {
-            toast.success('Verification code has been sent');
+            toast.success(i18n.t('auth.toast.verificationCodeSent'));
         },
         onError: (error) => {
             toast.error(error.message);
@@ -40,7 +41,7 @@ export function useVerificationEmail() {
         mutationKey: ['verify-verification-code'],
         onSuccess: (token) => {
             setToken(token);
-            toast.success('Email verification successful');
+            toast.success(i18n.t('auth.toast.emailVerificationSuccess'));
         },
         onError: (error) => {
             toast.error(error.message);
@@ -59,7 +60,7 @@ export function useVerificationEmail() {
         },
         mutationKey: ['user-register'],
         onSuccess: () => {
-            toast.success('Registration successful');
+            toast.success(i18n.t('auth.toast.registerSuccess'));
         },
         onError: (error) => {
             toast.error(error.message);

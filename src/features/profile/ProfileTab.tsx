@@ -8,18 +8,20 @@ import { Route as repostsRoute } from "@/routes/_app/_protected/_profile/@/repos
 import { Route as activityRoute } from "@/routes/_app/_protected/_profile/@/activity";
 import { Route as listsRoute } from "@/routes/_app/_protected/_profile/@/lists";
 import { Route as aboutRoute } from "@/routes/_app/_protected/_profile/@/about";
+import { useTranslation } from "react-i18next";
 
 export default function ProfileTab({ children }: { children: React.ReactNode }) {
+    const { t } = useTranslation();
     const user = useAtomValue(userAtom);
     const location = useLocation();
     const navigate = useNavigate();
 
     const profileTabMap = [
-        { name: 'Home', path: homeRoute.to },
-        { name: 'Reposts', path: repostsRoute.to },
-        { name: 'Activity', path: activityRoute.to },
-        { name: 'Lists', path: listsRoute.to },
-        { name: 'About', path: aboutRoute.to },
+        { name: t('profile.tab.home'), path: homeRoute.to },
+        { name: t('profile.tab.reposts'), path: repostsRoute.to },
+        { name: t('profile.tab.activity'), path: activityRoute.to },
+        { name: t('profile.tab.lists'), path: listsRoute.to },
+        { name: t('profile.tab.about'), path: aboutRoute.to },
     ]
 
     return (
@@ -31,7 +33,7 @@ export default function ProfileTab({ children }: { children: React.ReactNode }) 
                             <Avatar imageUrl={user?.image ?? ''} username={user?.username ?? ''} />
                         </div>
                         <div>
-                            <div className="w-full text-lg md:text-3xl font-bold">{user?.username || 'Unknown username'}</div>
+                            <div className="w-full text-lg md:text-3xl font-bold">{user?.username || t('profile.unknownUsername')}</div>
                         </div>
                     </div>
                     <div className="flex items-center p-4">
@@ -42,12 +44,12 @@ export default function ProfileTab({ children }: { children: React.ReactNode }) 
                             popover="auto" id="popover-profile-more" style={{ positionAnchor: "--anchor-1" }}>
                             <li>
                                 <button className="btn btn-ghost justify-start text-xs font-light">
-                                    Copy link to profile
+                                    {t('profile.menu.copyLink')}
                                 </button>
                             </li>
                             <li>
                                 <button className="btn btn-ghost justify-start text-xs font-light">
-                                    Design your profile
+                                    {t('profile.menu.designProfile')}
                                 </button>
                             </li>
                         </ul>
@@ -72,7 +74,7 @@ export default function ProfileTab({ children }: { children: React.ReactNode }) 
             <div className="hidden md:inline-flex md:w-1.5xl md:flex-col md:p-6 md:items-start gap-3">
                 <Avatar imageUrl={user?.image ?? ''} username={user?.username ?? ''} />
                 <p className="font-bold text-lg">{user?.username}</p>
-                <Link to='/me/settings' className="text-green-500 hover:text-black">Edit profile</Link>
+                <Link to='/me/settings' className="text-green-500 hover:text-black">{t('profile.editProfile')}</Link>
             </div>
         </div>
     );

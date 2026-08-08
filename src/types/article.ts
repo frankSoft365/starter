@@ -43,7 +43,8 @@ export type ArticleListItemVO = {
     coverImage?: string;
     /** vertical focus point returned by backend, range 0-1 (0 top, 1 bottom) */
     coverFocusY: number;
-    clapNum?: number;
+
+    likeCount: number;
     responseNum: number;
     repostNum?: number;
 }
@@ -58,7 +59,7 @@ export type ArticleVO = {
 
     topics: TopicInArticleVO[];
 
-    clapNum?: number;
+    likeCount: number;
     responseNum: number;
     repostNum?: number;
 

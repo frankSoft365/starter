@@ -8,6 +8,7 @@ import type { ArticleListRequest } from "@/types/article";
 import { useAtom } from "jotai";
 import { escapeArticleIdAtom } from "@/atoms/article";
 import { useLayoutEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function ArticleList({
     author = 'allUser'
@@ -15,6 +16,7 @@ export default function ArticleList({
     author?: 'allUser' | 'myArticle'
 }) {
     const [escapeArticleId, setEscapeArticleId] = useAtom(escapeArticleIdAtom);
+    const { t } = useTranslation();
     const params: ArticleListRequest = author === 'allUser' ? { isMyArticle: false } : author === 'myArticle' ? { isMyArticle: true } : {}
 
     const { data: articleList, isLoading, isError, error } = useQuery({
@@ -53,14 +55,14 @@ export default function ArticleList({
             {isLoading && !isError && <Loading />}
             {isError && <main className="flex items-center justify-center min-h-screen">
                 <div className="text-3xl text-red-600">
-                    {error.message || 'Failed to load article list.'}
+                    {error.message || t('article.list.loadFailed')}
                 </div>
             </main>}
 
             {!isLoading && !isError && articleList && <ul className="list w-full lg:w-3xl bg-base-100 shadow-md">
                 {articleList.length === 0 && <main className="flex items-center justify-center min-h-screen">
                     <div className="text-3xl text-red-600">
-                        Article not found.
+                        {t('article.list.empty')}
                     </div>
                 </main>}
                 {articleList.map((article) => {

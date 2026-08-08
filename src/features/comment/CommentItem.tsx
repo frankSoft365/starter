@@ -10,8 +10,11 @@ type CommentItemProps = {
     createdAt?: string;
     body: string;
     likes?: number;
+    liked?: boolean;
+    isLiking?: boolean;
     size?: "md" | "sm";
     onReply?: () => void;
+    onLike?: () => void;
 };
 
 export default function CommentItem({
@@ -22,8 +25,11 @@ export default function CommentItem({
     createdAt,
     body,
     likes = 0,
+    liked = false,
+    isLiking = false,
     size = "md",
     onReply,
+    onLike,
 }: CommentItemProps) {
     const { t } = useTranslation();
     const isSmall = size === "sm";
@@ -55,9 +61,17 @@ export default function CommentItem({
             <p className={`list-col-wrap ${bodySize} mb-2`}>
                 {body}
             </p>
-            <button type="button" className={`btn btn-ghost ${actionSize}`}>
-                <ThumbsUpIcon size={isSmall ? 20 : 24} color="#676565" />
-                {likes && likes}
+            <button
+                type="button"
+                onClick={onLike}
+                disabled={isLiking}
+                className={`btn btn-ghost ${actionSize}`}
+            >
+                {isLiking
+                    ? <span className="loading loading-spinner loading-xs"></span>
+                    : <ThumbsUpIcon size={isSmall ? 20 : 24} weight={liked ? "fill" : "light"} color={liked ? "#676565" : "#676565"} />
+                }
+                {likes > 0 && likes}
             </button>
             <button type="button" onClick={onReply} className={`btn btn-ghost ${actionSize}`}>
                 <ChatCircleDotsIcon size={isSmall ? 20 : 24} color="#676565" />

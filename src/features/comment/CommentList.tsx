@@ -1,5 +1,5 @@
 import CommentItem from "./CommentItem";
-import { useGetInfiniteRootCommentList, useReplyCommentForm } from "./comment";
+import { useGetInfiniteRootCommentList, useReplyCommentForm, useCommentLikeStatus, useLikeComment } from "./comment";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Avatar from "@/ui/Avatar";
 import FieldInfo from "@/ui/FieldInfo";
@@ -28,6 +28,8 @@ export default function CommentList({
     const user = useAtomValue(userAtom);
     const queryClient = useQueryClient();
 
+    const { toggleLike, isPending: isLiking, variables: likeVariables } = useLikeComment(articleId);
+
     const {
         isAddingComment,
         activeReplyTarget,
@@ -45,6 +47,14 @@ export default function CommentList({
         isFetchingNextPage,
         status,
     } = useGetInfiniteRootCommentList(articleId);
+
+    // Batch query like status for all loaded root comments
+    const rootCommentIds = data?.pages.flatMap(p => p.items.map(c => c.root.id)) ?? [];
+    const { data: rootLikeStatusMap = {} } = useCommentLikeStatus(
+        `roots-${articleId}`,
+        rootCommentIds,
+        true,
+    );
 
     const [pinnedComment, setPinnedComment] = useState<CommentThreadDTO | null>(null);
     const targetReplyId = useMemo(() => {
@@ -158,7 +168,13 @@ export default function CommentList({
                                                 isAuthor={authorId === rootComment.userId}
                                                 createdAt={new Date(rootComment.createdAt).toLocaleString()}
                                                 body={rootComment.content}
-                                                likes={0}
+                                                likes={rootComment.likeCount}
+                                                liked={!!rootLikeStatusMap[rootComment.id]}
+                                                isLiking={isLiking && !!likeVariables && likeVariables.commentId === rootComment.id}
+                                                onLike={() => toggleLike({
+                                                    commentId: rootComment.id,
+                                                    action: rootLikeStatusMap[rootComment.id] ? 2 : 1,
+                                                })}
                                                 onReply={() => {
                                                     setActiveReplyTarget({ rootId: rootComment.id, replyToUsername: rootComment.username ?? '', parentId: rootComment.id });
                                                     setTimeout(() => {
@@ -176,6 +192,9 @@ export default function CommentList({
                                             commentThreadDTO={comment}
                                             setActiveReplyTarget={setActiveReplyTarget}
                                             targetReplyId={targetReplyId}
+                                            toggleLike={toggleLike}
+                                            isLiking={isLiking}
+                                            likeVariables={likeVariables}
                                         />
 
                                         {activeReplyTarget?.rootId === rootComment.id && (
