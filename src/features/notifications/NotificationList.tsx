@@ -142,11 +142,13 @@ export default function NotificationList({
 
     function NotificationRow({ notification, children }: { notification: NotificationItem, children: React.ReactNode }) {
         const hash = notification.type === 'LIKE_ARTICLE' ? undefined : `reply${notification.targetId}`;
-        const url = router.buildLocation({
-            to: articleRoute.to,
-            params: { articleId: notification.article.id },
-            ...(hash && { hash }),
-        }).href;
+        const url = notification.article
+            ? router.buildLocation({
+                to: articleRoute.to,
+                params: { articleId: notification.article.id },
+                ...(hash && { hash }),
+            }).href
+            : undefined;
 
         return (
             <a
@@ -239,7 +241,7 @@ export default function NotificationList({
                                                         {notification.targetType === 'ARTICLE' &&
                                                             <div>
                                                                 <span className="opacity-70 text-xs">{t('notification.relatedArticle')} </span>
-                                                                <span>{notification.article.title}</span>
+                                                                {notification.article ? <span>{notification.article.title}</span> : <span className="text-red-600">该文章已被删除</span>}
                                                             </div>
                                                         }
                                                         {notification.targetType === 'COMMENT' &&
@@ -255,7 +257,7 @@ export default function NotificationList({
                                                         {notification.type === 'LIKE_ARTICLE' &&
                                                             <div>
                                                                 <span className="opacity-70 text-xs">{t('notification.relatedArticle')} </span>
-                                                                <span>{notification.article.title}</span>
+                                                                {notification.article ? <span>{notification.article.title}</span> : <span className="text-red-600">该文章已被删除</span>}
                                                             </div>
                                                         }
                                                         {notification.type === 'LIKE_COMMENT' && notification.comment &&

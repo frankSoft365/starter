@@ -27,7 +27,7 @@ export default function ShareButton({ articleId, title }: { articleId: string, t
     return (
         <>
             <button className="btn btn-square btn-ghost" popoverTarget="popover-share" style={{ anchorName: "--anchor-share" }} >
-                <ExportIcon size={24} color="#676565" weight="light" />
+                <ExportIcon size={24} weight="light" />
             </button>
             <ul className="dropdown menu w-42 bg-base-100 shadow-lg"
                 popover="auto" id="popover-share" style={{ positionAnchor: "--anchor-share" }}>

@@ -2,19 +2,23 @@ import ArticleListItem from "./ArticleListItem";
 import { useQuery } from "@tanstack/react-query";
 import { getArticleList, getUserArticleList } from "@/services/apiArticle";
 import Loading from "@/ui/Loading";
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { Route } from "@/routes/_app/article.$articleId";
 import type { ArticleListRequest } from "@/types/article";
 import { useAtom } from "jotai";
 import { escapeArticleIdAtom } from "@/atoms/article";
 import { useLayoutEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import DeleteArticleModal from "../article/DeleteArticleModal";
+import { useState } from "react";
 
 export default function ArticleList({
     author = 'allUser'
 }: {
     author?: 'allUser' | 'myArticle'
 }) {
+    const navigate = useNavigate();
+    const [deleteArticleId, setDeleteArticleId] = useState<string | null>(null);
     const [escapeArticleId, setEscapeArticleId] = useAtom(escapeArticleIdAtom);
     const { t } = useTranslation();
     const params: ArticleListRequest = author === 'allUser' ? { isMyArticle: false } : author === 'myArticle' ? { isMyArticle: true } : {}
@@ -59,22 +63,35 @@ export default function ArticleList({
                 </div>
             </main>}
 
-            {!isLoading && !isError && articleList && <ul className="list w-full lg:w-3xl bg-base-100 shadow-md">
-                {articleList.length === 0 && <main className="flex items-center justify-center min-h-screen">
-                    <div className="text-3xl text-red-600">
-                        {t('article.list.empty')}
-                    </div>
-                </main>}
-                {articleList.map((article) => {
-                    return (
-                        <Link onClick={() => setEscapeArticleId(article.id)} key={article.id} to={Route.to} params={{ articleId: article.id }}>
-                            <ArticleListItem
-                                article={article}
-                            />
-                        </Link>
-                    );
-                })}
-            </ul>}
+            {!isLoading && !isError && articleList && <>
+                <ul className="list w-full lg:w-3xl bg-base-100 shadow-md">
+                    {articleList.length === 0 && <main className="flex items-center justify-center min-h-screen">
+                        <div className="text-3xl text-red-600">
+                            {t('article.list.empty')}
+                        </div>
+                    </main>}
+                    {articleList.map((article) => {
+                        return (
+                            <div
+                                key={article.id}
+                                onClick={() => {
+                                    setEscapeArticleId(article.id);
+                                    navigate({ to: Route.to, params: { articleId: article.id } })
+                                }}
+                            >
+                                <ArticleListItem
+                                    article={article}
+                                    onDelete={() => setDeleteArticleId(article.id)}
+                                />
+                            </div>
+                        );
+                    })}
+                </ul>
+            </>}
+            <DeleteArticleModal
+                articleId={deleteArticleId}
+                onClose={() => setDeleteArticleId(null)}
+            />
         </>
     );
 }

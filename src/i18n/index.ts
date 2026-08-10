@@ -13,7 +13,7 @@ i18n
             "zh-CN": { translation: zhCN },
             en: { translation: en },
         },
-        fallbackLng: "en",
+        fallbackLng: "zh-CN",
         debug: import.meta.env.DEV,
         interpolation: {
             escapeValue: false,

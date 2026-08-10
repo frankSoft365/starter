@@ -70,12 +70,10 @@ export default function NavBar() {
                                     <NotePencilIcon size={24} />
                                     {t('btn.write')}
                                 </button>
-                                <div className="md:tooltip md:tooltip-bottom" data-tip={t('nav.notificationBell.tooltip')}>
-                                    <NotificationBell
-                                        isNotificationRoute={isNotificationRoute}
-                                        hanleClick={() => navigate({ to: notificationsRoute.to })}
-                                    />
-                                </div>
+                                <NotificationBell
+                                    isNotificationRoute={isNotificationRoute}
+                                    hanleClick={() => navigate({ to: notificationsRoute.to })}
+                                />
                             </>
                         }
                         {isEditorRoute && <>
