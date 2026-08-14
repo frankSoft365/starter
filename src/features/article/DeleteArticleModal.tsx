@@ -32,7 +32,7 @@ export default function DeleteArticleModal({
                 <div className="modal-action justify-center items-center gap-2 md:gap-4">
                     <form method="dialog">
                         {/* if there is a button, it will close the modal */}
-                        <button className="btn btn-outline btn-sm md:btn-md">Cancel</button>
+                        <button className="btn btn-outline btn-sm md:btn-md rounded-full">Cancel</button>
                     </form>
                     <button disabled={isDeleting} onClick={() => {
                         if (!articleId) {
@@ -46,7 +46,7 @@ export default function DeleteArticleModal({
                                 navigate({ to: homeRoute.to });
                             }
                         });
-                    }} className="btn btn-error btn-sm md:btn-md">Delete</button>
+                    }} className="btn btn-error btn-sm md:btn-md rounded-full">Delete</button>
                 </div>
             </div>
         </dialog>

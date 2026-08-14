@@ -9,11 +9,13 @@ export default function MoreButton({
     authorId,
     articleId,
     onDelete,
+    onRemoveFromList,
 }: {
     isOwnStory: boolean,
     authorId: string,
     articleId: string,
     onDelete: () => void,
+    onRemoveFromList?: () => void,
 }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -50,6 +52,16 @@ export default function MoreButton({
                 {!isOwnStory && <li><button className="btn btn-ghost justify-start text-red-600">
                     Report story...
                 </button></li>}
+                {onRemoveFromList && (
+                    <li>
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onRemoveFromList(); }}
+                            className="btn btn-ghost justify-start text-red-600"
+                        >
+                            {t('profile.list.removeItem')}
+                        </button>
+                    </li>
+                )}
                 <CurrentUser authorId={authorId}>
                     <li>
                         <button onClick={() => {

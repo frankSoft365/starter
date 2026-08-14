@@ -1,4 +1,4 @@
-import { SidebarIcon, NotePencilIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
+import { NotePencilIcon, MagnifyingGlassIcon, ListIcon } from "@phosphor-icons/react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";
@@ -49,7 +49,7 @@ export default function NavBar() {
                 <div className="navbar-start">
                     <label htmlFor="my-drawer-4" aria-label="open sidebar" className="btn btn-square btn-ghost">
                         {/* Sidebar toggle icon */}
-                        <SidebarIcon size={32} />
+                        <ListIcon size={32} />
                     </label>
                     <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost btn-sm text-sm mr-2 lg:text-xl lg:btn-md">Aedium</button>
                     {/* search input field */}

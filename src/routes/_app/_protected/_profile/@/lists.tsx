@@ -1,11 +1,8 @@
+import Lists from '@/features/profile/Lists'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
   '/_app/_protected/_profile/@/lists',
 )({
-  component: RouteComponent,
+  component: Lists,
 })
-
-function RouteComponent() {
-  return <div>Hello "/_app/_protected/_profile/$emailname/lists"!</div>
-}

@@ -62,6 +62,7 @@ export function useArticlePublish(articlePreview: ArticlePublishPreview | null) 
 }
 
 export function useDeleteArticle() {
+    const queryClient = useQueryClient();
     const { mutate: handleDelete, isPending: isDeleting } = useMutation({
         mutationKey: ['delete-article'],
         mutationFn: async ({ deleteRequest }: { deleteRequest: DeleteRequest }) => {
@@ -69,6 +70,7 @@ export function useDeleteArticle() {
         },
         onSuccess() {
             toast.success('Article deleted successfully.');
+            queryClient.invalidateQueries({ queryKey: ['get-article-list'] });
         },
         onError: (error) => {
             toast.error(error.message || 'An error occurred while publishing the article.');

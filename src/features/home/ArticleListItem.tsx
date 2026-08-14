@@ -11,7 +11,7 @@ import { userAtom } from "@/atoms/user";
 import MoreButton from "../article/MoreButton";
 import SaveButton from "../article/SaveButton";
 
-export default function ArticleListItem({ article, onDelete }: { article: ArticleListItemVO; onDelete: () => void }) {
+export default function ArticleListItem({ article, onDelete, onRemoveFromList }: { article: ArticleListItemVO; onDelete: () => void; onRemoveFromList?: () => void }) {
     const { t } = useTranslation();
     const user = useAtomValue(userAtom);
 
@@ -40,7 +40,7 @@ export default function ArticleListItem({ article, onDelete }: { article: Articl
                     <div className="flex flex-row">
                         <div className="lg:tooltip" data-tip={t('btn.clap', { count: article.likeCount })}>
                             <ArticleMenuButton>
-                                <HandsClappingIcon weight="fill" size={20} />
+                                <HandsClappingIcon size={20} />
                                 {formatLargeNumber(article.likeCount)}
                             </ArticleMenuButton>
                         </div>
@@ -66,7 +66,7 @@ export default function ArticleListItem({ article, onDelete }: { article: Articl
                         {/* save button */}
                         <SaveButton articleId={article.id} />
                         {/* more button */}
-                        <MoreButton isOwnStory={isOwnStory} authorId={article.authorId} articleId={article.id} onDelete={onDelete} />
+                        <MoreButton isOwnStory={isOwnStory} authorId={article.authorId} articleId={article.id} onDelete={onDelete} onRemoveFromList={onRemoveFromList} />
                     </div>
                 </div>
             </div>

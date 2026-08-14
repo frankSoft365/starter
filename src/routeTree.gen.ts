@@ -31,6 +31,7 @@ import { Route as AppProtectedProfileAtRepostsRouteImport } from './routes/_app/
 import { Route as AppProtectedProfileAtListsRouteImport } from './routes/_app/_protected/_profile/@/lists'
 import { Route as AppProtectedProfileAtActivityRouteImport } from './routes/_app/_protected/_profile/@/activity'
 import { Route as AppProtectedProfileAtAboutRouteImport } from './routes/_app/_protected/_profile/@/about'
+import { Route as AppProtectedAtListsListIdRouteImport } from './routes/_app/_protected/@/lists.$listId'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -150,6 +151,12 @@ const AppProtectedProfileAtAboutRoute =
     path: '/@/about',
     getParentRoute: () => AppProtectedProfileRouteRoute,
   } as any)
+const AppProtectedAtListsListIdRoute =
+  AppProtectedAtListsListIdRouteImport.update({
+    id: '/@/lists/$listId',
+    path: '/@/lists/$listId',
+    getParentRoute: () => AppProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
@@ -162,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/me/notifications': typeof AppProtectedMeNotificationsRouteRouteWithChildren
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
+  '/@/lists/$listId': typeof AppProtectedAtListsListIdRoute
   '/@/about': typeof AppProtectedProfileAtAboutRoute
   '/@/activity': typeof AppProtectedProfileAtActivityRoute
   '/@/lists': typeof AppProtectedProfileAtListsRoute
@@ -182,6 +190,7 @@ export interface FileRoutesByTo {
   '/article/$articleId': typeof AppArticleArticleIdRoute
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
+  '/@/lists/$listId': typeof AppProtectedAtListsListIdRoute
   '/@/about': typeof AppProtectedProfileAtAboutRoute
   '/@/activity': typeof AppProtectedProfileAtActivityRoute
   '/@/lists': typeof AppProtectedProfileAtListsRoute
@@ -207,6 +216,7 @@ export interface FileRoutesById {
   '/_app/_protected/me/notifications': typeof AppProtectedMeNotificationsRouteRouteWithChildren
   '/_app/_protected/me/password': typeof AppProtectedMePasswordRoute
   '/_app/_protected/me/settings': typeof AppProtectedMeSettingsRoute
+  '/_app/_protected/@/lists/$listId': typeof AppProtectedAtListsListIdRoute
   '/_app/_protected/_profile/@/about': typeof AppProtectedProfileAtAboutRoute
   '/_app/_protected/_profile/@/activity': typeof AppProtectedProfileAtActivityRoute
   '/_app/_protected/_profile/@/lists': typeof AppProtectedProfileAtListsRoute
@@ -230,6 +240,7 @@ export interface FileRouteTypes {
     | '/me/notifications'
     | '/me/password'
     | '/me/settings'
+    | '/@/lists/$listId'
     | '/@/about'
     | '/@/activity'
     | '/@/lists'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/article/$articleId'
     | '/me/password'
     | '/me/settings'
+    | '/@/lists/$listId'
     | '/@/about'
     | '/@/activity'
     | '/@/lists'
@@ -274,6 +286,7 @@ export interface FileRouteTypes {
     | '/_app/_protected/me/notifications'
     | '/_app/_protected/me/password'
     | '/_app/_protected/me/settings'
+    | '/_app/_protected/@/lists/$listId'
     | '/_app/_protected/_profile/@/about'
     | '/_app/_protected/_profile/@/activity'
     | '/_app/_protected/_profile/@/lists'
@@ -447,6 +460,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProtectedProfileAtAboutRouteImport
       parentRoute: typeof AppProtectedProfileRouteRoute
     }
+    '/_app/_protected/@/lists/$listId': {
+      id: '/_app/_protected/@/lists/$listId'
+      path: '/@/lists/$listId'
+      fullPath: '/@/lists/$listId'
+      preLoaderRoute: typeof AppProtectedAtListsListIdRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
+    }
   }
 }
 
@@ -499,6 +519,7 @@ interface AppProtectedRouteRouteChildren {
   AppProtectedMeNotificationsRouteRoute: typeof AppProtectedMeNotificationsRouteRouteWithChildren
   AppProtectedMePasswordRoute: typeof AppProtectedMePasswordRoute
   AppProtectedMeSettingsRoute: typeof AppProtectedMeSettingsRoute
+  AppProtectedAtListsListIdRoute: typeof AppProtectedAtListsListIdRoute
   AppProtectedArticlesEditArticleIdRoute: typeof AppProtectedArticlesEditArticleIdRoute
 }
 
@@ -510,6 +531,7 @@ const AppProtectedRouteRouteChildren: AppProtectedRouteRouteChildren = {
     AppProtectedMeNotificationsRouteRouteWithChildren,
   AppProtectedMePasswordRoute: AppProtectedMePasswordRoute,
   AppProtectedMeSettingsRoute: AppProtectedMeSettingsRoute,
+  AppProtectedAtListsListIdRoute: AppProtectedAtListsListIdRoute,
   AppProtectedArticlesEditArticleIdRoute:
     AppProtectedArticlesEditArticleIdRoute,
 }

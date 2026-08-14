@@ -56,9 +56,9 @@ export default function ProfileTab({ children }: { children: React.ReactNode }) 
                     </div>
                 </div>
                 <ul className="menu bg-base-100 menu-horizontal shadow-xs">
-                    {profileTabMap.map(item => {
+                    {profileTabMap.map((item, index) => {
                         return (
-                            <li>
+                            <li key={index}>
                                 <a className={location.pathname === item.path ? "menu-active" : ''} onClick={() => navigate({ to: item.path })}>
                                     {item.name}
                                 </a>
