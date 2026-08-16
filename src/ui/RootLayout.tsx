@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     {!isEditorRoute && !isArticleEditRoute && <Footer />}
                 </div>
                 <DrawerSide onNav={setDrawerOpen} />
-                <BottomMenu />
+                {!isEditorRoute && <BottomMenu />}
             </div>
         </>
     );

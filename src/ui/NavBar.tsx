@@ -58,7 +58,7 @@ export default function NavBar() {
                 </>}
             </div>
             <div className="navbar-end">
-                <LanguageBtn />
+                {!isEditorRoute && <LanguageBtn />}
                 {/* can write only when is login */}
                 <SignedIn>
                     {!isEditorRoute && !isArticleEditRoute &&
