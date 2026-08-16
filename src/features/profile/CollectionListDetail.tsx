@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -14,15 +14,14 @@ import { useCollectionListArticlesQuery, useCollectionListQuery, useRemoveArticl
 import { Route as listRoute } from "@/routes/_app/_protected/_profile/profile/lists";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import CollectionListInfo from "./CollectionListInfo";
-
-const routeApi = getRouteApi('/_app/_protected/@/lists/$listId');
+import { Route as listDetailRoute } from "@/routes/_app/_protected/profile/lists.$listId";
 
 function isDeletedArticle(article: ArticleListItemVO): boolean {
     return !!article.id && !article.title;
 }
 
 export default function CollectionListDetail() {
-    const { listId } = routeApi.useParams();
+    const { listId } = listDetailRoute.useParams();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
