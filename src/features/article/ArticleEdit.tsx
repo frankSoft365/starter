@@ -246,7 +246,7 @@ export default function ArticleEdit() {
                                         </>
                                     )}
                                 />
-                                <p className="py-4 text-sm text-gray-500">The title and subtitle are used on your publication homepage, in previews of your story on Medium, and on social media.</p>
+                                <p className="py-4 text-sm opacity-60">The title and subtitle are used on your publication homepage, in previews of your story on Aedium, and on social media.</p>
                             </Modal>
                         </li>
                         {/* Change topics */}
@@ -262,7 +262,7 @@ export default function ArticleEdit() {
                                 buttonName="Change topics"
                                 disabled={canSubmit}
                             >
-                                <p className="py-4 text-sm text-gray-500">Add or change topics (up to 5) so readers know what your story is about:</p>
+                                <p className="py-4 text-sm opacity-60">Add or change topics (up to 5) so readers know what your story is about:</p>
                                 <form.Field
                                     name="topicCandidate"
                                     children={(candidateField) => (

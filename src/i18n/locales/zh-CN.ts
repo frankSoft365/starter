@@ -244,7 +244,6 @@ export default {
             deletedTip: '列表已删除。',
             editInfo: '编辑列表信息',
             editTitle: '编辑列表',
-            editAction: '更新',
             updatedTip: '列表信息已更新。',
             toggledPublicTip: '列表可见性已更新。',
             removedTip: '已从列表中移除文章。',

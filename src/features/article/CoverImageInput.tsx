@@ -48,7 +48,7 @@ export default function CoverImageInput({
                         </div>}
                         {/* image arrary */}
                         {isImageArraryModalShow &&
-                            <div className="p-4 w-full bg-gray-100 min-h-85">
+                            <div className="p-4 w-full bg-base-100 min-h-85">
                                 <button
                                     className="btn btn-ghost mb-2"
                                     onClick={() => {
@@ -87,7 +87,7 @@ export default function CoverImageInput({
                                             ✕
                                         </button>
                                         <h1 className="text-center font-bold text-xl md:text-2xl">{t('submission.coverImage.adjust.legend')}</h1>
-                                        <p className="pt-2 pb-3 text-sm text-gray-500 text-center max-w-9/12">{t('submission.coverImage.adjust.des')}</p>
+                                        <p className="pt-2 pb-3 text-sm opacity-60 text-center max-w-9/12">{t('submission.coverImage.adjust.des')}</p>
                                         <form.Field
                                             name="coverFocusY"
                                             children={(coverFocusYField: AnyFieldApi) => {
@@ -110,9 +110,9 @@ export default function CoverImageInput({
                     </>
                     :
                     <div
-                        className="bg-gray-100 w-full h-48 text-left content-center text-sm p-8 text-gray-500"
+                        className="bg-base-200 w-full h-48 text-left content-center text-sm p-8"
                     >
-                        {t('submission.coverImage.emptyDes')}
+                        <span className="opacity-60">{t('submission.coverImage.emptyDes')}</span>
                     </div>
             }
         </>

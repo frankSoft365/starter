@@ -48,8 +48,8 @@ export default function Modal({
                                 <button type="button" onClick={() => {
                                     onCancel();
                                     close();
-                                }} className="btn">Cancel</button>
-                                <button disabled={disabled} type="button" className="btn btn-neutral" onClick={() => {
+                                }} className="btn btn-outline rounded-full">Cancel</button>
+                                <button disabled={disabled} type="button" className="btn btn-neutral rounded-full" onClick={() => {
                                     onDone && onDone();
                                     close();
                                 }}>Done</button>

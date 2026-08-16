@@ -3,11 +3,11 @@ import { userAtom } from "@/atoms/user";
 import Avatar from "@/ui/Avatar";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { DotsThreeIcon } from "@phosphor-icons/react";
-import { Route as homeRoute } from "@/routes/_app/_protected/_profile/@/index";
-import { Route as repostsRoute } from "@/routes/_app/_protected/_profile/@/reposts";
-import { Route as activityRoute } from "@/routes/_app/_protected/_profile/@/activity";
-import { Route as listsRoute } from "@/routes/_app/_protected/_profile/@/lists";
-import { Route as aboutRoute } from "@/routes/_app/_protected/_profile/@/about";
+import { Route as homeRoute } from "@/routes/_app/_protected/_profile/profile/index";
+import { Route as repostsRoute } from "@/routes/_app/_protected/_profile/profile/reposts";
+import { Route as activityRoute } from "@/routes/_app/_protected/_profile/profile/activity";
+import { Route as listsRoute } from "@/routes/_app/_protected/_profile/profile/lists";
+import { Route as aboutRoute } from "@/routes/_app/_protected/_profile/profile/about";
 import { useTranslation } from "react-i18next";
 
 export default function ProfileTab({ children }: { children: React.ReactNode }) {

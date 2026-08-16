@@ -11,7 +11,7 @@ import Loading from "@/ui/Loading";
 import ArticleListItem from "@/features/home/ArticleListItem";
 import type { ArticleListItemVO } from "@/types/article";
 import { useCollectionListArticlesQuery, useCollectionListQuery, useRemoveArticleFromList, useRemoveArticlesFromList } from "./collection";
-import { Route as listRoute } from "@/routes/_app/_protected/_profile/@/lists";
+import { Route as listRoute } from "@/routes/_app/_protected/_profile/profile/lists";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import CollectionListInfo from "./CollectionListInfo";
 
@@ -111,21 +111,21 @@ export default function CollectionListDetail() {
                 )}
                 {status === 'success' && articles.length > 0 && removeMode && (
                     <ul className="list w-full lg:w-3xl bg-base-100 shadow-md">
-                            {articles.map((article) => (
-                                <li key={article.id} className="list-row min-h-12 grid-cols-5">
-                                    <label className="flex items-center gap-3 col-span-5 cursor-pointer p-2">
-                                        <input
-                                            type="checkbox"
-                                            className="checkbox checkbox-sm"
-                                            checked={selected.has(article.id)}
-                                            onChange={() => toggleSelect(article.id)}
-                                        />
-                                        <span className="truncate flex-1 text-sm">
-                                            {article.title || t('profile.list.storyNoLongerAvailable')}
-                                        </span>
-                                    </label>
-                                </li>
-                            ))}
+                        {articles.map((article) => (
+                            <li key={article.id} className="list-row min-h-12 grid-cols-5">
+                                <label className="flex items-center gap-3 col-span-5 cursor-pointer p-2">
+                                    <input
+                                        type="checkbox"
+                                        className="checkbox checkbox-sm"
+                                        checked={selected.has(article.id)}
+                                        onChange={() => toggleSelect(article.id)}
+                                    />
+                                    <span className="truncate flex-1 text-sm">
+                                        {article.title || t('profile.list.storyNoLongerAvailable')}
+                                    </span>
+                                </label>
+                            </li>
+                        ))}
                     </ul>
                 )}
             </div>
@@ -139,10 +139,10 @@ function DeletedArticleItem({ article, onRemove }: { article: ArticleListItemVO;
         <li id={`article-list-item-${article.id}`} className="list-row grid-cols-5">
             <div className=" flex flex-col items-end justify-center col-span-5 gap-4">
                 <div role="alert" className="alert w-full p-6">
-                <WarningCircleIcon size={24} />
-  <span className="opacity-65 text-base">{t('profile.list.storyNoLongerAvailable')}</span>
-</div>
-<button
+                    <WarningCircleIcon size={24} />
+                    <span className="opacity-65 text-base">{t('profile.list.storyNoLongerAvailable')}</span>
+                </div>
+                <button
                     className="btn btn-outline rounded-full"
                     onClick={(e) => { e.stopPropagation(); onRemove(); }}
                 >

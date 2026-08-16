@@ -125,7 +125,7 @@ export default function CreateListModal({
                     <div className="modal-action justify-center items-center gap-2 md:gap-4 mt-2">
                         <button
                             type="button"
-                            className="btn btn-outline btn-sm md:btn-md"
+                            className="btn btn-outline btn-sm md:btn-md rounded-full"
                             onClick={onClose}
                             disabled={isPending}
                         >
@@ -133,7 +133,7 @@ export default function CreateListModal({
                         </button>
                         <button
                             type="submit"
-                            className="btn btn-success btn-sm md:btn-md"
+                            className="btn btn-success btn-sm md:btn-md rounded-full"
                             disabled={isPending}
                         >
                             {isPending && <span className="loading loading-spinner loading-sm"></span>}

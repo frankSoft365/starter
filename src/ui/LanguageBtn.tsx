@@ -5,7 +5,7 @@ export default function LanguageBtn() {
     const { i18n } = useTranslation();
     return (
         <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-square mr-2">
+            <div tabIndex={0} role="button" className="btn btn-square btn-ghost mr-2">
                 <GlobeIcon size={24} />
             </div>
             <ul tabIndex={-1} className="dropdown-content bg-base-100 rounded-box z-1 w-32 p-2 shadow-2xl">

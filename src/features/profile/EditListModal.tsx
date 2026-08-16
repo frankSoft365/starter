@@ -151,7 +151,7 @@ export default function EditListModal({
                             disabled={isPending || !hasChanges}
                         >
                             {isPending && <span className="loading loading-spinner loading-sm"></span>}
-                            {t('profile.list.editAction')}
+                            {t('btn.done')}
                         </button>
                     </div>
                 </form>

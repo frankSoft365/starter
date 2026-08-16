@@ -48,7 +48,7 @@ export default function Submission() {
     }, [articlePreview, navigate]);
 
     return (
-        <div className="card w-full card-md lg:w-4xl bg-base-100 lg:card-xl shadow-sm lg:mx-auto mt-12">
+        <div className="card w-full card-md lg:w-4xl bg-base-100 lg:card-xl shadow-sm lg:mx-auto my-12">
             <div className="card-body w-full">
                 <h2 className="card-title">{t('submission.storyPreview')}</h2>
                 <form
@@ -121,7 +121,7 @@ export default function Submission() {
                                     />
                                 </>
                             }
-                            <div className="w-full text-left content-center text-sm text-gray-500 mt-3">
+                            <div className="w-full text-left content-center text-sm opacity-60 mt-3">
                                 {t('submission.note')}
                             </div>
                         </div>
@@ -148,13 +148,13 @@ export default function Submission() {
                             />
 
                             <div className="lg:absolute left-0 bottom-0">
-                                <button onClick={() => navigate({ to: editorRoute.to })} type="button" className="btn btn-outline mr-3 mt-4">
+                                <button onClick={() => navigate({ to: editorRoute.to })} type="button" className="btn btn-outline rounded-full mr-3 mt-4">
                                     {t('btn.cancel')}
                                 </button>
                                 <form.Subscribe
                                     selector={(state) => [state.canSubmit, state.isSubmitting]}
                                     children={([canSubmit, isSubmitting]) => (
-                                        <button disabled={!canSubmit || isPublishing} type="submit" className="btn btn-success mt-4">
+                                        <button disabled={!canSubmit || isPublishing} type="submit" className="btn btn-neutral rounded-full mt-4">
                                             {!isPublishing && !isSubmitting && t('btn.publish')}
                                             {(isPublishing || isSubmitting) && <span className="loading loading-spinner"></span>}
                                         </button>

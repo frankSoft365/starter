@@ -93,7 +93,7 @@ export default function ArticleDetail() {
                         <Avatar imageUrl={article.authorAvatar} username={article.authorName} size="sm" />
                         <span className="ml-1.5">{article.authorName}</span>
                         <span>·</span>
-                        <span className="text-gray-500">{getPublishDate(new Date(article.publishTime))}</span>
+                        <span className="opacity-60">{getPublishDate(new Date(article.publishTime))}</span>
                     </div>
                     {/* Interaction Bar */}
                     <div className="divider mb-0"></div>
@@ -190,7 +190,7 @@ export default function ArticleDetail() {
                                 <button
                                     disabled={!canSubmit || isAddingComment}
                                     type="submit"
-                                    className="btn btn-sm md:btn-base btn-neutral my-3 ml-auto"
+                                    className="btn btn-sm md:btn-base btn-neutral rounded-full my-3 ml-auto"
                                 >
                                     {isAddingComment ? <span className="loading loading-spinner"></span> : t('btn.publish')}
                                 </button>

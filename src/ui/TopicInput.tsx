@@ -36,7 +36,7 @@ export default function TopicInput({ topicsField, candidateField, max = 5 }: { t
 
     return (
         <div className="relative w-full">
-            <div className="flex flex-wrap items-center gap-2 bg-gray-100 p-3 min-h-12 w-full border-gray-200 border rounded-sm">
+            <div className="flex flex-wrap items-center gap-2 bg-base-300 p-3 min-h-12 w-full border-gray-200 border rounded-sm">
                 {topicsField.state.value.map((value: string, index: number) => (
                     <Topic key={index} topicContent={value} handleDelete={() => topicsField.removeValue(index)} />
                 ))}
@@ -99,7 +99,7 @@ export default function TopicInput({ topicsField, candidateField, max = 5 }: { t
                                 candidateField.handleChange('');
                                 setIsDropdownShow(false);
                             }}
-                            className="flex w-full items-center justify-between px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                            className="flex w-full items-center justify-between px-3 py-2 text-left text-sm text-gray-700 hover:bg-base-300"
                         >
                             <span>{getSuggestionLabel(suggestion)}</span>
                         </button>

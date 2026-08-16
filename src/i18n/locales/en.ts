@@ -244,7 +244,6 @@ export default {
             deletedTip: 'List deleted.',
             editInfo: 'Edit list info',
             editTitle: 'Edit list',
-            editAction: 'Update',
             updatedTip: 'List info updated.',
             toggledPublicTip: 'List visibility updated.',
             removedTip: 'Article removed from list.',

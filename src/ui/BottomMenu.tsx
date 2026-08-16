@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as homeRoute } from "../routes/_app/index";
-import { Route as profileRoute } from "../routes/_app/_protected/_profile/@";
+import { Route as profileRoute } from "../routes/_app/_protected/_profile/profile";
 
 export default function BottomMenu() {
     const navigate = useNavigate();

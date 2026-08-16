@@ -166,7 +166,7 @@ export default function CommentList({
                                                 avatarUrl={rootComment.userAvatar || ''}
                                                 username={rootComment.username || ''}
                                                 isAuthor={authorId === rootComment.userId}
-                                                createdAt={new Date(rootComment.createdAt).toLocaleString()}
+                                                createdAt={rootComment.createdAt}
                                                 body={rootComment.content}
                                                 likes={rootComment.likeCount}
                                                 liked={!!rootLikeStatusMap[rootComment.id]}
@@ -198,13 +198,13 @@ export default function CommentList({
                                         />
 
                                         {activeReplyTarget?.rootId === rootComment.id && (
-                                            <div id={`reply-textarea-${rootComment.id}`} className="w-full">
+                                            <div id={`reply-textarea-${rootComment.id}`} className="w-full my-2">
                                                 <form onSubmit={(e) => {
                                                     e.preventDefault();
                                                     replyForm.handleSubmit();
-                                                }} className="w-full bg-base-200 p-3 rounded-lg">
+                                                }} className="w-full bg-base-200 p-6 rounded-lg">
 
-                                                    <div className="flex flex-row items-center text-sm gap-1 my-3">
+                                                    <div className="flex flex-row items-center text-sm gap-1 m-3">
                                                         <Avatar imageUrl={user?.image ?? undefined} username={user?.username || ''} size="sm" />
                                                         <span className="ml-1.5">{user?.username}</span>
                                                     </div>
@@ -237,7 +237,7 @@ export default function CommentList({
                                                         <button
                                                             disabled={!replyCanSubmit || isAddingComment}
                                                             type="submit"
-                                                            className="btn btn-sm btn-neutral"
+                                                            className="btn btn-sm btn-neutral rounded-full"
                                                         >
                                                             {isAddingComment ? <span className="loading loading-spinner"></span> : t('btn.reply')}
                                                         </button>
@@ -253,7 +253,7 @@ export default function CommentList({
                             {!hasNextPage && <li className="list-row text-center h-24 p-5">{t('comment.noMoreComment')}</li>}
                         </ul>)
                     : (
-                        <div className="h-48 text-gray-500 text-center p-5">
+                        <div className="h-48 opacity-60 text-center p-5">
                             {t('comment.noComment')}
                         </div>)
             )}

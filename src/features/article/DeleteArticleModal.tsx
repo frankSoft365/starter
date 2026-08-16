@@ -22,13 +22,13 @@ export default function DeleteArticleModal({
 
     return (
         <dialog ref={dialogRef} className="modal" onClick={(event) => event.stopPropagation()} onClose={onClose}>
-            <div className="modal-box w-11/12 md:max-w-4xl aspect-5/3 flex flex-col items-center justify-center text-center">
+            <div className="modal-box w-11/12 md:max-w-4xl md:aspect-5/3 flex flex-col items-center justify-center text-center">
                 <form method="dialog">
                     {/* if there is a button in form, it will close the modal */}
                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                 </form>
                 <h1 className="text-center font-bold text-xl md:text-3xl">Delete story</h1>
-                <p className="pt-2 pb-3 text-sm md:text-base text-gray-500 text-center max-w-9/12">Deletion is not reversible, and the story will be completely deleted. If you do not want to delete, you can unlist the story.</p>
+                <p className="pt-2 pb-3 text-sm md:text-base opacity-60 text-center max-w-9/12">Deletion is not reversible, and the story will be completely deleted. If you do not want to delete, you can unlist the story.</p>
                 <div className="modal-action justify-center items-center gap-2 md:gap-4">
                     <form method="dialog">
                         {/* if there is a button, it will close the modal */}

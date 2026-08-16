@@ -46,7 +46,7 @@ export default function NavBar() {
             <div className="navbar-start">
                 <label htmlFor="my-drawer-4" className="btn drawer-button btn-square btn-ghost">
                     {/* Sidebar toggle icon */}
-                    <ListIcon size={32} />
+                    <ListIcon size={24} />
                 </label>
                 <button onClick={() => navigate({ to: homeRoute.to })} className="btn btn-ghost btn-sm text-sm mr-2 lg:text-xl lg:btn-md">Aedium</button>
                 {/* search input field */}
@@ -73,17 +73,18 @@ export default function NavBar() {
                             />
                         </>
                     }
+                    {/* article editor */}
                     {isEditorRoute && <>
-                        <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-1 btn-xs lg:btn-md lg:mr-3">
+                        <button onClick={() => setEditorPublishSignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-success mr-1 btn-xs lg:btn-md lg:mr-3 rounded-full">
                             {t('btn.publish')}
                         </button>
-                        <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-2 btn-xs lg:btn-md lg:mr-4">
+                        <button onClick={() => setEditorEmptySignal(pre => pre + 1)} disabled={isEditorEmpty} className="btn btn-error mr-2 btn-xs lg:btn-md lg:mr-4 rounded-full">
                             {t('btn.discardDrafts')}
                         </button>
                     </>}
                     {isArticleEditRoute &&
                         <>
-                            <button disabled={!isDirty} onClick={() => setEditorUpdateSignal(pre => pre + 1)} className="btn btn-primary mx-4">
+                            <button disabled={!isDirty} onClick={() => setEditorUpdateSignal(pre => pre + 1)} className="btn btn-primary mx-4 rounded-full">
                                 {t('btn.update')}
                             </button>
                         </>

@@ -67,7 +67,7 @@ export default function ReplyList({
         <>
             {/* reply preview (only newly added replies when not expanded) */}
             {repliesPreview.length > 0 && !expanded && (
-                <div className="ml-5 border-gray-200 bg-base-200 pl-1 rounded-2xl">
+                <div className="ml-16 mr-2 border-gray-200 bg-base-200 pl-1 rounded-xl">
                     {repliesPreview.map(reply => (
                         <div key={reply.id} className={`space-y-2 ${targetReplyId && reply.id === targetReplyId ? 'animate-highlight-fade' : ''}`}>
                             <CommentItem
@@ -75,7 +75,7 @@ export default function ReplyList({
                                 username={reply.username || ''}
                                 isAuthor={authorId === reply.userId}
                                 replyToUsername={rootComment.id !== reply.parentId ? reply.replyToUsername : null}
-                                createdAt={new Date(reply.createdAt).toLocaleString()}
+                                createdAt={reply.createdAt}
                                 body={reply.content}
                                 likes={reply.likeCount}
                                 liked={!!previewLikeStatusMap[reply.id]}
@@ -98,14 +98,17 @@ export default function ReplyList({
                     ))}
                 </div>
             )}
-            {!expanded && totalReplyCount > 0 && <li
-                onClick={() => {
-                    setExpanded(true);
-                    setActiveReplyTarget(null);
-                }}
-                className="list-row w-full p-4 text-blue-400 hover:text-blue-600 cursor-pointer">
-                {t('comment.expand', { count: totalReplyCount })}
-            </li>}
+            {!expanded && totalReplyCount > 0 &&
+                <div
+                    className="ml-16 mr-2 p-3 border-gray-200 bg-base-200 rounded-xl text-blue-400 hover:text-blue-600 cursor-pointer"
+                    onClick={() => {
+                        setExpanded(true);
+                        setActiveReplyTarget(null);
+                    }}
+                >
+                    {t('comment.expand', { count: totalReplyCount })}
+                </div>
+            }
             {/* full reply list */}
             {expanded && status === 'pending' && <div className="ml-5 border-gray-200 bg-base-200 pl-1 rounded-2xl flex h-24 items-center justify-center gap-2"><span className="loading loading-spinner"></span><span>{t('common.loading')}</span></div>}
             {status === 'error' && (
@@ -117,7 +120,7 @@ export default function ReplyList({
                 </div>
             )}
             {status === 'success' && expanded ?
-                <div className="ml-5 border-gray-200 bg-base-200 pl-1 rounded-2xl">
+                <div className="ml-16 mr-2 border-gray-200 bg-base-200 rounded-xl">
                     {data.pages.flatMap(page => page.items).map(reply => (
                         <div key={reply.id} className="space-y-2">
                             <CommentItem
@@ -125,7 +128,7 @@ export default function ReplyList({
                                 username={reply.username || ''}
                                 isAuthor={authorId === reply.userId}
                                 replyToUsername={rootComment.id !== reply.parentId ? reply.replyToUsername : null}
-                                createdAt={new Date(reply.createdAt).toLocaleString()}
+                                createdAt={reply.createdAt}
                                 body={reply.content}
                                 likes={reply.likeCount}
                                 liked={!!expandedLikeStatusMap[reply.id]}

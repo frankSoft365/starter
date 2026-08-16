@@ -118,12 +118,12 @@ export default function SettingsPageUpdateModal({ user, setIsModalOpen }: { user
                             onClick={() => {
                                 setIsModalOpen(false);
                             }}
-                            className="btn">{t('settings.modal.close')}</button>
+                            className="btn rounded-full mr-1">{t('settings.modal.close')}</button>
                         <button
                             type="submit"
                             disabled={((username.trim() === user.username) &&
                                 (image === (user.image || undefined))) || isUpdating || isUploading}
-                            className="btn btn-success"
+                            className="btn btn-success rounded-full"
                         >
                             {(isUpdating || isUploading) && <span className="loading loading-spinner"></span>}
                             {(!isUpdating && !isUploading) && t('btn.save')}

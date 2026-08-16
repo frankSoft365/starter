@@ -23,7 +23,7 @@ export default function ChangePasswordForm() {
 
     return (
         <main className="mx-auto">
-            <div className="card w-11/12 md:w-3xl bg-base-100 md:card-xl shadow-sm mx-auto mt-8">
+            <div className="card w-11/12 md:w-3xl bg-base-100 md:card-xl shadow-sm mx-auto my-8">
                 <div className="card-body w-full">
                     <h2 className="card-title">{t('settings.changePassword.title')}</h2>
                     <h3 className="text-xs">{t('settings.changePassword.description')}</h3>

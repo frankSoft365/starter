@@ -1,5 +1,6 @@
 import Avatar from "@/ui/Avatar";
-import { ChatCircleDotsIcon, ThumbsUpIcon } from "@phosphor-icons/react";
+import { formatDateTime } from "@/utils/dateHelper";
+import { ThumbsUpIcon } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 
 type CommentItemProps = {
@@ -7,7 +8,7 @@ type CommentItemProps = {
     username: string;
     isAuthor: boolean;
     replyToUsername?: string | null;
-    createdAt?: string;
+    createdAt: Date;
     body: string;
     likes?: number;
     liked?: boolean;
@@ -37,10 +38,12 @@ export default function CommentItem({
     const headingSize = isSmall ? "text-xs" : "text-sm";
     const bodySize = isSmall ? "text-sm" : "text-base";
 
+    const createdAtStr = formatDateTime(new Date(createdAt));
+
     return (
         <li className="list-row">
             <div><Avatar imageUrl={avatarUrl} username={username} size={size} /></div>
-            <div>
+            <div className="w-min-0 flex-1">
                 <div className={headingSize}>
                     <span><strong>{username}</strong></span>
                     {isAuthor && <div className="badge badge-xs badge-primary ml-2">{t('badge.author')}</div>}
@@ -55,27 +58,28 @@ export default function CommentItem({
                         : null
                     }
                 </div>
-
-                {createdAt ? <div className="text-xs text-gray-500">{createdAt}</div> : null}
+                <p className={`${bodySize} my-2`}>
+                    {body}
+                </p>
+                <div className="flex flex-row items-center justify-start">
+                    {createdAtStr ? <span className="opacity-60">{createdAtStr}</span> : null}
+                    <button
+                        type="button"
+                        onClick={onLike}
+                        disabled={isLiking}
+                        className={`btn btn-ghost ${actionSize} ml-2`}
+                    >
+                        {isLiking
+                            ? <span className="loading loading-spinner loading-xs"></span>
+                            : <ThumbsUpIcon size={isSmall ? 20 : 22} weight={liked ? "fill" : "light"} color={liked ? "#676565" : "#676565"} />
+                        }
+                        {likes > 0 && likes}
+                    </button>
+                    <button type="button" onClick={onReply} className={`btn btn-link text-black ${actionSize}`}>
+                        {t('btn.reply')}
+                    </button>
+                </div>
             </div>
-            <p className={`list-col-wrap ${bodySize} mb-2`}>
-                {body}
-            </p>
-            <button
-                type="button"
-                onClick={onLike}
-                disabled={isLiking}
-                className={`btn btn-ghost ${actionSize}`}
-            >
-                {isLiking
-                    ? <span className="loading loading-spinner loading-xs"></span>
-                    : <ThumbsUpIcon size={isSmall ? 20 : 24} weight={liked ? "fill" : "light"} color={liked ? "#676565" : "#676565"} />
-                }
-                {likes > 0 && likes}
-            </button>
-            <button type="button" onClick={onReply} className={`btn btn-ghost ${actionSize}`}>
-                <ChatCircleDotsIcon size={isSmall ? 20 : 24} color="#676565" />
-            </button>
         </li>
     );
 }

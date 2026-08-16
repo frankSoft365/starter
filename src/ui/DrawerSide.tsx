@@ -3,9 +3,9 @@ import { useLocation, useNavigate } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as homeRoute } from "../routes/_app/index";
-import { Route as profileRoute } from "../routes/_app/_protected/_profile/@";
+import { Route as profileRoute } from "../routes/_app/_protected/_profile/profile";
 import { useTranslation } from "react-i18next";
-import { Route } from "@/routes/_app/_protected/_profile/@/index";
+import { Route } from "@/routes/_app/_protected/_profile/profile/index";
 
 export default function DrawerSide({ onNav }: { onNav: (value: boolean) => void }) {
     const { t } = useTranslation();

@@ -21,7 +21,7 @@ export default function NotificationBell({
         <div className="md:tooltip md:tooltip-bottom mr-3" data-tip={t('nav.notificationBell.tooltip')}>
             <div className="indicator">
                 {totalUnreadCount > 0 && <span className="indicator-item badge badge-xs badge-primary">{totalUnreadCount}</span>}
-                <button onClick={hanleClick} className="btn btn-square md:inline-flex">
+                <button onClick={hanleClick} className="btn btn-square btn-ghost md:inline-flex">
                     {isNotificationRoute ? <BellIcon size={24} weight="fill" /> : <BellIcon size={24} />}
                 </button>
             </div>

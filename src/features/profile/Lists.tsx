@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
-import { Route as listDetailRoute } from "@/routes/_app/_protected/@/lists.$listId";
+import { Route as listDetailRoute } from "@/routes/_app/_protected/profile/lists.$listId";
 import type { CollectionListVO, ListCoverItemVO } from "@/types/collection";
 import { useCollectionListsQuery } from "./collection";
 import CollectionListInfo from "./CollectionListInfo";

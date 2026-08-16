@@ -230,7 +230,7 @@ export default function NotificationList({
                                                         <span>{notification.parentComment.content}</span>
                                                     </div>
                                                 )}
-                                                <span className="text-xs text-gray-500">
+                                                <span className="text-xs opacity-60">
                                                     {new Date(notification.createTime).toLocaleString()}
                                                 </span>
                                             </div>
@@ -280,7 +280,7 @@ export default function NotificationList({
                         {!hasNextPage && <li className="list-row h-24 text-center p-5">{t('notification.noMore')}</li>}
                     </ul>
                     :
-                    <div className="h-48 text-gray-500 text-center p-5">
+                    <div className="h-48 opacity-60 text-center p-5">
                         {t('notification.empty')}
                     </div>
             )}

@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useUserLogout } from "@/features/auth/userLogin";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
+import { useState } from "react";
 
 export default function AvatarDropdown() {
     const { t } = useTranslation();
@@ -17,26 +18,28 @@ export default function AvatarDropdown() {
     const navigate = useNavigate();
     const user = useAtomValue(userAtom);
     const isLoading = useAtomValue(isLoadingAtom);
+    // dropdown open state
+    const [isOpen, setIsOpen] = useState(false);
 
     const { userLogout } = useUserLogout();
 
     function UserAvatar() {
-        return <Avatar imageUrl={user?.image ?? undefined} username={user?.username || ''} />
+        return <Avatar size="sm" imageUrl={user?.image ?? undefined} username={user?.username || ''} />
     }
 
     return (
-        <div className="dropdown dropdown-bottom dropdown-end dropdown-hover mr-3">
-
-            <div tabIndex={0} role="button" className="btn btn-circle">
+        <details open={isOpen} className="dropdown dropdown-end mr-3">
+            <summary className="btn btn-circle" onClick={(e) => {
+                e.preventDefault();
+                setIsOpen(!isOpen);
+            }}>
                 {isLoading
                     ? <button className="btn btn-circle">
                         <span className="loading loading-spinner"></span>
                     </button>
                     : <UserAvatar />}
-            </div>
-            <ul
-                tabIndex={-1}
-                className="dropdown-content menu bg-base-100 rounded-box z-1 w-68 p-2 shadow-sm mt-1">
+            </summary>
+            {isOpen && <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-64 p-2 shadow-sm">
                 <li className="list-row">
                     <a>
                         <UserAvatar />
@@ -48,7 +51,10 @@ export default function AvatarDropdown() {
                         </div>
                     </a>
                 </li>
-                <li onClick={() => navigate({ to: meSettingsRoute.to })} className="list-row">
+                <li onClick={() => {
+                    setIsOpen(false);
+                    navigate({ to: meSettingsRoute.to });
+                }} className="list-row">
                     <a><GearIcon size={24} />{t('btn.settings')}</a>
                 </li>
                 <li onClick={() => {
@@ -61,7 +67,7 @@ export default function AvatarDropdown() {
                         {t('btn.logout')}
                     </div>
                 </li>
-            </ul>
-        </div>
+            </ul>}
+        </details>
     );
 }

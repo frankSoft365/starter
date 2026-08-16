@@ -20,18 +20,18 @@ export default function ArticleListItem({ article, onDelete, onRemoveFromList }:
     return (
         <li id={`article-list-item-${article.id}`} className="list-row min-h-64 cursor-pointer grid-cols-5">
             <div className='flex flex-col justify-between col-span-3'>
-                <div className="flex flex-row items-center text-sm gap-1">
+                <div className="flex flex-row items-center text-xs md:text-sm gap-1">
                     <Avatar imageUrl={article.authorAvatar} username={article.authorName} size="sm" />
                     <span className="ml-1.5">{article.authorName}</span>
                     <span>·</span>
-                    <span className="text-gray-500">{getPublishDate(new Date(article.publishTime))}</span>
+                    <span className="opacity-60">{getPublishDate(new Date(article.publishTime))}</span>
                 </div>
                 {/* article content */}
                 <div>
                     <p className="text-lg md:text-2xl font-sans font-bold text-wrap mb-2.5">
                         {article.title}
                     </p>
-                    <p className="text-sm text-gray-500 md:text-base font-sans font-light text-wrap">
+                    <p className="text-sm opacity-60 md:text-base font-sans font-light text-wrap">
                         {article.subtitle}
                     </p>
                 </div>
