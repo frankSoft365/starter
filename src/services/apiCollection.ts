@@ -2,8 +2,8 @@ import request from "../utils/request";
 import type { ArticleCollectStatusVO, CollectionListDetailVO, CollectionListVO } from "@/types/collection";
 import type { ArticleListItemVO } from "@/types/article";
 
-export async function getUserCollectionLists() {
-    return request.get<void, CollectionListVO[]>('/collection/user/lists');
+export async function getUserCollectionLists(userId: string) {
+    return request.get<void, CollectionListVO[]>('/collection/user/lists', { params: { userId } });
 }
 
 export async function getCollectionList(listId: string) {

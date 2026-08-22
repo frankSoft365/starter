@@ -1,4 +1,3 @@
-import BottomMenu from "./BottomMenu";
 import DrawerSide from "./DrawerSide";
 import Footer from "./Footer";
 import NavBar from "./NavBar";
@@ -30,7 +29,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     {!isEditorRoute && !isArticleEditRoute && <Footer />}
                 </div>
                 <DrawerSide onNav={setDrawerOpen} />
-                {(!isEditorRoute && !isArticleEditRoute) && <BottomMenu />}
             </div>
         </>
     );

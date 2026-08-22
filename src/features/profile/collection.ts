@@ -4,10 +4,10 @@ import { addArticleToList, createCollectionList, deleteCollectionList, getCollec
 import type { CollectionListDetailVO } from "@/types/collection";
 import type { CreateCollectionListForm } from "@/schemas/collection";
 
-export function useCollectionListsQuery() {
+export function useCollectionListsQuery(userId: string) {
     return useQuery({
-        queryKey: ['collection-lists'],
-        queryFn: getUserCollectionLists,
+        queryKey: ['collection-lists', userId],
+        queryFn: () => getUserCollectionLists(userId),
     });
 }
 

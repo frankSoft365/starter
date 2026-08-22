@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { changePassword, getCurrentUser, updateUserProfile } from "@/services/apiUserProfile";
+import { changePassword, getCurrentUser, getSomeUser, updateUserProfile } from "@/services/apiUserProfile";
 import { useSetAtom } from "jotai";
 import { isLoginAtom, userAtom } from "@/atoms/user";
 import { toast } from "sonner";
@@ -28,6 +28,22 @@ export function useUserProfile() {
         user,
         isUserProfileLoading,
         isLoadingError,
+    });
+}
+
+export function useProfile(userId: string) {
+    const { data: user, isLoading: isUserProfileLoading, isError: isLoadingError, error } = useQuery({
+        queryKey: ['get-profile', userId],
+        queryFn: async () => {
+            const userInfo = await getSomeUser(userId);
+            return userInfo;
+        }
+    })
+    return ({
+        user,
+        isUserProfileLoading,
+        isLoadingError,
+        error
     });
 }
 

@@ -1,7 +1,7 @@
 import ProfileTab from '@/features/profile/ProfileTab'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/_app/_protected/_profile')({
+export const Route = createFileRoute('/_app/_protected/profile/$userId/_profile')({
     component: RouteComponent,
 })
 

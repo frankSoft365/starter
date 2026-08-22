@@ -18,20 +18,20 @@ import { Route as AppProtectedRouteRouteImport } from './routes/_app/_protected/
 import { Route as AppArticleArticleIdRouteImport } from './routes/_app/article.$articleId'
 import { Route as AppProtectedSubmissionRouteImport } from './routes/_app/_protected/submission'
 import { Route as AppProtectedEditorRouteImport } from './routes/_app/_protected/editor'
-import { Route as AppProtectedProfileRouteRouteImport } from './routes/_app/_protected/_profile/route'
 import { Route as AppProtectedMeSettingsRouteImport } from './routes/_app/_protected/me/settings'
 import { Route as AppProtectedMePasswordRouteImport } from './routes/_app/_protected/me/password'
 import { Route as AppProtectedMeNotificationsRouteRouteImport } from './routes/_app/_protected/me/notifications/route'
 import { Route as AppProtectedMeNotificationsIndexRouteImport } from './routes/_app/_protected/me/notifications/index'
-import { Route as AppProtectedProfileProfileIndexRouteImport } from './routes/_app/_protected/_profile/profile/index'
-import { Route as AppProtectedProfileListsListIdRouteImport } from './routes/_app/_protected/profile/lists.$listId'
 import { Route as AppProtectedMeNotificationsLikeRouteImport } from './routes/_app/_protected/me/notifications/like'
 import { Route as AppProtectedMeNotificationsFollowRouteImport } from './routes/_app/_protected/me/notifications/follow'
 import { Route as AppProtectedArticlesEditArticleIdRouteImport } from './routes/_app/_protected/articles.edit.$articleId'
-import { Route as AppProtectedProfileProfileRepostsRouteImport } from './routes/_app/_protected/_profile/profile/reposts'
-import { Route as AppProtectedProfileProfileListsRouteImport } from './routes/_app/_protected/_profile/profile/lists'
-import { Route as AppProtectedProfileProfileActivityRouteImport } from './routes/_app/_protected/_profile/profile/activity'
-import { Route as AppProtectedProfileProfileAboutRouteImport } from './routes/_app/_protected/_profile/profile/about'
+import { Route as AppProtectedProfileUserIdProfileRouteRouteImport } from './routes/_app/_protected/profile/$userId/_profile/route'
+import { Route as AppProtectedProfileUserIdProfileIndexRouteImport } from './routes/_app/_protected/profile/$userId/_profile/index'
+import { Route as AppProtectedProfileUserIdListsListIdRouteImport } from './routes/_app/_protected/profile/$userId/lists.$listId'
+import { Route as AppProtectedProfileUserIdProfileRepostsRouteImport } from './routes/_app/_protected/profile/$userId/_profile/reposts'
+import { Route as AppProtectedProfileUserIdProfileListsRouteImport } from './routes/_app/_protected/profile/$userId/_profile/lists'
+import { Route as AppProtectedProfileUserIdProfileActivityRouteImport } from './routes/_app/_protected/profile/$userId/_profile/activity'
+import { Route as AppProtectedProfileUserIdProfileAboutRouteImport } from './routes/_app/_protected/profile/$userId/_profile/about'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -76,11 +76,6 @@ const AppProtectedEditorRoute = AppProtectedEditorRouteImport.update({
   path: '/editor',
   getParentRoute: () => AppProtectedRouteRoute,
 } as any)
-const AppProtectedProfileRouteRoute =
-  AppProtectedProfileRouteRouteImport.update({
-    id: '/_profile',
-    getParentRoute: () => AppProtectedRouteRoute,
-  } as any)
 const AppProtectedMeSettingsRoute = AppProtectedMeSettingsRouteImport.update({
   id: '/me/settings',
   path: '/me/settings',
@@ -103,18 +98,6 @@ const AppProtectedMeNotificationsIndexRoute =
     path: '/',
     getParentRoute: () => AppProtectedMeNotificationsRouteRoute,
   } as any)
-const AppProtectedProfileProfileIndexRoute =
-  AppProtectedProfileProfileIndexRouteImport.update({
-    id: '/profile/',
-    path: '/profile/',
-    getParentRoute: () => AppProtectedProfileRouteRoute,
-  } as any)
-const AppProtectedProfileListsListIdRoute =
-  AppProtectedProfileListsListIdRouteImport.update({
-    id: '/profile/lists/$listId',
-    path: '/profile/lists/$listId',
-    getParentRoute: () => AppProtectedRouteRoute,
-  } as any)
 const AppProtectedMeNotificationsLikeRoute =
   AppProtectedMeNotificationsLikeRouteImport.update({
     id: '/like',
@@ -133,29 +116,47 @@ const AppProtectedArticlesEditArticleIdRoute =
     path: '/articles/edit/$articleId',
     getParentRoute: () => AppProtectedRouteRoute,
   } as any)
-const AppProtectedProfileProfileRepostsRoute =
-  AppProtectedProfileProfileRepostsRouteImport.update({
-    id: '/profile/reposts',
-    path: '/profile/reposts',
-    getParentRoute: () => AppProtectedProfileRouteRoute,
+const AppProtectedProfileUserIdProfileRouteRoute =
+  AppProtectedProfileUserIdProfileRouteRouteImport.update({
+    id: '/profile/$userId/_profile',
+    path: '/profile/$userId',
+    getParentRoute: () => AppProtectedRouteRoute,
   } as any)
-const AppProtectedProfileProfileListsRoute =
-  AppProtectedProfileProfileListsRouteImport.update({
-    id: '/profile/lists',
-    path: '/profile/lists',
-    getParentRoute: () => AppProtectedProfileRouteRoute,
+const AppProtectedProfileUserIdProfileIndexRoute =
+  AppProtectedProfileUserIdProfileIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppProtectedProfileUserIdProfileRouteRoute,
   } as any)
-const AppProtectedProfileProfileActivityRoute =
-  AppProtectedProfileProfileActivityRouteImport.update({
-    id: '/profile/activity',
-    path: '/profile/activity',
-    getParentRoute: () => AppProtectedProfileRouteRoute,
+const AppProtectedProfileUserIdListsListIdRoute =
+  AppProtectedProfileUserIdListsListIdRouteImport.update({
+    id: '/profile/$userId/lists/$listId',
+    path: '/profile/$userId/lists/$listId',
+    getParentRoute: () => AppProtectedRouteRoute,
   } as any)
-const AppProtectedProfileProfileAboutRoute =
-  AppProtectedProfileProfileAboutRouteImport.update({
-    id: '/profile/about',
-    path: '/profile/about',
-    getParentRoute: () => AppProtectedProfileRouteRoute,
+const AppProtectedProfileUserIdProfileRepostsRoute =
+  AppProtectedProfileUserIdProfileRepostsRouteImport.update({
+    id: '/reposts',
+    path: '/reposts',
+    getParentRoute: () => AppProtectedProfileUserIdProfileRouteRoute,
+  } as any)
+const AppProtectedProfileUserIdProfileListsRoute =
+  AppProtectedProfileUserIdProfileListsRouteImport.update({
+    id: '/lists',
+    path: '/lists',
+    getParentRoute: () => AppProtectedProfileUserIdProfileRouteRoute,
+  } as any)
+const AppProtectedProfileUserIdProfileActivityRoute =
+  AppProtectedProfileUserIdProfileActivityRouteImport.update({
+    id: '/activity',
+    path: '/activity',
+    getParentRoute: () => AppProtectedProfileUserIdProfileRouteRoute,
+  } as any)
+const AppProtectedProfileUserIdProfileAboutRoute =
+  AppProtectedProfileUserIdProfileAboutRouteImport.update({
+    id: '/about',
+    path: '/about',
+    getParentRoute: () => AppProtectedProfileUserIdProfileRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -169,16 +170,17 @@ export interface FileRoutesByFullPath {
   '/me/notifications': typeof AppProtectedMeNotificationsRouteRouteWithChildren
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
-  '/profile/about': typeof AppProtectedProfileProfileAboutRoute
-  '/profile/activity': typeof AppProtectedProfileProfileActivityRoute
-  '/profile/lists': typeof AppProtectedProfileProfileListsRoute
-  '/profile/reposts': typeof AppProtectedProfileProfileRepostsRoute
+  '/profile/$userId': typeof AppProtectedProfileUserIdProfileRouteRouteWithChildren
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
   '/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
   '/me/notifications/like': typeof AppProtectedMeNotificationsLikeRoute
-  '/profile/lists/$listId': typeof AppProtectedProfileListsListIdRoute
-  '/profile/': typeof AppProtectedProfileProfileIndexRoute
   '/me/notifications/': typeof AppProtectedMeNotificationsIndexRoute
+  '/profile/$userId/about': typeof AppProtectedProfileUserIdProfileAboutRoute
+  '/profile/$userId/activity': typeof AppProtectedProfileUserIdProfileActivityRoute
+  '/profile/$userId/lists': typeof AppProtectedProfileUserIdProfileListsRoute
+  '/profile/$userId/reposts': typeof AppProtectedProfileUserIdProfileRepostsRoute
+  '/profile/$userId/lists/$listId': typeof AppProtectedProfileUserIdListsListIdRoute
+  '/profile/$userId/': typeof AppProtectedProfileUserIdProfileIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -190,16 +192,16 @@ export interface FileRoutesByTo {
   '/article/$articleId': typeof AppArticleArticleIdRoute
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
-  '/profile/about': typeof AppProtectedProfileProfileAboutRoute
-  '/profile/activity': typeof AppProtectedProfileProfileActivityRoute
-  '/profile/lists': typeof AppProtectedProfileProfileListsRoute
-  '/profile/reposts': typeof AppProtectedProfileProfileRepostsRoute
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
   '/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
   '/me/notifications/like': typeof AppProtectedMeNotificationsLikeRoute
-  '/profile/lists/$listId': typeof AppProtectedProfileListsListIdRoute
-  '/profile': typeof AppProtectedProfileProfileIndexRoute
   '/me/notifications': typeof AppProtectedMeNotificationsIndexRoute
+  '/profile/$userId/about': typeof AppProtectedProfileUserIdProfileAboutRoute
+  '/profile/$userId/activity': typeof AppProtectedProfileUserIdProfileActivityRoute
+  '/profile/$userId/lists': typeof AppProtectedProfileUserIdProfileListsRoute
+  '/profile/$userId/reposts': typeof AppProtectedProfileUserIdProfileRepostsRoute
+  '/profile/$userId/lists/$listId': typeof AppProtectedProfileUserIdListsListIdRoute
+  '/profile/$userId': typeof AppProtectedProfileUserIdProfileIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -209,23 +211,23 @@ export interface FileRoutesById {
   '/_app/_protected': typeof AppProtectedRouteRouteWithChildren
   '/_app/needLogin': typeof AppNeedLoginRoute
   '/_app/': typeof AppIndexRoute
-  '/_app/_protected/_profile': typeof AppProtectedProfileRouteRouteWithChildren
   '/_app/_protected/editor': typeof AppProtectedEditorRoute
   '/_app/_protected/submission': typeof AppProtectedSubmissionRoute
   '/_app/article/$articleId': typeof AppArticleArticleIdRoute
   '/_app/_protected/me/notifications': typeof AppProtectedMeNotificationsRouteRouteWithChildren
   '/_app/_protected/me/password': typeof AppProtectedMePasswordRoute
   '/_app/_protected/me/settings': typeof AppProtectedMeSettingsRoute
-  '/_app/_protected/_profile/profile/about': typeof AppProtectedProfileProfileAboutRoute
-  '/_app/_protected/_profile/profile/activity': typeof AppProtectedProfileProfileActivityRoute
-  '/_app/_protected/_profile/profile/lists': typeof AppProtectedProfileProfileListsRoute
-  '/_app/_protected/_profile/profile/reposts': typeof AppProtectedProfileProfileRepostsRoute
+  '/_app/_protected/profile/$userId/_profile': typeof AppProtectedProfileUserIdProfileRouteRouteWithChildren
   '/_app/_protected/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
   '/_app/_protected/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
   '/_app/_protected/me/notifications/like': typeof AppProtectedMeNotificationsLikeRoute
-  '/_app/_protected/profile/lists/$listId': typeof AppProtectedProfileListsListIdRoute
-  '/_app/_protected/_profile/profile/': typeof AppProtectedProfileProfileIndexRoute
   '/_app/_protected/me/notifications/': typeof AppProtectedMeNotificationsIndexRoute
+  '/_app/_protected/profile/$userId/_profile/about': typeof AppProtectedProfileUserIdProfileAboutRoute
+  '/_app/_protected/profile/$userId/_profile/activity': typeof AppProtectedProfileUserIdProfileActivityRoute
+  '/_app/_protected/profile/$userId/_profile/lists': typeof AppProtectedProfileUserIdProfileListsRoute
+  '/_app/_protected/profile/$userId/_profile/reposts': typeof AppProtectedProfileUserIdProfileRepostsRoute
+  '/_app/_protected/profile/$userId/lists/$listId': typeof AppProtectedProfileUserIdListsListIdRoute
+  '/_app/_protected/profile/$userId/_profile/': typeof AppProtectedProfileUserIdProfileIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -240,16 +242,17 @@ export interface FileRouteTypes {
     | '/me/notifications'
     | '/me/password'
     | '/me/settings'
-    | '/profile/about'
-    | '/profile/activity'
-    | '/profile/lists'
-    | '/profile/reposts'
+    | '/profile/$userId'
     | '/articles/edit/$articleId'
     | '/me/notifications/follow'
     | '/me/notifications/like'
-    | '/profile/lists/$listId'
-    | '/profile/'
     | '/me/notifications/'
+    | '/profile/$userId/about'
+    | '/profile/$userId/activity'
+    | '/profile/$userId/lists'
+    | '/profile/$userId/reposts'
+    | '/profile/$userId/lists/$listId'
+    | '/profile/$userId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -261,16 +264,16 @@ export interface FileRouteTypes {
     | '/article/$articleId'
     | '/me/password'
     | '/me/settings'
-    | '/profile/about'
-    | '/profile/activity'
-    | '/profile/lists'
-    | '/profile/reposts'
     | '/articles/edit/$articleId'
     | '/me/notifications/follow'
     | '/me/notifications/like'
-    | '/profile/lists/$listId'
-    | '/profile'
     | '/me/notifications'
+    | '/profile/$userId/about'
+    | '/profile/$userId/activity'
+    | '/profile/$userId/lists'
+    | '/profile/$userId/reposts'
+    | '/profile/$userId/lists/$listId'
+    | '/profile/$userId'
   id:
     | '__root__'
     | '/_app'
@@ -279,23 +282,23 @@ export interface FileRouteTypes {
     | '/_app/_protected'
     | '/_app/needLogin'
     | '/_app/'
-    | '/_app/_protected/_profile'
     | '/_app/_protected/editor'
     | '/_app/_protected/submission'
     | '/_app/article/$articleId'
     | '/_app/_protected/me/notifications'
     | '/_app/_protected/me/password'
     | '/_app/_protected/me/settings'
-    | '/_app/_protected/_profile/profile/about'
-    | '/_app/_protected/_profile/profile/activity'
-    | '/_app/_protected/_profile/profile/lists'
-    | '/_app/_protected/_profile/profile/reposts'
+    | '/_app/_protected/profile/$userId/_profile'
     | '/_app/_protected/articles/edit/$articleId'
     | '/_app/_protected/me/notifications/follow'
     | '/_app/_protected/me/notifications/like'
-    | '/_app/_protected/profile/lists/$listId'
-    | '/_app/_protected/_profile/profile/'
     | '/_app/_protected/me/notifications/'
+    | '/_app/_protected/profile/$userId/_profile/about'
+    | '/_app/_protected/profile/$userId/_profile/activity'
+    | '/_app/_protected/profile/$userId/_profile/lists'
+    | '/_app/_protected/profile/$userId/_profile/reposts'
+    | '/_app/_protected/profile/$userId/lists/$listId'
+    | '/_app/_protected/profile/$userId/_profile/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -369,13 +372,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProtectedEditorRouteImport
       parentRoute: typeof AppProtectedRouteRoute
     }
-    '/_app/_protected/_profile': {
-      id: '/_app/_protected/_profile'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AppProtectedProfileRouteRouteImport
-      parentRoute: typeof AppProtectedRouteRoute
-    }
     '/_app/_protected/me/settings': {
       id: '/_app/_protected/me/settings'
       path: '/me/settings'
@@ -404,20 +400,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProtectedMeNotificationsIndexRouteImport
       parentRoute: typeof AppProtectedMeNotificationsRouteRoute
     }
-    '/_app/_protected/_profile/profile/': {
-      id: '/_app/_protected/_profile/profile/'
-      path: '/profile'
-      fullPath: '/profile/'
-      preLoaderRoute: typeof AppProtectedProfileProfileIndexRouteImport
-      parentRoute: typeof AppProtectedProfileRouteRoute
-    }
-    '/_app/_protected/profile/lists/$listId': {
-      id: '/_app/_protected/profile/lists/$listId'
-      path: '/profile/lists/$listId'
-      fullPath: '/profile/lists/$listId'
-      preLoaderRoute: typeof AppProtectedProfileListsListIdRouteImport
-      parentRoute: typeof AppProtectedRouteRoute
-    }
     '/_app/_protected/me/notifications/like': {
       id: '/_app/_protected/me/notifications/like'
       path: '/like'
@@ -439,60 +421,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProtectedArticlesEditArticleIdRouteImport
       parentRoute: typeof AppProtectedRouteRoute
     }
-    '/_app/_protected/_profile/profile/reposts': {
-      id: '/_app/_protected/_profile/profile/reposts'
-      path: '/profile/reposts'
-      fullPath: '/profile/reposts'
-      preLoaderRoute: typeof AppProtectedProfileProfileRepostsRouteImport
-      parentRoute: typeof AppProtectedProfileRouteRoute
+    '/_app/_protected/profile/$userId/_profile': {
+      id: '/_app/_protected/profile/$userId/_profile'
+      path: '/profile/$userId'
+      fullPath: '/profile/$userId'
+      preLoaderRoute: typeof AppProtectedProfileUserIdProfileRouteRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
     }
-    '/_app/_protected/_profile/profile/lists': {
-      id: '/_app/_protected/_profile/profile/lists'
-      path: '/profile/lists'
-      fullPath: '/profile/lists'
-      preLoaderRoute: typeof AppProtectedProfileProfileListsRouteImport
-      parentRoute: typeof AppProtectedProfileRouteRoute
+    '/_app/_protected/profile/$userId/_profile/': {
+      id: '/_app/_protected/profile/$userId/_profile/'
+      path: '/'
+      fullPath: '/profile/$userId/'
+      preLoaderRoute: typeof AppProtectedProfileUserIdProfileIndexRouteImport
+      parentRoute: typeof AppProtectedProfileUserIdProfileRouteRoute
     }
-    '/_app/_protected/_profile/profile/activity': {
-      id: '/_app/_protected/_profile/profile/activity'
-      path: '/profile/activity'
-      fullPath: '/profile/activity'
-      preLoaderRoute: typeof AppProtectedProfileProfileActivityRouteImport
-      parentRoute: typeof AppProtectedProfileRouteRoute
+    '/_app/_protected/profile/$userId/lists/$listId': {
+      id: '/_app/_protected/profile/$userId/lists/$listId'
+      path: '/profile/$userId/lists/$listId'
+      fullPath: '/profile/$userId/lists/$listId'
+      preLoaderRoute: typeof AppProtectedProfileUserIdListsListIdRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
     }
-    '/_app/_protected/_profile/profile/about': {
-      id: '/_app/_protected/_profile/profile/about'
-      path: '/profile/about'
-      fullPath: '/profile/about'
-      preLoaderRoute: typeof AppProtectedProfileProfileAboutRouteImport
-      parentRoute: typeof AppProtectedProfileRouteRoute
+    '/_app/_protected/profile/$userId/_profile/reposts': {
+      id: '/_app/_protected/profile/$userId/_profile/reposts'
+      path: '/reposts'
+      fullPath: '/profile/$userId/reposts'
+      preLoaderRoute: typeof AppProtectedProfileUserIdProfileRepostsRouteImport
+      parentRoute: typeof AppProtectedProfileUserIdProfileRouteRoute
+    }
+    '/_app/_protected/profile/$userId/_profile/lists': {
+      id: '/_app/_protected/profile/$userId/_profile/lists'
+      path: '/lists'
+      fullPath: '/profile/$userId/lists'
+      preLoaderRoute: typeof AppProtectedProfileUserIdProfileListsRouteImport
+      parentRoute: typeof AppProtectedProfileUserIdProfileRouteRoute
+    }
+    '/_app/_protected/profile/$userId/_profile/activity': {
+      id: '/_app/_protected/profile/$userId/_profile/activity'
+      path: '/activity'
+      fullPath: '/profile/$userId/activity'
+      preLoaderRoute: typeof AppProtectedProfileUserIdProfileActivityRouteImport
+      parentRoute: typeof AppProtectedProfileUserIdProfileRouteRoute
+    }
+    '/_app/_protected/profile/$userId/_profile/about': {
+      id: '/_app/_protected/profile/$userId/_profile/about'
+      path: '/about'
+      fullPath: '/profile/$userId/about'
+      preLoaderRoute: typeof AppProtectedProfileUserIdProfileAboutRouteImport
+      parentRoute: typeof AppProtectedProfileUserIdProfileRouteRoute
     }
   }
 }
-
-interface AppProtectedProfileRouteRouteChildren {
-  AppProtectedProfileProfileAboutRoute: typeof AppProtectedProfileProfileAboutRoute
-  AppProtectedProfileProfileActivityRoute: typeof AppProtectedProfileProfileActivityRoute
-  AppProtectedProfileProfileListsRoute: typeof AppProtectedProfileProfileListsRoute
-  AppProtectedProfileProfileRepostsRoute: typeof AppProtectedProfileProfileRepostsRoute
-  AppProtectedProfileProfileIndexRoute: typeof AppProtectedProfileProfileIndexRoute
-}
-
-const AppProtectedProfileRouteRouteChildren: AppProtectedProfileRouteRouteChildren =
-  {
-    AppProtectedProfileProfileAboutRoute: AppProtectedProfileProfileAboutRoute,
-    AppProtectedProfileProfileActivityRoute:
-      AppProtectedProfileProfileActivityRoute,
-    AppProtectedProfileProfileListsRoute: AppProtectedProfileProfileListsRoute,
-    AppProtectedProfileProfileRepostsRoute:
-      AppProtectedProfileProfileRepostsRoute,
-    AppProtectedProfileProfileIndexRoute: AppProtectedProfileProfileIndexRoute,
-  }
-
-const AppProtectedProfileRouteRouteWithChildren =
-  AppProtectedProfileRouteRoute._addFileChildren(
-    AppProtectedProfileRouteRouteChildren,
-  )
 
 interface AppProtectedMeNotificationsRouteRouteChildren {
   AppProtectedMeNotificationsFollowRoute: typeof AppProtectedMeNotificationsFollowRoute
@@ -514,28 +493,57 @@ const AppProtectedMeNotificationsRouteRouteWithChildren =
     AppProtectedMeNotificationsRouteRouteChildren,
   )
 
+interface AppProtectedProfileUserIdProfileRouteRouteChildren {
+  AppProtectedProfileUserIdProfileAboutRoute: typeof AppProtectedProfileUserIdProfileAboutRoute
+  AppProtectedProfileUserIdProfileActivityRoute: typeof AppProtectedProfileUserIdProfileActivityRoute
+  AppProtectedProfileUserIdProfileListsRoute: typeof AppProtectedProfileUserIdProfileListsRoute
+  AppProtectedProfileUserIdProfileRepostsRoute: typeof AppProtectedProfileUserIdProfileRepostsRoute
+  AppProtectedProfileUserIdProfileIndexRoute: typeof AppProtectedProfileUserIdProfileIndexRoute
+}
+
+const AppProtectedProfileUserIdProfileRouteRouteChildren: AppProtectedProfileUserIdProfileRouteRouteChildren =
+  {
+    AppProtectedProfileUserIdProfileAboutRoute:
+      AppProtectedProfileUserIdProfileAboutRoute,
+    AppProtectedProfileUserIdProfileActivityRoute:
+      AppProtectedProfileUserIdProfileActivityRoute,
+    AppProtectedProfileUserIdProfileListsRoute:
+      AppProtectedProfileUserIdProfileListsRoute,
+    AppProtectedProfileUserIdProfileRepostsRoute:
+      AppProtectedProfileUserIdProfileRepostsRoute,
+    AppProtectedProfileUserIdProfileIndexRoute:
+      AppProtectedProfileUserIdProfileIndexRoute,
+  }
+
+const AppProtectedProfileUserIdProfileRouteRouteWithChildren =
+  AppProtectedProfileUserIdProfileRouteRoute._addFileChildren(
+    AppProtectedProfileUserIdProfileRouteRouteChildren,
+  )
+
 interface AppProtectedRouteRouteChildren {
-  AppProtectedProfileRouteRoute: typeof AppProtectedProfileRouteRouteWithChildren
   AppProtectedEditorRoute: typeof AppProtectedEditorRoute
   AppProtectedSubmissionRoute: typeof AppProtectedSubmissionRoute
   AppProtectedMeNotificationsRouteRoute: typeof AppProtectedMeNotificationsRouteRouteWithChildren
   AppProtectedMePasswordRoute: typeof AppProtectedMePasswordRoute
   AppProtectedMeSettingsRoute: typeof AppProtectedMeSettingsRoute
+  AppProtectedProfileUserIdProfileRouteRoute: typeof AppProtectedProfileUserIdProfileRouteRouteWithChildren
   AppProtectedArticlesEditArticleIdRoute: typeof AppProtectedArticlesEditArticleIdRoute
-  AppProtectedProfileListsListIdRoute: typeof AppProtectedProfileListsListIdRoute
+  AppProtectedProfileUserIdListsListIdRoute: typeof AppProtectedProfileUserIdListsListIdRoute
 }
 
 const AppProtectedRouteRouteChildren: AppProtectedRouteRouteChildren = {
-  AppProtectedProfileRouteRoute: AppProtectedProfileRouteRouteWithChildren,
   AppProtectedEditorRoute: AppProtectedEditorRoute,
   AppProtectedSubmissionRoute: AppProtectedSubmissionRoute,
   AppProtectedMeNotificationsRouteRoute:
     AppProtectedMeNotificationsRouteRouteWithChildren,
   AppProtectedMePasswordRoute: AppProtectedMePasswordRoute,
   AppProtectedMeSettingsRoute: AppProtectedMeSettingsRoute,
+  AppProtectedProfileUserIdProfileRouteRoute:
+    AppProtectedProfileUserIdProfileRouteRouteWithChildren,
   AppProtectedArticlesEditArticleIdRoute:
     AppProtectedArticlesEditArticleIdRoute,
-  AppProtectedProfileListsListIdRoute: AppProtectedProfileListsListIdRoute,
+  AppProtectedProfileUserIdListsListIdRoute:
+    AppProtectedProfileUserIdListsListIdRoute,
 }
 
 const AppProtectedRouteRouteWithChildren =

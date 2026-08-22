@@ -11,10 +11,12 @@ import Loading from "@/ui/Loading";
 import ArticleListItem from "@/features/home/ArticleListItem";
 import type { ArticleListItemVO } from "@/types/article";
 import { useCollectionListArticlesQuery, useCollectionListQuery, useRemoveArticleFromList, useRemoveArticlesFromList } from "./collection";
-import { Route as listRoute } from "@/routes/_app/_protected/_profile/profile/lists";
+import { Route as listRoute } from "@/routes/_app/_protected/profile/$userId/_profile/lists";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import CollectionListInfo from "./CollectionListInfo";
-import { Route as listDetailRoute } from "@/routes/_app/_protected/profile/lists.$listId";
+import { Route as listDetailRoute } from "@/routes/_app/_protected/profile/$userId/lists.$listId";
+import { useAtomValue } from "jotai";
+import { userAtom } from "@/atoms/user";
 
 function isDeletedArticle(article: ArticleListItemVO): boolean {
     return !!article.id && !article.title;
@@ -24,6 +26,7 @@ export default function CollectionListDetail() {
     const { listId } = listDetailRoute.useParams();
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const user = useAtomValue(userAtom);
     const queryClient = useQueryClient();
     const [removeMode, setRemoveMode] = useState(false);
     const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -61,7 +64,7 @@ export default function CollectionListDetail() {
                         onRemoveItems={() => setRemoveMode(true)}
                         onCancelRemove={exitRemoveMode}
                         onConfirmRemove={() => { batchRemoveMutation.mutate({ listId, articleIds: Array.from(selected) }, { onSuccess: () => { toast.success(t('profile.list.removedTip')); exitRemoveMode(); } }); }}
-                        onDelete={() => navigate({ to: listRoute.to })}
+                        onDelete={() => navigate({ to: listRoute.to, params: { userId: user?.id ?? '' } })}
                     />
                 )}
             </div>

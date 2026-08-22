@@ -70,7 +70,8 @@ export function useDeleteArticle() {
         },
         onSuccess() {
             toast.success('Article deleted successfully.');
-            queryClient.invalidateQueries({ queryKey: ['get-article-list'] });
+            queryClient.invalidateQueries({ queryKey: ['get-home-article-list'] });
+            queryClient.invalidateQueries({ queryKey: ['get-my-article-list'] });
         },
         onError: (error) => {
             toast.error(error.message || 'An error occurred while publishing the article.');

@@ -4,17 +4,21 @@ import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
-import { Route as listDetailRoute } from "@/routes/_app/_protected/profile/lists.$listId";
+import { Route as listDetailRoute } from "@/routes/_app/_protected/profile/$userId/lists.$listId";
 import type { CollectionListVO, ListCoverItemVO } from "@/types/collection";
 import { useCollectionListsQuery } from "./collection";
 import CollectionListInfo from "./CollectionListInfo";
+import { useAtomValue } from "jotai";
+import { userAtom } from "@/atoms/user";
+import { Route as listsRoute } from "@/routes/_app/_protected/profile/$userId/_profile/lists";
 
 const COVER_PREVIEW_MAX = 3;
 
 export default function Lists() {
     const { t } = useTranslation();
+    const { userId } = listsRoute.useParams();
     const queryClient = useQueryClient();
-    const { data: lists, status, error } = useCollectionListsQuery();
+    const { data: lists, status, error } = useCollectionListsQuery(userId);
 
     return (
         <div className="w-full">
@@ -45,9 +49,10 @@ export default function Lists() {
 
 function CollectionListRow({ list }: { list: CollectionListVO }) {
     const navigate = useNavigate();
+    const user = useAtomValue(userAtom);
     const covers = list.coverImages.slice(0, COVER_PREVIEW_MAX);
 
-    const goListDetail = () => navigate({ to: listDetailRoute.to, params: { listId: list.id } });
+    const goListDetail = () => navigate({ to: listDetailRoute.to, params: { userId: user?.id ?? '', listId: list.id } });
 
     return (
         <li

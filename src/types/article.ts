@@ -2,6 +2,7 @@ import type { TopicInArticleVO } from "./topic";
 
 export type ArticleListRequest = {
     isMyArticle?: boolean;
+    userId?: string;
 }
 
 export type ArticlePublishRequest = {

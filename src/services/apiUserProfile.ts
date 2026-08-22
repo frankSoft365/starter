@@ -5,6 +5,10 @@ export async function getCurrentUser() {
     return request.get<any, UserVO>('/user/current');
 }
 
+export async function getSomeUser(userId: string) {
+    return request.get<void, UserVO>('/user/some', { params: { userId } });
+}
+
 export async function updateUserProfile(updateRequest: UserUpdateRequest) {
     return request.post<UserUpdateRequest, void>('/user/update', updateRequest);
 }
