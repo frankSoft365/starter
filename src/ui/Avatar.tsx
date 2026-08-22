@@ -3,10 +3,10 @@ export default function Avatar({ imageUrl, hover = false, username, size = 'md' 
         imageUrl: string | undefined,
         hover?: boolean,
         username: string,
-        size?: 'sm' | 'md'
+        size?: 'sm' | 'md' | 'lg'
     }) {
     const hoverRingConfig = 'hover:ring-2 ring-offset-2 ring-primary ring-offset-base-100';
-    const sizeStyle = size === 'md' ? 'w-12' : size === 'sm' ? 'w-8' : 'w-12';
+    const sizeStyle = size === 'md' ? 'w-12' : size === 'sm' ? 'w-8' : size === 'lg' ? 'w-18' : 'w-12';
     return (
         <div>
             {(imageUrl ?? '') !== ''

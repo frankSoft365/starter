@@ -1,4 +1,4 @@
-import { GearIcon, SignOutIcon } from "@phosphor-icons/react";
+import { BellIcon, GearIcon, NotePencilIcon, SignOutIcon } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as meSettingsRoute } from "../routes/_app/_protected/me/settings";
 import Avatar from "../ui/Avatar";
@@ -11,6 +11,9 @@ import { useUserLogout } from "@/features/auth/userLogin";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import { useState } from "react";
+import { totalUnreadCountAtom } from "@/atoms/notification";
+import { Route as notificationsRoute } from "@/routes/_app/_protected/me/notifications";
+import { Route as editorRoute } from "../routes/_app/_protected/editor";
 
 export default function AvatarDropdown() {
     const { t } = useTranslation();
@@ -23,8 +26,10 @@ export default function AvatarDropdown() {
 
     const { userLogout } = useUserLogout();
 
+    const totalUnreadCount = useAtomValue(totalUnreadCountAtom);
+
     function UserAvatar() {
-        return <Avatar size="sm" imageUrl={user?.image ?? undefined} username={user?.username || ''} />
+        return <Avatar size="sm" imageUrl={user?.image ?? undefined} username={user?.username || ''} />;
     }
 
     return (
@@ -37,7 +42,11 @@ export default function AvatarDropdown() {
                     ? <button className="btn btn-circle">
                         <span className="loading loading-spinner"></span>
                     </button>
-                    : <UserAvatar />}
+                    :
+                    <div className="indicator">
+                        {totalUnreadCount > 0 && <span className="indicator-item md:hidden badge badge-xs badge-primary">{totalUnreadCount}</span>}
+                        <UserAvatar />
+                    </div>}
             </summary>
             {isOpen && <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-64 p-2 shadow-sm">
                 <li className="list-row">
@@ -51,12 +60,39 @@ export default function AvatarDropdown() {
                         </div>
                     </a>
                 </li>
+                {/* write link (show only in small screen) */}
+                <li onClick={() => {
+                    setIsOpen(false);
+                    navigate({ to: editorRoute.to });
+                }} className="list-row md:hidden">
+                    <a>
+                        <NotePencilIcon size={24} />
+                        <span>{t('btn.write')}</span>
+                    </a>
+                </li>
+                {/* notification link (show only in small screen) */}
+                <li onClick={() => {
+                    setIsOpen(false);
+                    navigate({ to: notificationsRoute.to });
+                }} className="list-row md:hidden">
+                    <a>
+                        <BellIcon size={24} />
+                        {t('nav.notificationBell.tooltip')}
+                        {totalUnreadCount > 0 &&
+                            <span className="badge badge-xs badge-primary">
+                                {totalUnreadCount}
+                            </span>
+                        }
+                    </a>
+                </li>
+                {/* settings link */}
                 <li onClick={() => {
                     setIsOpen(false);
                     navigate({ to: meSettingsRoute.to });
                 }} className="list-row">
                     <a><GearIcon size={24} />{t('btn.settings')}</a>
                 </li>
+                {/* logout link */}
                 <li onClick={() => {
                     userLogout();
                     toast.success(i18n.t('settings.toast.logoutSuccess'));

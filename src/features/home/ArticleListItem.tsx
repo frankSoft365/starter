@@ -20,8 +20,8 @@ export default function ArticleListItem({ article, onDelete, onRemoveFromList }:
     const isOwnStory = user ? article.authorId === user.id : false;
 
     return (
-        <li id={`article-list-item-${article.id}`} className="list-row min-h-64 cursor-pointer grid-cols-5">
-            <div className='flex flex-col justify-between col-span-3'>
+        <li id={`article-list-item-${article.id}`} className="list-row min-h-56 cursor-pointer grid-cols-5 md:grid-cols-7">
+            <div className='flex flex-col justify-between col-span-3 md:col-span-5'>
                 <div className="flex flex-row items-center text-xs md:text-sm gap-1">
                     <Link onClick={(e) => e.stopPropagation()} to={profileRoute.to} params={{ userId: article.authorId }}>
                         <Avatar
@@ -82,7 +82,7 @@ export default function ArticleListItem({ article, onDelete, onRemoveFromList }:
                 </div>
             </div>
             {article.coverImage &&
-                <div className="content-center col-start-4 col-end-6">
+                <div className="content-center col-start-4 col-end-6 md:col-start-6 md:col-end-8">
                     <img
                         src={article.coverImage}
                         alt={t('article.coverAlt')}

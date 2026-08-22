@@ -17,7 +17,7 @@ export default function ArticleList({
     const navigate = useNavigate();
 
     return (
-        <ul className="list w-full lg:w-3xl bg-base-100 shadow-md">
+        <ul className="list w-full lg:w-2xl bg-base-100">
             {articleList.length === 0 && <main className="flex items-center justify-center min-h-screen">
                 <div className="text-3xl text-red-600">
                     {t('article.list.empty')}

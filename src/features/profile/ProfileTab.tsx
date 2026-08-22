@@ -12,6 +12,7 @@ import { Route as profileTabRoute } from "@/routes/_app/_protected/profile/$user
 import Loading from "@/ui/Loading";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
+import { handleShareCopyLink } from "@/utils/copyHelper";
 
 export default function ProfileTab({ children }: { children: React.ReactNode }) {
     const { t } = useTranslation();
@@ -20,6 +21,8 @@ export default function ProfileTab({ children }: { children: React.ReactNode }) 
     const { user, isUserProfileLoading, isLoadingError, error } = useProfile(userId);
     const location = useLocation();
     const navigate = useNavigate();
+
+    const url = `${window.location.origin}/profile/${userId}`;
 
     const profileTabMap = [
         { name: t('profile.tab.home'), path: homeRoute.to },
@@ -41,55 +44,70 @@ export default function ProfileTab({ children }: { children: React.ReactNode }) 
     }
 
     return (
+        // flex-row layout
         <div className="w-full flex">
-            <div className="w-full md:w-3xl shadow-xl">
-                <div className="flex w-full justify-between">
-                    <div className="flex p-5 gap-3">
-                        <div className="inline-flex md:hidden">
-                            <Avatar imageUrl={user?.image ?? ''} username={user?.username ?? ''} />
+            {/* left main layout */}
+            <div className="lg:mx-20 w-2xl">
+                {/* flex-col layout */}
+                <div className="w-full flex flex-col items-center">
+                    <div className="flex w-full justify-between px-2 lg:p-0">
+                        {/* user info */}
+                        <div className="flex p-5 gap-3 px-2">
+                            <div className="inline-flex lg:hidden">
+                                <Avatar imageUrl={user?.image ?? ''} username={user?.username ?? ''} />
+                            </div>
+                            <div className="flex flex-col justify-start">
+                                <div className="w-full text-xl lg:text-4xl lg:my-4 font-bold">{user?.username || t('profile.unknownUsername')}</div>
+                                <span className="opacity-60 lg:hidden">0 follower</span>
+                            </div>
                         </div>
-                        <div>
-                            <div className="w-full text-lg md:text-3xl font-bold">{user?.username || t('profile.unknownUsername')}</div>
+                        {/* 'more' button */}
+                        <div className="flex items-center px-0">
+                            <button className="btn btn-square btn-ghost" popoverTarget="popover-profile-more" style={{ anchorName: "--anchor-1" }} >
+                                <DotsThreeIcon size={24} weight="bold" />
+                            </button>
+                            <ul className="dropdown dropdown-end menu w-42 bg-base-100 shadow-lg"
+                                popover="auto" id="popover-profile-more" style={{ positionAnchor: "--anchor-1" }}>
+                                <li>
+                                    <button className="btn btn-ghost justify-start text-xs" onClick={() => handleShareCopyLink(url)}>
+                                        {t('profile.menu.copyLink')}
+                                    </button>
+                                </li>
+                                <li>
+                                    <button className="btn btn-ghost justify-start text-xs">
+                                        {t('profile.menu.designProfile')}
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div className="flex items-center p-4">
-                        <button className="btn btn-square btn-ghost" popoverTarget="popover-profile-more" style={{ anchorName: "--anchor-1" }} >
-                            <DotsThreeIcon size={24} weight="bold" />
-                        </button>
-                        <ul className="dropdown dropdown-end menu w-42 bg-base-100 shadow-lg"
-                            popover="auto" id="popover-profile-more" style={{ positionAnchor: "--anchor-1" }}>
-                            <li>
-                                <button className="btn btn-ghost justify-start text-xs font-light">
-                                    {t('profile.menu.copyLink')}
-                                </button>
-                            </li>
-                            <li>
-                                <button className="btn btn-ghost justify-start text-xs font-light">
-                                    {t('profile.menu.designProfile')}
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
+                    {/* 'follow' button (show in small screen) */}
+                    {currentUser && currentUser.id !== userId && <button className="inline-flex lg:hidden btn btn-neutral rounded-full w-11/12 mb-3 m-auto">Follow</button>}
+                    {/* profile menu */}
+                    <ul className="menu w-full gap-1.5 bg-base-100 menu-horizontal border-b-2 border-base-300">
+                        {profileTabMap.map((item, index) => {
+                            return (
+                                <li key={index}>
+                                    <a className={location.pathname === item.path.replace('$userId', userId) ? "menu-active" : ''} onClick={() => navigate({ to: item.path, params: { userId: userId } })}>
+                                        {item.name}
+                                    </a>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                    {/* outlet */}
+                    <div>{children}</div>
                 </div>
-                <ul className="menu bg-base-100 menu-horizontal shadow-xs">
-                    {profileTabMap.map((item, index) => {
-                        return (
-                            <li key={index}>
-                                <a className={location.pathname === item.path.replace('$userId', userId) ? "menu-active" : ''} onClick={() => navigate({ to: item.path, params: { userId: userId } })}>
-                                    {item.name}
-                                </a>
-                            </li>
-                        );
-                    })}
-
-                </ul>
-                {/* outlet */}
-                <div>{children}</div>
             </div>
-            <div className="hidden md:inline-flex md:w-1.5xl md:flex-col md:p-6 md:items-start gap-3">
-                <Avatar imageUrl={user?.image ?? ''} username={user?.username ?? ''} />
+            {/* right lg-screen-show profile info */}
+            <div className="hidden lg:inline-flex lg:grow lg:flex-col lg:p-12 lg:items-start gap-3 lg:border-l-2 lg:border-base-300">
+                <Avatar imageUrl={user?.image ?? ''} username={user?.username ?? ''} size="lg" />
                 <p className="font-bold text-lg">{user?.username}</p>
+                <span className="opacity-60">0 follower</span>
+                {/* link to profile edit page */}
                 {currentUser && currentUser.id === userId && <Link to='/me/settings' className="text-green-500 hover:text-black">{t('profile.editProfile')}</Link>}
+                {/* 'follow' button */}
+                {currentUser && currentUser.id !== userId && <button className="btn btn-neutral rounded-full mt-2">Follow</button>}
             </div>
         </div>
     );

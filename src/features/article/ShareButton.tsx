@@ -1,21 +1,10 @@
+import { handleShareCopyLink } from "@/utils/copyHelper";
 import { ExportIcon, LinkIcon, XLogoIcon } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 
 export default function ShareButton({ articleId, title }: { articleId: string, title: string }) {
     const { t } = useTranslation();
     const url = `${window.location.origin}/article/${articleId}`;
-
-    async function handleShareCopyLink() {
-
-        try {
-            await navigator.clipboard.writeText(url);
-            toast.success('Link copied');
-        } catch (err) {
-            console.error('Clipboard write failed', err);
-            toast.error('Failed to copy link, please copy manually');
-        }
-    }
 
     async function handleShareToX() {
         window.open(
@@ -32,7 +21,7 @@ export default function ShareButton({ articleId, title }: { articleId: string, t
             <ul className="dropdown menu w-42 bg-base-100 shadow-lg"
                 popover="auto" id="popover-share" style={{ positionAnchor: "--anchor-share" }}>
                 <li>
-                    <button className="btn btn-ghost justify-start" onClick={handleShareCopyLink}>
+                    <button className="btn btn-ghost justify-start" onClick={() => handleShareCopyLink(url)}>
                         <LinkIcon size={24} weight="light" />
                         {t('btn.copyLink')}
                     </button>

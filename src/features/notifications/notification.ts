@@ -14,7 +14,9 @@ export function useUnreadCountQuery() {
     });
 
     useEffect(() => {
-        if (query.data) setUnreadCount(query.data);
+        if (query.data) {
+            setUnreadCount(query.data);
+        }
     }, [query.data, setUnreadCount]);
 
     return query;

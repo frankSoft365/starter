@@ -11,6 +11,7 @@ import CollectionListInfo from "./CollectionListInfo";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
 import { Route as listsRoute } from "@/routes/_app/_protected/profile/$userId/_profile/lists";
+import { BookmarkSimpleIcon } from "@phosphor-icons/react";
 
 const COVER_PREVIEW_MAX = 3;
 
@@ -29,14 +30,20 @@ export default function Lists() {
                         {t('common.error')}: {error.message}
                     </p>
                     <button
-                        onClick={() => queryClient.invalidateQueries({ queryKey: ['collection-lists'] })}
+                        onClick={() => queryClient.invalidateQueries({ queryKey: ['collection-lists', userId] })}
                         className="btn btn-sm btn-outline"
                     >
                         {t('common.retry')}
                     </button>
                 </div>
             )}
-            {status === 'success' && (
+            {status === 'success' && lists.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-24 opacity-60">
+                    <BookmarkSimpleIcon size={48} weight="light" />
+                    <p className="mt-4">{t('profile.list.emptyList')}</p>
+                </div>
+            )}
+            {status === 'success' && lists.length > 0 && (
                 <ul className="list bg-base-100 rounded-box shadow-md">
                     {lists.map((list) => (
                         <CollectionListRow key={list.id} list={list} />
