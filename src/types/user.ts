@@ -7,6 +7,9 @@ export type UserVO = {
     email: string;
     role: string;
     image: string | null;
+    createTime: Date;
+    followerCount: number;
+    followingCount: number;
 }
 
 export type UserUpdateRequest = {

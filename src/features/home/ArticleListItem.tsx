@@ -1,7 +1,5 @@
-import { ChatCircleDotsIcon, HandsClappingIcon, RepeatIcon, ThumbsDownIcon } from "@phosphor-icons/react";
+import { BookmarkIcon, ChatCircleDotsIcon, HandsClappingIcon, RepeatIcon, ThumbsDownIcon } from "@phosphor-icons/react";
 import type { ArticleListItemVO } from "@/types/article";
-import Avatar from "@/ui/Avatar";
-import { getPublishDate } from "@/utils/dateHelper";
 import ArticleMenuButton from "@/ui/ArticleMenuButton";
 import { objectPositionFromRatio } from "@/utils/coverFocus";
 import { useTranslation } from "react-i18next";
@@ -10,8 +8,9 @@ import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
 import MoreButton from "../article/MoreButton";
 import SaveButton from "../article/SaveButton";
-import { Link } from "@tanstack/react-router";
-import { Route as profileRoute } from "@/routes/_app/_protected/profile/$userId/_profile/index";
+import ArticleAuthorInfo from "@/ui/ArticleAuthorInfo";
+import SignedIn from "@/ui/SignedIn";
+import SignedOut from "@/ui/SignedOut";
 
 export default function ArticleListItem({ article, onDelete, onRemoveFromList }: { article: ArticleListItemVO; onDelete: () => void; onRemoveFromList?: () => void }) {
     const { t } = useTranslation();
@@ -22,21 +21,13 @@ export default function ArticleListItem({ article, onDelete, onRemoveFromList }:
     return (
         <li id={`article-list-item-${article.id}`} className="list-row min-h-56 cursor-pointer grid-cols-5 md:grid-cols-7">
             <div className='flex flex-col justify-between col-span-3 md:col-span-5'>
-                <div className="flex flex-row items-center text-xs md:text-sm gap-1">
-                    <Link onClick={(e) => e.stopPropagation()} to={profileRoute.to} params={{ userId: article.authorId }}>
-                        <Avatar
-                            imageUrl={article.authorAvatar}
-                            username={article.authorName}
-                            size="sm"
-                            hover={true}
-                        />
-                    </Link>
-                    <Link onClick={(e) => e.stopPropagation()} className="link link-hover" to={profileRoute.to} params={{ userId: article.authorId }}>
-                        <span className="ml-1.5">{article.authorName}</span>
-                    </Link>
-                    <span>·</span>
-                    <span className="opacity-60">{getPublishDate(new Date(article.publishTime))}</span>
-                </div>
+                <ArticleAuthorInfo
+                    authorId={article.authorId}
+                    authorAvatar={article.authorAvatar}
+                    authorName={article.authorName}
+                    publishTime={article.publishTime}
+                    className="text-xs md:text-sm"
+                />
                 {/* article content */}
                 <div>
                     <p className="text-lg md:text-2xl font-sans font-bold text-wrap mt-1 mb-2.5">
@@ -75,7 +66,16 @@ export default function ArticleListItem({ article, onDelete, onRemoveFromList }:
                             </button>
                         </div>
                         {/* save button */}
-                        <SaveButton articleId={article.id} />
+                        <SignedIn>
+                            <SaveButton articleId={article.id} />
+                        </SignedIn>
+                        <SignedOut>
+                            <div className="lg:tooltip" data-tip={t('btn.favorite')}>
+                                <button type="button" className="btn btn-square btn-ghost" disabled>
+                                    <BookmarkIcon size={24} weight="light" />
+                                </button>
+                            </div>
+                        </SignedOut>
                         {/* more button */}
                         <MoreButton isOwnStory={isOwnStory} authorId={article.authorId} articleId={article.id} onDelete={onDelete} onRemoveFromList={onRemoveFromList} />
                     </div>

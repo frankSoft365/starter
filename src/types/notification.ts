@@ -2,10 +2,10 @@ export interface NotificationVO {
     id: string;
     recipientId: string;
     actorId: string;
-    actorAvatar: string;
-    actorUsername: string;
-    type: 'NEW_COMMENT' | 'NEW_REPLY' | 'LIKE_ARTICLE' | 'LIKE_COMMENT';
-    targetType: 'ARTICLE' | 'COMMENT';
+    actorAvatar: string | null;
+    actorUsername: string | null;
+    type: 'NEW_COMMENT' | 'NEW_REPLY' | 'LIKE_ARTICLE' | 'LIKE_COMMENT' | 'NEW_FOLLOWER';
+    targetType: 'ARTICLE' | 'COMMENT' | 'USER';
     targetId: string;
     isNew: number; // 0 is new ; 1 is old
     createTime: string;
@@ -21,6 +21,11 @@ export interface ReplyNotificationVO extends NotificationVO {
 export interface LikeNotificationVO extends NotificationVO {
     article: ArticleBriefDTO;
     comment: CommentBriefDTO | null;
+}
+
+export interface FollowNotificationVO extends NotificationVO {
+    type: 'NEW_FOLLOWER';
+    targetType: 'USER';
 }
 
 export type UnreadCountVO = {

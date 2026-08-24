@@ -22,6 +22,8 @@ import { Route as AppProtectedMeSettingsRouteImport } from './routes/_app/_prote
 import { Route as AppProtectedMePasswordRouteImport } from './routes/_app/_protected/me/password'
 import { Route as AppProtectedMeNotificationsRouteRouteImport } from './routes/_app/_protected/me/notifications/route'
 import { Route as AppProtectedMeNotificationsIndexRouteImport } from './routes/_app/_protected/me/notifications/index'
+import { Route as AppProtectedProfileUserIdFollowingRouteImport } from './routes/_app/_protected/profile/$userId/following'
+import { Route as AppProtectedProfileUserIdFollowersRouteImport } from './routes/_app/_protected/profile/$userId/followers'
 import { Route as AppProtectedMeNotificationsLikeRouteImport } from './routes/_app/_protected/me/notifications/like'
 import { Route as AppProtectedMeNotificationsFollowRouteImport } from './routes/_app/_protected/me/notifications/follow'
 import { Route as AppProtectedArticlesEditArticleIdRouteImport } from './routes/_app/_protected/articles.edit.$articleId'
@@ -97,6 +99,18 @@ const AppProtectedMeNotificationsIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => AppProtectedMeNotificationsRouteRoute,
+  } as any)
+const AppProtectedProfileUserIdFollowingRoute =
+  AppProtectedProfileUserIdFollowingRouteImport.update({
+    id: '/profile/$userId/following',
+    path: '/profile/$userId/following',
+    getParentRoute: () => AppProtectedRouteRoute,
+  } as any)
+const AppProtectedProfileUserIdFollowersRoute =
+  AppProtectedProfileUserIdFollowersRouteImport.update({
+    id: '/profile/$userId/followers',
+    path: '/profile/$userId/followers',
+    getParentRoute: () => AppProtectedRouteRoute,
   } as any)
 const AppProtectedMeNotificationsLikeRoute =
   AppProtectedMeNotificationsLikeRouteImport.update({
@@ -174,6 +188,8 @@ export interface FileRoutesByFullPath {
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
   '/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
   '/me/notifications/like': typeof AppProtectedMeNotificationsLikeRoute
+  '/profile/$userId/followers': typeof AppProtectedProfileUserIdFollowersRoute
+  '/profile/$userId/following': typeof AppProtectedProfileUserIdFollowingRoute
   '/me/notifications/': typeof AppProtectedMeNotificationsIndexRoute
   '/profile/$userId/about': typeof AppProtectedProfileUserIdProfileAboutRoute
   '/profile/$userId/activity': typeof AppProtectedProfileUserIdProfileActivityRoute
@@ -195,6 +211,8 @@ export interface FileRoutesByTo {
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
   '/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
   '/me/notifications/like': typeof AppProtectedMeNotificationsLikeRoute
+  '/profile/$userId/followers': typeof AppProtectedProfileUserIdFollowersRoute
+  '/profile/$userId/following': typeof AppProtectedProfileUserIdFollowingRoute
   '/me/notifications': typeof AppProtectedMeNotificationsIndexRoute
   '/profile/$userId/about': typeof AppProtectedProfileUserIdProfileAboutRoute
   '/profile/$userId/activity': typeof AppProtectedProfileUserIdProfileActivityRoute
@@ -221,6 +239,8 @@ export interface FileRoutesById {
   '/_app/_protected/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
   '/_app/_protected/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
   '/_app/_protected/me/notifications/like': typeof AppProtectedMeNotificationsLikeRoute
+  '/_app/_protected/profile/$userId/followers': typeof AppProtectedProfileUserIdFollowersRoute
+  '/_app/_protected/profile/$userId/following': typeof AppProtectedProfileUserIdFollowingRoute
   '/_app/_protected/me/notifications/': typeof AppProtectedMeNotificationsIndexRoute
   '/_app/_protected/profile/$userId/_profile/about': typeof AppProtectedProfileUserIdProfileAboutRoute
   '/_app/_protected/profile/$userId/_profile/activity': typeof AppProtectedProfileUserIdProfileActivityRoute
@@ -246,6 +266,8 @@ export interface FileRouteTypes {
     | '/articles/edit/$articleId'
     | '/me/notifications/follow'
     | '/me/notifications/like'
+    | '/profile/$userId/followers'
+    | '/profile/$userId/following'
     | '/me/notifications/'
     | '/profile/$userId/about'
     | '/profile/$userId/activity'
@@ -267,6 +289,8 @@ export interface FileRouteTypes {
     | '/articles/edit/$articleId'
     | '/me/notifications/follow'
     | '/me/notifications/like'
+    | '/profile/$userId/followers'
+    | '/profile/$userId/following'
     | '/me/notifications'
     | '/profile/$userId/about'
     | '/profile/$userId/activity'
@@ -292,6 +316,8 @@ export interface FileRouteTypes {
     | '/_app/_protected/articles/edit/$articleId'
     | '/_app/_protected/me/notifications/follow'
     | '/_app/_protected/me/notifications/like'
+    | '/_app/_protected/profile/$userId/followers'
+    | '/_app/_protected/profile/$userId/following'
     | '/_app/_protected/me/notifications/'
     | '/_app/_protected/profile/$userId/_profile/about'
     | '/_app/_protected/profile/$userId/_profile/activity'
@@ -399,6 +425,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/me/notifications/'
       preLoaderRoute: typeof AppProtectedMeNotificationsIndexRouteImport
       parentRoute: typeof AppProtectedMeNotificationsRouteRoute
+    }
+    '/_app/_protected/profile/$userId/following': {
+      id: '/_app/_protected/profile/$userId/following'
+      path: '/profile/$userId/following'
+      fullPath: '/profile/$userId/following'
+      preLoaderRoute: typeof AppProtectedProfileUserIdFollowingRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
+    }
+    '/_app/_protected/profile/$userId/followers': {
+      id: '/_app/_protected/profile/$userId/followers'
+      path: '/profile/$userId/followers'
+      fullPath: '/profile/$userId/followers'
+      preLoaderRoute: typeof AppProtectedProfileUserIdFollowersRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
     }
     '/_app/_protected/me/notifications/like': {
       id: '/_app/_protected/me/notifications/like'
@@ -528,6 +568,8 @@ interface AppProtectedRouteRouteChildren {
   AppProtectedMeSettingsRoute: typeof AppProtectedMeSettingsRoute
   AppProtectedProfileUserIdProfileRouteRoute: typeof AppProtectedProfileUserIdProfileRouteRouteWithChildren
   AppProtectedArticlesEditArticleIdRoute: typeof AppProtectedArticlesEditArticleIdRoute
+  AppProtectedProfileUserIdFollowersRoute: typeof AppProtectedProfileUserIdFollowersRoute
+  AppProtectedProfileUserIdFollowingRoute: typeof AppProtectedProfileUserIdFollowingRoute
   AppProtectedProfileUserIdListsListIdRoute: typeof AppProtectedProfileUserIdListsListIdRoute
 }
 
@@ -542,6 +584,10 @@ const AppProtectedRouteRouteChildren: AppProtectedRouteRouteChildren = {
     AppProtectedProfileUserIdProfileRouteRouteWithChildren,
   AppProtectedArticlesEditArticleIdRoute:
     AppProtectedArticlesEditArticleIdRoute,
+  AppProtectedProfileUserIdFollowersRoute:
+    AppProtectedProfileUserIdFollowersRoute,
+  AppProtectedProfileUserIdFollowingRoute:
+    AppProtectedProfileUserIdFollowingRoute,
   AppProtectedProfileUserIdListsListIdRoute:
     AppProtectedProfileUserIdListsListIdRoute,
 }

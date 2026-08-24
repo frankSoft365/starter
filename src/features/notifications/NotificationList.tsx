@@ -4,22 +4,24 @@ import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { getNotificationList, markAsRead as markNotificationAsRead } from "@/services/apiNotification";
 import type { CursorPageRequest } from "@/types/comment";
-import type { LikeNotificationVO, NotificationVO, ReplyNotificationVO, UnreadCountVO } from "@/types/notification";
+import type { FollowNotificationVO, LikeNotificationVO, NotificationVO, ReplyNotificationVO, UnreadCountVO } from "@/types/notification";
 import { useRouter } from "@tanstack/react-router";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import { useSetAtom } from "jotai";
 import { unreadCountAtom } from "@/atoms/notification";
 import { useTranslation } from "react-i18next";
+import { UserHoverLink } from "@/ui/ArticleAuthorInfo";
 
 
 type NotificationListType = 'reply' | 'like' | 'follow';
-export type NotificationItem = ReplyNotificationVO | LikeNotificationVO;
+export type NotificationItem = ReplyNotificationVO | LikeNotificationVO | FollowNotificationVO;
 
 const notificationActionTextMap: Record<NotificationVO['type'], string> = {
     NEW_COMMENT: 'notification.action.commentedArticle',
     NEW_REPLY: 'notification.action.repliedComment',
     LIKE_ARTICLE: 'notification.action.likedArticle',
     LIKE_COMMENT: 'notification.action.likedComment',
+    NEW_FOLLOWER: 'notification.action.followedYou',
 };
 
 function isReplyNotification(n: NotificationItem): n is ReplyNotificationVO {
@@ -28,6 +30,10 @@ function isReplyNotification(n: NotificationItem): n is ReplyNotificationVO {
 
 function isLikeNotification(n: NotificationItem): n is LikeNotificationVO {
     return n.type === 'LIKE_ARTICLE' || n.type === 'LIKE_COMMENT';
+}
+
+function isFollowNotification(n: NotificationItem): n is FollowNotificationVO {
+    return n.type === 'NEW_FOLLOWER';
 }
 
 const unreadCountFieldMap: Record<NotificationListType, keyof UnreadCountVO> = {
@@ -70,6 +76,7 @@ export default function NotificationList({
         initialPageParam: {
             lastCreatedAt: null,
             lastId: null,
+            size: 12,
         } as CursorPageRequest,
         getNextPageParam: (lastPage) => {
             if (!lastPage.hasMore) {
@@ -79,6 +86,7 @@ export default function NotificationList({
             return {
                 lastCreatedAt: lastPage.nextCursorCreatedAt,
                 lastId: lastPage.nextCursorId,
+                size: 12,
             };
         },
     });
@@ -140,25 +148,19 @@ export default function NotificationList({
 
     const notificationItems = data?.pages.flatMap((page) => page.items as NotificationItem[]) ?? [];
 
-    function NotificationRow({ notification, children }: { notification: NotificationItem, children: React.ReactNode }) {
+    function getNotificationUrl(notification: NotificationItem) {
+        if (isFollowNotification(notification)) {
+            return undefined;
+        }
+
         const hash = notification.type === 'LIKE_ARTICLE' ? undefined : `reply${notification.targetId}`;
-        const url = notification.article
+        return notification.article
             ? router.buildLocation({
                 to: articleRoute.to,
                 params: { articleId: notification.article.id },
                 ...(hash && { hash }),
             }).href
             : undefined;
-
-        return (
-            <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                {children}
-            </a>
-        );
     }
 
     return (
@@ -178,29 +180,50 @@ export default function NotificationList({
                 notificationItems.length > 0 ?
                     <ul className="list space-y-3">
                         {notificationItems.map((notification, index) => {
+                            const actorUsername = notification.actorUsername || t('profile.unknownUsername');
+                            const notificationUrl = getNotificationUrl(notification);
+                            const openNotification = () => {
+                                if (notificationUrl) {
+                                    window.open(notificationUrl, '_blank', 'noopener,noreferrer');
+                                }
+                            };
                             return (
                                 <div key={notification.id}>
                                     {index !== 0 && notification.id === watermarkRef.current && <div className="divider">{t('notification.watermark')}</div>}
-                                    <NotificationRow notification={notification} >
-                                        <li
-                                            className='list-row'
-                                        >
+                                    <li
+                                        className={`list-row ${notificationUrl ? 'cursor-pointer' : ''}`}
+                                        role={notificationUrl ? 'link' : undefined}
+                                        tabIndex={notificationUrl ? 0 : undefined}
+                                        onClick={notificationUrl ? openNotification : undefined}
+                                        onKeyDown={notificationUrl ? (event) => {
+                                            if (event.key === 'Enter') {
+                                                openNotification();
+                                            }
+                                        } : undefined}
+                                    >
                                             <div className="indicator">
                                                 {notification.isNew === 0 && <span className="indicator-item status status-error"></span>}
                                                 <div className="grid h-10 w-10 place-items-center">
-                                                    <Avatar
-                                                        imageUrl={notification.actorAvatar || undefined}
-                                                        username={notification.actorUsername || ''}
-                                                        size="sm"
-                                                    />
+                                                    <UserHoverLink userId={notification.actorId}>
+                                                        <Avatar
+                                                            imageUrl={notification.actorAvatar || undefined}
+                                                            username={actorUsername}
+                                                            size="sm"
+                                                            hover
+                                                        />
+                                                    </UserHoverLink>
                                                 </div>
                                             </div>
 
                                             <div className="min-w-0 flex-1">
                                                 <div className="text-sm">
-                                                    <span className="font-semibold mr-3">
-                                                        {notification.actorUsername}
-                                                    </span>
+                                                    <UserHoverLink
+                                                        userId={notification.actorId}
+                                                        className="inline-block mr-3"
+                                                        linkClassName="link link-hover font-semibold"
+                                                    >
+                                                        <span>{actorUsername}</span>
+                                                    </UserHoverLink>
                                                     <span className="opacity-65">
                                                         {t(notificationActionTextMap[notification.type])}
                                                     </span>
@@ -235,7 +258,7 @@ export default function NotificationList({
                                                 </span>
                                             </div>
                                             {/* right column */}
-                                            <div className="font-bold w-24 md:w-32">
+                                            {!isFollowNotification(notification) && <div className="font-bold w-24 md:w-32">
                                                 {isReplyNotification(notification) && (
                                                     <>
                                                         {notification.targetType === 'ARTICLE' &&
@@ -268,9 +291,8 @@ export default function NotificationList({
                                                         }
                                                     </>
                                                 )}
-                                            </div>
-                                        </li>
-                                    </NotificationRow>
+                                            </div>}
+                                    </li>
 
                                 </div>
                             );

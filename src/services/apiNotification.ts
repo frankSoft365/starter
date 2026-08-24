@@ -1,6 +1,6 @@
 import type { CursorPageRequest } from "@/types/comment";
 import request from "../utils/request";
-import type { LikeNotificationVO, NotificationCursorPage, ReplyNotificationVO, UnreadCountVO } from "@/types/notification";
+import type { FollowNotificationVO, LikeNotificationVO, NotificationCursorPage, ReplyNotificationVO, UnreadCountVO } from "@/types/notification";
 
 type NotificationListType = 'reply' | 'like' | 'follow';
 type NotificationListPage<T extends NotificationListType> =
@@ -8,7 +8,7 @@ type NotificationListPage<T extends NotificationListType> =
     ? NotificationCursorPage<ReplyNotificationVO>
     : T extends 'like'
     ? NotificationCursorPage<LikeNotificationVO>
-    : NotificationCursorPage<ReplyNotificationVO>;
+    : NotificationCursorPage<FollowNotificationVO>;
 
 export async function getNotificationList<T extends NotificationListType>(type: T, params: CursorPageRequest, watermarkVar: string | null): Promise<NotificationListPage<T>> {
     return request.post<CursorPageRequest, NotificationListPage<T>>(`/notifications/getList?type=${type}${watermarkVar ? watermarkVar : ''}`, params);

@@ -1,4 +1,5 @@
 import Avatar from "@/ui/Avatar";
+import { ProfileUserProvider } from './ProfileUserContext'
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { DotsThreeIcon } from "@phosphor-icons/react";
 import { Route as homeRoute } from "@/routes/_app/_protected/profile/$userId/_profile/index";
@@ -10,14 +11,14 @@ import { useTranslation } from "react-i18next";
 import { useProfile } from "../account/userProfile";
 import { Route as profileTabRoute } from "@/routes/_app/_protected/profile/$userId/_profile/route";
 import Loading from "@/ui/Loading";
-import { useAtomValue } from "jotai";
-import { userAtom } from "@/atoms/user";
 import { handleShareCopyLink } from "@/utils/copyHelper";
+import CurrentUser from "@/ui/CurrentUser";
+import FollowStats from "../follow/FollowStats";
+import FollowButton from "../follow/FollowButton";
 
 export default function ProfileTab({ children }: { children: React.ReactNode }) {
     const { t } = useTranslation();
     const { userId } = profileTabRoute.useParams();
-    const currentUser = useAtomValue(userAtom);
     const { user, isUserProfileLoading, isLoadingError, error } = useProfile(userId);
     const location = useLocation();
     const navigate = useNavigate();
@@ -58,7 +59,12 @@ export default function ProfileTab({ children }: { children: React.ReactNode }) 
                             </div>
                             <div className="flex flex-col justify-start">
                                 <div className="w-full text-xl lg:text-4xl lg:my-4 font-bold">{user?.username || t('profile.unknownUsername')}</div>
-                                <span className="opacity-60 lg:hidden">0 follower</span>
+                                <FollowStats
+                                    userId={userId}
+                                    followerCount={user?.followerCount}
+                                    type="followers"
+                                    className="opacity-60 lg:hidden"
+                                />
                             </div>
                         </div>
                         {/* 'more' button */}
@@ -73,18 +79,16 @@ export default function ProfileTab({ children }: { children: React.ReactNode }) 
                                         {t('profile.menu.copyLink')}
                                     </button>
                                 </li>
-                                <li>
-                                    <button className="btn btn-ghost justify-start text-xs">
-                                        {t('profile.menu.designProfile')}
-                                    </button>
-                                </li>
                             </ul>
                         </div>
                     </div>
                     {/* 'follow' button (show in small screen) */}
-                    {currentUser && currentUser.id !== userId && <button className="inline-flex lg:hidden btn btn-neutral rounded-full w-11/12 mb-3 m-auto">Follow</button>}
+                    <CurrentUser
+                        authorId={userId}
+                        fallback={<FollowButton userId={userId} className="inline-flex lg:hidden w-11/12 mb-3 mx-auto" />}
+                    />
                     {/* profile menu */}
-                    <ul className="menu w-full gap-1.5 bg-base-100 menu-horizontal border-b-2 border-base-300">
+                    <ul className="menu w-full bg-base-100 menu-horizontal border-b-2 border-base-300">
                         {profileTabMap.map((item, index) => {
                             return (
                                 <li key={index}>
@@ -96,18 +100,30 @@ export default function ProfileTab({ children }: { children: React.ReactNode }) 
                         })}
                     </ul>
                     {/* outlet */}
-                    <div>{children}</div>
+                    <ProfileUserProvider user={user}>
+                        <div className="w-full">{children}</div>
+                    </ProfileUserProvider>
                 </div>
             </div>
             {/* right lg-screen-show profile info */}
             <div className="hidden lg:inline-flex lg:grow lg:flex-col lg:p-12 lg:items-start gap-3 lg:border-l-2 lg:border-base-300">
                 <Avatar imageUrl={user?.image ?? ''} username={user?.username ?? ''} size="lg" />
                 <p className="font-bold text-lg">{user?.username}</p>
-                <span className="opacity-60">0 follower</span>
+                <FollowStats
+                    userId={userId}
+                    followerCount={user?.followerCount}
+                    type="followers"
+                    className="opacity-60"
+                />
                 {/* link to profile edit page */}
-                {currentUser && currentUser.id === userId && <Link to='/me/settings' className="text-green-500 hover:text-black">{t('profile.editProfile')}</Link>}
+                <CurrentUser authorId={userId}>
+                    <Link to='/me/settings' className="text-green-500 hover:text-black">{t('profile.editProfile')}</Link>
+                </CurrentUser>
                 {/* 'follow' button */}
-                {currentUser && currentUser.id !== userId && <button className="btn btn-neutral rounded-full mt-2">Follow</button>}
+                <CurrentUser
+                    authorId={userId}
+                    fallback={<FollowButton userId={userId} className="mt-2" />}
+                />
             </div>
         </div>
     );

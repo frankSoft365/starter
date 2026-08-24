@@ -1,5 +1,5 @@
+import NotificationList from '@/features/notifications/NotificationList'
 import { createFileRoute } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute(
     '/_app/_protected/me/notifications/follow',
@@ -8,10 +8,5 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    const { t } = useTranslation();
-    return (
-        <div className="p-6">
-            {t('notification.tab.follow')}
-        </div>
-    );
+    return <NotificationList type="follow" />
 }

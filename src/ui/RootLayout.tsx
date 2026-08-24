@@ -23,9 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <NavBar />
             <div className="drawer md:drawer-open">
                 <input id="my-drawer-4" type="checkbox" className="drawer-toggle" checked={drawerOpen} onChange={(e) => setDrawerOpen(e.target.checked)} />
-                <div className="drawer-content">
+                <div className="drawer-content flex flex-col min-h-dvh">
                     {/* Page content here */}
-                    {children}
+                    <div className="flex-1">{children}</div>
                     {!isEditorRoute && !isArticleEditRoute && <Footer />}
                 </div>
                 <DrawerSide onNav={setDrawerOpen} />

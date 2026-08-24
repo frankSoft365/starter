@@ -31,19 +31,30 @@ export function useUserProfile() {
     });
 }
 
-export function useProfile(userId: string) {
-    const { data: user, isLoading: isUserProfileLoading, isError: isLoadingError, error } = useQuery({
-        queryKey: ['get-profile', userId],
+export function useProfile(userId: string, enabled = true) {
+    const queryClient = useQueryClient();
+    const queryKey = ['get-profile', userId];
+    const {
+        data: user,
+        isLoading: isUserProfileLoading,
+        isFetching: isUserProfileFetching,
+        isError: isLoadingError,
+        error,
+    } = useQuery({
+        queryKey,
         queryFn: async () => {
             const userInfo = await getSomeUser(userId);
             return userInfo;
-        }
+        },
+        enabled,
     })
     return ({
         user,
         isUserProfileLoading,
+        isUserProfileFetching,
         isLoadingError,
-        error
+        error,
+        retryUserProfile: () => queryClient.invalidateQueries({ queryKey }),
     });
 }
 

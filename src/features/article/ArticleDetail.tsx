@@ -1,7 +1,6 @@
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import Loading from "@/ui/Loading";
 import Avatar from "@/ui/Avatar";
-import { getPublishDate } from "@/utils/dateHelper";
 import EditorComponent from "@/ui/EditorComponent";
 import { ChatCircleDotsIcon, HandsClappingIcon, RepeatIcon } from "@phosphor-icons/react";
 import ArticleMenuButton from "@/ui/ArticleMenuButton";
@@ -22,6 +21,8 @@ import { useTranslation } from "react-i18next";
 import DeleteArticleModal from "./DeleteArticleModal";
 import MoreButton from "./MoreButton";
 import SaveButton from "./SaveButton";
+import { TopicShow } from "@/ui/Topic";
+import ArticleAuthorInfo from "@/ui/ArticleAuthorInfo";
 
 export default function ArticleDetail() {
     const { t } = useTranslation();
@@ -85,15 +86,20 @@ export default function ArticleDetail() {
                 </div>
             </main>}
             {!isLoading && !isError && article && <>
-                <div className="flex flex-col items-center w-full lg:w-3xl mx-auto">
-                    {/* Title */}
-                    <h1 className="text-center font-sans font-bold text-3xl lg:text-5xl m-6">{title}</h1>
-                    {/* Author info */}
-                    <div className="flex flex-row items-center text-sm gap-1">
-                        <Avatar imageUrl={article.authorAvatar} username={article.authorName} size="sm" />
-                        <span className="ml-1.5">{article.authorName}</span>
-                        <span>·</span>
-                        <span className="opacity-60">{getPublishDate(new Date(article.publishTime))}</span>
+                <div className="flex flex-col items-center w-full md:w-3xl mx-auto p-4">
+                    <div className="flex flex-col items-start w-full">
+                        {/* topics show */}
+                        <div className="mt-6 flex flex-wrap gap-2">{article.topics.map(topicVO => <TopicShow topicContent={topicVO.name} />)}</div>
+                        {/* Title */}
+                        <h1 className="font-sans font-bold text-3xl lg:text-5xl my-6">{title}</h1>
+                        {/* Author info */}
+                        <ArticleAuthorInfo
+                            authorId={article.authorId}
+                            authorAvatar={article.authorAvatar}
+                            authorName={article.authorName}
+                            publishTime={article.publishTime}
+                            className="text-sm"
+                        />
                     </div>
                     {/* Interaction Bar */}
                     <div className="divider mb-0"></div>
@@ -141,19 +147,19 @@ export default function ArticleDetail() {
                         </div>
                     </div>
                     <div className="divider mt-0"></div>
+                    {/* editor */}
+                    <div className="w-full -ml-26">
+                        <EditorComponent
+                            editor={editor}
+                            editable={false}
+                        />
+                    </div>
                 </div>
                 {/* Delete article Modal */}
                 <DeleteArticleModal
                     articleId={deleteArticleId}
                     onClose={() => setDeleteArticleId(null)}
                 />
-                {/* editor */}
-                <div className="w-full md:w-4xl mx-auto">
-                    <EditorComponent
-                        editor={editor}
-                        editable={false}
-                    />
-                </div>
                 {/* comment area */}
                 <div className="divider mb-0"></div>
                 <SignedOut>

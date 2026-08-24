@@ -19,3 +19,7 @@ export function formatDateTime(date: Date): string {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
+
+export function formatMonthYear(date: Date, locale = 'en') {
+    return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(date);
+}

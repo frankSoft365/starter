@@ -5,7 +5,7 @@ import {
     QueryClient,
     QueryClientProvider,
 } from '@tanstack/react-query'
-// import { DevTools } from 'jotai-devtools'
+import { DevTools } from 'jotai-devtools'
 import 'jotai-devtools/styles.css'
 import Auth from '@/features/auth/Auth'
 
@@ -19,7 +19,7 @@ const RootLayout = () => (
                 <Toaster position="top-center" richColors duration={2000} gap={28} />
             </Auth>
             <TanStackRouterDevtools />
-            {/* <DevTools position='bottom-right' /> */}
+            <DevTools position='bottom-right' />
         </QueryClientProvider>
     </>
 )

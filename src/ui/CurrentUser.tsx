@@ -1,12 +1,20 @@
 import { userAtom } from "@/atoms/user";
 import { useAtomValue } from "jotai";
 
-export default function CurrentUser({ authorId, children }: { authorId: string, children: React.ReactNode }) {
+export default function CurrentUser({
+    authorId,
+    children,
+    fallback = null,
+}: {
+    authorId: string;
+    children?: React.ReactNode;
+    fallback?: React.ReactNode;
+}) {
     const user = useAtomValue(userAtom);
 
     if (!user || user.id !== authorId) {
-        return null;
+        return fallback;
     }
 
-    return children;
+    return children ?? null;
 }

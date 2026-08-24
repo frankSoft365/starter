@@ -10,7 +10,6 @@ export function useUnreadCountQuery() {
     const query = useQuery({
         queryKey: ['unreadCount'],
         queryFn: getUnreadCount,
-        staleTime: Infinity,
     });
 
     useEffect(() => {

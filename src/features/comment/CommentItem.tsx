@@ -37,6 +37,7 @@ export default function CommentItem({
     const actionSize = isSmall ? "btn-xs" : "btn-sm";
     const headingSize = isSmall ? "text-xs" : "text-sm";
     const bodySize = isSmall ? "text-sm" : "text-base";
+    const createdAtStrSize = isSmall ? 'text-sm' : 'text-base';
 
     const createdAtStr = formatDateTime(new Date(createdAt));
 
@@ -62,7 +63,7 @@ export default function CommentItem({
                     {body}
                 </p>
                 <div className="flex flex-row items-center justify-start">
-                    {createdAtStr ? <span className="opacity-60">{createdAtStr}</span> : null}
+                    {createdAtStr ? <span className={`opacity-60 ${createdAtStrSize}`}>{createdAtStr}</span> : null}
                     <button
                         type="button"
                         onClick={onLike}

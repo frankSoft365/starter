@@ -8,7 +8,7 @@ export default function LanguageBtn() {
             <div tabIndex={0} role="button" className="btn btn-square btn-ghost mr-2">
                 <GlobeIcon size={24} />
             </div>
-            <ul tabIndex={-1} className="dropdown-content bg-base-100 rounded-box z-1 w-32 p-2 shadow-2xl">
+            <ul tabIndex={-1} className="dropdown-content bg-base-100 rounded-box z-1 w-24 p-2 shadow-2xl">
                 <li>
                     <button onClick={() => i18n.changeLanguage("en")} className={`w-full btn btn-sm btn-block btn-ghost justify-start ${i18n.resolvedLanguage === "en" ? 'btn-active' : ''}`}>
                         EN
