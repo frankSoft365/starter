@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useDeleteArticle } from "./article";
-import { Route as homeRoute } from "@/routes/_app/index";
+import { Route as homeRoute } from "@/routes/_app/_home/index";
 import { useEffect, useRef } from "react";
 
 export default function DeleteArticleModal({

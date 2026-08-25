@@ -1,10 +1,29 @@
-import HomeArticleList from "../features/home/HomeArticleList";
+import { Route as homeArticleListRoute } from "@/routes/_app/_home";
+import { Route as homeFeatureRoute } from "@/routes/_app/_home/feature";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 
-export default function HomePage() {
+export default function HomePage({ children }: { children: React.ReactNode }) {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const isHomeArticleListRoute = location.pathname === homeArticleListRoute.to;
+    const isHomeFeatureRoute = location.pathname === homeFeatureRoute.to
+
     return (
         <div className="w-full flex">
             <div className="lg:mx-20 w-2xl">
-                <HomeArticleList />
+                <ul className="menu w-full bg-base-100 menu-horizontal border-b-2 border-base-300 mt-2">
+                    <li>
+                        <a className={isHomeArticleListRoute ? "menu-active" : ''} onClick={() => navigate({ to: homeArticleListRoute.to })}>
+                            For you
+                        </a>
+                    </li>
+                    <li>
+                        <a className={isHomeFeatureRoute ? "menu-active" : ''} onClick={() => navigate({ to: homeFeatureRoute.to })}>
+                            Feature
+                        </a>
+                    </li>
+                </ul>
+                {children}
             </div>
             <div className="hidden lg:inline-flex lg:grow lg:flex-col lg:p-12 lg:items-start gap-3 lg:border-l-2 lg:border-base-300">
                 <div className="aura aura-rainbow">

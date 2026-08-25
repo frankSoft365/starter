@@ -89,9 +89,10 @@ export default function ArticleDetail() {
                 <div className="flex flex-col items-center w-full md:w-3xl mx-auto p-4">
                     <div className="flex flex-col items-start w-full">
                         {/* topics show */}
-                        <div className="mt-6 flex flex-wrap gap-2">{article.topics.map(topicVO => <TopicShow topicContent={topicVO.name} />)}</div>
+                        {article.topics.length > 0 &&
+                            <div className="mt-6 flex flex-wrap gap-2">{article.topics.map(topicVO => <TopicShow topicContent={topicVO.name} />)}</div>}
                         {/* Title */}
-                        <h1 className="font-sans font-bold text-3xl lg:text-5xl my-6">{title}</h1>
+                        <h1 className="font-sans font-bold text-3xl/10 lg:text-5xl/16 my-6">{title}</h1>
                         {/* Author info */}
                         <ArticleAuthorInfo
                             authorId={article.authorId}

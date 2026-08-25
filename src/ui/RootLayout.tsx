@@ -5,6 +5,8 @@ import { useLocation } from "@tanstack/react-router";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
 import { useState } from "react";
+import SignedIn from "./SignedIn";
+import NotificationSync from "@/features/notifications/NotificationSync";
 
 /**
  * Page-root-layout in addition to the login and registration page
@@ -19,6 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <>
+            <SignedIn>
+                <NotificationSync />
+            </SignedIn>
             {/* Navbar */}
             <NavBar />
             <div className="drawer md:drawer-open">

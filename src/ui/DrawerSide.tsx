@@ -2,7 +2,7 @@ import { HouseIcon, NotePencilIcon, UserCircleIcon } from "@phosphor-icons/react
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
-import { Route as homeRoute } from "../routes/_app/index";
+import { Route as homeRoute } from "../routes/_app/_home/index";
 import { Route as profileRoute } from "../routes/_app/_protected/profile/$userId/_profile";
 import { useTranslation } from "react-i18next";
 import { useAtomValue } from "jotai";

@@ -97,10 +97,16 @@ export default function NotificationList({
     const latestSeenId = useRef<string | null>(null);
 
     const clearUnread = () => {
+        const field = unreadCountFieldMap[type];
         setUnreadCount(prev => ({
             ...prev,
-            [unreadCountFieldMap[type]]: '0'
+            [field]: '0'
         }));
+        queryClient.setQueryData<UnreadCountVO>(['unreadCount'], prev => (
+            prev
+                ? { ...prev, [field]: '0' }
+                : prev
+        ));
     };
 
     useEffect(() => {

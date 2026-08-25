@@ -4,6 +4,7 @@ export default {
         write: 'Write',
         home: 'Home',
         profile: 'Profile',
+        viewProfile: 'View profile',
         follow: 'Follow',
         following: 'Following',
         unfollow: 'Unfollow',

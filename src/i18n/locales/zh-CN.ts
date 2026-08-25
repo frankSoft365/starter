@@ -4,6 +4,7 @@ export default {
         write: '写文章',
         home: '主页',
         profile: '个人主页',
+        viewProfile: '查看个人主页',
         follow: '关注',
         following: '已关注',
         unfollow: '取消关注',

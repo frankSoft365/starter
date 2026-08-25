@@ -4,7 +4,7 @@ import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";
 import { useAtomValue, useSetAtom } from "jotai";
 import AvatarDropdown from "./AvatarDropdown";
-import { Route as homeRoute } from "../routes/_app/index";
+import { Route as homeRoute } from "../routes/_app/_home/index";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
 import { Route as loginRoute } from "../routes/login";
 import { editorEmptySignalAtom, editorSubmissionSignalAtom, editorUpdateSignalAtom, isEditorEmptyAtom } from "../atoms/editor";

@@ -1,6 +1,7 @@
-import { BellIcon, GearIcon, NotePencilIcon, SignOutIcon } from "@phosphor-icons/react";
-import { useNavigate } from "@tanstack/react-router";
+import { BellIcon, GearIcon, NotePencilIcon } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Route as meSettingsRoute } from "../routes/_app/_protected/me/settings";
+import { Route as profileRoute } from "../routes/_app/_protected/profile/$userId/_profile/index";
 import Avatar from "../ui/Avatar";
 import useOverflowHelper from "../utils/overflowHelper";
 import { useAtomValue } from "jotai";
@@ -28,8 +29,8 @@ export default function AvatarDropdown() {
 
     const totalUnreadCount = useAtomValue(totalUnreadCountAtom);
 
-    function UserAvatar() {
-        return <Avatar size="sm" imageUrl={user?.image ?? undefined} username={user?.username || ''} />;
+    function UserAvatar({ size }: { size?: "sm" | "md" | "lg" | undefined }) {
+        return <Avatar size={size} imageUrl={user?.image ?? undefined} username={user?.username || ''} />;
     }
 
     return (
@@ -45,28 +46,30 @@ export default function AvatarDropdown() {
                     :
                     <div className="indicator">
                         {totalUnreadCount > 0 && <span className="indicator-item md:hidden badge badge-xs badge-primary">{totalUnreadCount}</span>}
-                        <UserAvatar />
+                        <UserAvatar size="sm" />
                     </div>}
             </summary>
-            {isOpen && <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-64 p-2 shadow-sm">
-                <li className="list-row">
-                    <a>
-                        <UserAvatar />
+            {isOpen && <ul className="menu dropdown-content bg-base-100 rounded-box z-1 mt-1 p-2 shadow-sm">
+                {user && <li className="list-row">
+                    <Link
+                        to={profileRoute.to}
+                        params={{ userId: user.id }}
+                        onClick={() => setIsOpen(false)}
+                    >
+                        <div className="mr-1"><UserAvatar /></div>
                         <div>
-                            <div>{user?.username}</div>
-                            <div className="tooltip" data-tip={user?.email}>
-                                <div className="text-xs ">{handleOverflow(user?.email, 25)}</div>
-                            </div>
+                            <div className="font-bold">{user.username}</div>
+                            <div className="text-xs">{t('btn.viewProfile')}</div>
                         </div>
-                    </a>
-                </li>
+                    </Link>
+                </li>}
                 {/* write link (show only in small screen) */}
                 <li onClick={() => {
                     setIsOpen(false);
                     navigate({ to: editorRoute.to });
                 }} className="list-row md:hidden">
                     <a>
-                        <NotePencilIcon size={24} />
+                        <NotePencilIcon size={24} weight="light" />
                         <span>{t('btn.write')}</span>
                     </a>
                 </li>
@@ -76,7 +79,7 @@ export default function AvatarDropdown() {
                     navigate({ to: notificationsRoute.to });
                 }} className="list-row md:hidden">
                     <a>
-                        <BellIcon size={24} />
+                        <BellIcon size={24} weight="light" />
                         {t('nav.notificationBell.tooltip')}
                         {totalUnreadCount > 0 &&
                             <span className="badge badge-xs badge-primary">
@@ -90,7 +93,7 @@ export default function AvatarDropdown() {
                     setIsOpen(false);
                     navigate({ to: meSettingsRoute.to });
                 }} className="list-row">
-                    <a><GearIcon size={24} />{t('btn.settings')}</a>
+                    <a><GearIcon size={24} weight="light" />{t('btn.settings')}</a>
                 </li>
                 {/* logout link */}
                 <li onClick={() => {
@@ -98,9 +101,13 @@ export default function AvatarDropdown() {
                     toast.success(i18n.t('settings.toast.logoutSuccess'));
                     navigate({ to: LoginRoute.to });
                 }} className="list-row">
-                    <div>
-                        <SignOutIcon size={24} />
-                        {t('btn.logout')}
+                    <div className="flex flex-col items-start p-4">
+                        <p>
+                            {t('btn.logout')}
+                        </p>
+                        <div className="tooltip" data-tip={user?.email}>
+                            <div className="text-xs opacity-70">{handleOverflow(user?.email, 25)}</div>
+                        </div>
                     </div>
                 </li>
             </ul>}

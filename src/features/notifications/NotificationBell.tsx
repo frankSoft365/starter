@@ -1,8 +1,6 @@
 import { totalUnreadCountAtom } from "@/atoms/notification";
 import { BellIcon } from "@phosphor-icons/react";
 import { useAtomValue } from "jotai";
-import { useUnreadCountQuery } from "./notification";
-import { useNotificationSocket } from "@/hooks/useNotificationSocket";
 import { useTranslation } from "react-i18next";
 
 export default function NotificationBell({
@@ -14,8 +12,6 @@ export default function NotificationBell({
 }) {
     const { t } = useTranslation();
     const totalUnreadCount = useAtomValue(totalUnreadCountAtom);
-    useUnreadCountQuery();
-    useNotificationSocket();
 
     return (
         <div className="hidden md:inline-flex md:tooltip md:tooltip-bottom mr-3" data-tip={t('nav.notificationBell.tooltip')}>
