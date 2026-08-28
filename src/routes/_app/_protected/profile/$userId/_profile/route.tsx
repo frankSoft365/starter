@@ -1,14 +1,16 @@
-import ProfileTab from '@/features/profile/ProfileTab'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import ProfilePage from "@/features/profile/ProfilePage";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_app/_protected/profile/$userId/_profile')({
-    component: RouteComponent,
-})
+export const Route = createFileRoute(
+  "/_app/_protected/profile/$userId/_profile",
+)({
+  component: RouteComponent,
+});
 
 function RouteComponent() {
-    return (
-        <ProfileTab>
-            <Outlet />
-        </ProfileTab>
-    );
+  return (
+    <ProfilePage>
+      <Outlet />
+    </ProfilePage>
+  );
 }
