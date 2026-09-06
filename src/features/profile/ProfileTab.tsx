@@ -22,25 +22,25 @@ export default function ProfileTab() {
   ];
 
   return (
-    <ul className="menu w-full bg-base-100 menu-horizontal border-b-2 border-base-300">
+    <div role="tablist" className="tabs tabs-border w-full">
       {profileTabMap.map((item, index) => {
         return (
-          <li key={index}>
-            <a
-              className={
-                location.pathname === item.path.replace("$userId", userId)
-                  ? "menu-active"
-                  : ""
-              }
-              onClick={() =>
-                navigate({ to: item.path, params: { userId: userId } })
-              }
-            >
-              {item.name}
-            </a>
-          </li>
+          <a
+            role="tab"
+            key={index}
+            className={`tab ${
+              location.pathname === item.path.replace("$userId", userId)
+                ? "tab-active"
+                : ""
+            }`}
+            onClick={() =>
+              navigate({ to: item.path, params: { userId: userId } })
+            }
+          >
+            {item.name}
+          </a>
         );
       })}
-    </ul>
+    </div>
   );
 }

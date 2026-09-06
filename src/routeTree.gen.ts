@@ -20,6 +20,13 @@ import { Route as AppArticleArticleIdRouteImport } from './routes/_app/article.$
 import { Route as AppProtectedSubmissionRouteImport } from './routes/_app/_protected/submission'
 import { Route as AppProtectedEditorRouteImport } from './routes/_app/_protected/editor'
 import { Route as AppHomeFeatureRouteImport } from './routes/_app/_home/feature'
+import { Route as AppSearchSearchRouteRouteImport } from './routes/_app/search/_search/route'
+import { Route as AppSearchSearchIndexRouteImport } from './routes/_app/search/_search/index'
+import { Route as AppSearchSearchUsersRouteImport } from './routes/_app/search/_search/users'
+import { Route as AppSearchSearchTagsRouteImport } from './routes/_app/search/_search/tags'
+import { Route as AppSearchSearchPublicationsRouteImport } from './routes/_app/search/_search/publications'
+import { Route as AppSearchSearchPostsRouteImport } from './routes/_app/search/_search/posts'
+import { Route as AppSearchSearchListsRouteImport } from './routes/_app/search/_search/lists'
 import { Route as AppProtectedMeSettingsRouteImport } from './routes/_app/_protected/me/settings'
 import { Route as AppProtectedMePasswordRouteImport } from './routes/_app/_protected/me/password'
 import { Route as AppProtectedMeNotificationsRouteRouteImport } from './routes/_app/_protected/me/notifications/route'
@@ -88,6 +95,42 @@ const AppHomeFeatureRoute = AppHomeFeatureRouteImport.update({
   id: '/feature',
   path: '/feature',
   getParentRoute: () => AppHomeRouteRoute,
+} as any)
+const AppSearchSearchRouteRoute = AppSearchSearchRouteRouteImport.update({
+  id: '/search/_search',
+  path: '/search',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppSearchSearchIndexRoute = AppSearchSearchIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppSearchSearchRouteRoute,
+} as any)
+const AppSearchSearchUsersRoute = AppSearchSearchUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AppSearchSearchRouteRoute,
+} as any)
+const AppSearchSearchTagsRoute = AppSearchSearchTagsRouteImport.update({
+  id: '/tags',
+  path: '/tags',
+  getParentRoute: () => AppSearchSearchRouteRoute,
+} as any)
+const AppSearchSearchPublicationsRoute =
+  AppSearchSearchPublicationsRouteImport.update({
+    id: '/publications',
+    path: '/publications',
+    getParentRoute: () => AppSearchSearchRouteRoute,
+  } as any)
+const AppSearchSearchPostsRoute = AppSearchSearchPostsRouteImport.update({
+  id: '/posts',
+  path: '/posts',
+  getParentRoute: () => AppSearchSearchRouteRoute,
+} as any)
+const AppSearchSearchListsRoute = AppSearchSearchListsRouteImport.update({
+  id: '/lists',
+  path: '/lists',
+  getParentRoute: () => AppSearchSearchRouteRoute,
 } as any)
 const AppProtectedMeSettingsRoute = AppProtectedMeSettingsRouteImport.update({
   id: '/me/settings',
@@ -189,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/needLogin': typeof AppNeedLoginRoute
+  '/search': typeof AppSearchSearchRouteRouteWithChildren
   '/feature': typeof AppHomeFeatureRoute
   '/editor': typeof AppProtectedEditorRoute
   '/submission': typeof AppProtectedSubmissionRoute
@@ -196,6 +240,12 @@ export interface FileRoutesByFullPath {
   '/me/notifications': typeof AppProtectedMeNotificationsRouteRouteWithChildren
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
+  '/search/lists': typeof AppSearchSearchListsRoute
+  '/search/posts': typeof AppSearchSearchPostsRoute
+  '/search/publications': typeof AppSearchSearchPublicationsRoute
+  '/search/tags': typeof AppSearchSearchTagsRoute
+  '/search/users': typeof AppSearchSearchUsersRoute
+  '/search/': typeof AppSearchSearchIndexRoute
   '/profile/$userId': typeof AppProtectedProfileUserIdProfileRouteRouteWithChildren
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
   '/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
@@ -221,6 +271,12 @@ export interface FileRoutesByTo {
   '/article/$articleId': typeof AppArticleArticleIdRoute
   '/me/password': typeof AppProtectedMePasswordRoute
   '/me/settings': typeof AppProtectedMeSettingsRoute
+  '/search/lists': typeof AppSearchSearchListsRoute
+  '/search/posts': typeof AppSearchSearchPostsRoute
+  '/search/publications': typeof AppSearchSearchPublicationsRoute
+  '/search/tags': typeof AppSearchSearchTagsRoute
+  '/search/users': typeof AppSearchSearchUsersRoute
+  '/search': typeof AppSearchSearchIndexRoute
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
   '/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
   '/me/notifications/like': typeof AppProtectedMeNotificationsLikeRoute
@@ -242,6 +298,7 @@ export interface FileRoutesById {
   '/_app/_home': typeof AppHomeRouteRouteWithChildren
   '/_app/_protected': typeof AppProtectedRouteRouteWithChildren
   '/_app/needLogin': typeof AppNeedLoginRoute
+  '/_app/search/_search': typeof AppSearchSearchRouteRouteWithChildren
   '/_app/_home/feature': typeof AppHomeFeatureRoute
   '/_app/_protected/editor': typeof AppProtectedEditorRoute
   '/_app/_protected/submission': typeof AppProtectedSubmissionRoute
@@ -250,6 +307,12 @@ export interface FileRoutesById {
   '/_app/_protected/me/notifications': typeof AppProtectedMeNotificationsRouteRouteWithChildren
   '/_app/_protected/me/password': typeof AppProtectedMePasswordRoute
   '/_app/_protected/me/settings': typeof AppProtectedMeSettingsRoute
+  '/_app/search/_search/lists': typeof AppSearchSearchListsRoute
+  '/_app/search/_search/posts': typeof AppSearchSearchPostsRoute
+  '/_app/search/_search/publications': typeof AppSearchSearchPublicationsRoute
+  '/_app/search/_search/tags': typeof AppSearchSearchTagsRoute
+  '/_app/search/_search/users': typeof AppSearchSearchUsersRoute
+  '/_app/search/_search/': typeof AppSearchSearchIndexRoute
   '/_app/_protected/profile/$userId/_profile': typeof AppProtectedProfileUserIdProfileRouteRouteWithChildren
   '/_app/_protected/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
   '/_app/_protected/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
@@ -271,6 +334,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/needLogin'
+    | '/search'
     | '/feature'
     | '/editor'
     | '/submission'
@@ -278,6 +342,12 @@ export interface FileRouteTypes {
     | '/me/notifications'
     | '/me/password'
     | '/me/settings'
+    | '/search/lists'
+    | '/search/posts'
+    | '/search/publications'
+    | '/search/tags'
+    | '/search/users'
+    | '/search/'
     | '/profile/$userId'
     | '/articles/edit/$articleId'
     | '/me/notifications/follow'
@@ -303,6 +373,12 @@ export interface FileRouteTypes {
     | '/article/$articleId'
     | '/me/password'
     | '/me/settings'
+    | '/search/lists'
+    | '/search/posts'
+    | '/search/publications'
+    | '/search/tags'
+    | '/search/users'
+    | '/search'
     | '/articles/edit/$articleId'
     | '/me/notifications/follow'
     | '/me/notifications/like'
@@ -323,6 +399,7 @@ export interface FileRouteTypes {
     | '/_app/_home'
     | '/_app/_protected'
     | '/_app/needLogin'
+    | '/_app/search/_search'
     | '/_app/_home/feature'
     | '/_app/_protected/editor'
     | '/_app/_protected/submission'
@@ -331,6 +408,12 @@ export interface FileRouteTypes {
     | '/_app/_protected/me/notifications'
     | '/_app/_protected/me/password'
     | '/_app/_protected/me/settings'
+    | '/_app/search/_search/lists'
+    | '/_app/search/_search/posts'
+    | '/_app/search/_search/publications'
+    | '/_app/search/_search/tags'
+    | '/_app/search/_search/users'
+    | '/_app/search/_search/'
     | '/_app/_protected/profile/$userId/_profile'
     | '/_app/_protected/articles/edit/$articleId'
     | '/_app/_protected/me/notifications/follow'
@@ -430,6 +513,55 @@ declare module '@tanstack/react-router' {
       fullPath: '/feature'
       preLoaderRoute: typeof AppHomeFeatureRouteImport
       parentRoute: typeof AppHomeRouteRoute
+    }
+    '/_app/search/_search': {
+      id: '/_app/search/_search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof AppSearchSearchRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/search/_search/': {
+      id: '/_app/search/_search/'
+      path: '/'
+      fullPath: '/search/'
+      preLoaderRoute: typeof AppSearchSearchIndexRouteImport
+      parentRoute: typeof AppSearchSearchRouteRoute
+    }
+    '/_app/search/_search/users': {
+      id: '/_app/search/_search/users'
+      path: '/users'
+      fullPath: '/search/users'
+      preLoaderRoute: typeof AppSearchSearchUsersRouteImport
+      parentRoute: typeof AppSearchSearchRouteRoute
+    }
+    '/_app/search/_search/tags': {
+      id: '/_app/search/_search/tags'
+      path: '/tags'
+      fullPath: '/search/tags'
+      preLoaderRoute: typeof AppSearchSearchTagsRouteImport
+      parentRoute: typeof AppSearchSearchRouteRoute
+    }
+    '/_app/search/_search/publications': {
+      id: '/_app/search/_search/publications'
+      path: '/publications'
+      fullPath: '/search/publications'
+      preLoaderRoute: typeof AppSearchSearchPublicationsRouteImport
+      parentRoute: typeof AppSearchSearchRouteRoute
+    }
+    '/_app/search/_search/posts': {
+      id: '/_app/search/_search/posts'
+      path: '/posts'
+      fullPath: '/search/posts'
+      preLoaderRoute: typeof AppSearchSearchPostsRouteImport
+      parentRoute: typeof AppSearchSearchRouteRoute
+    }
+    '/_app/search/_search/lists': {
+      id: '/_app/search/_search/lists'
+      path: '/lists'
+      fullPath: '/search/lists'
+      preLoaderRoute: typeof AppSearchSearchListsRouteImport
+      parentRoute: typeof AppSearchSearchRouteRoute
     }
     '/_app/_protected/me/settings': {
       id: '/_app/_protected/me/settings'
@@ -642,10 +774,32 @@ const AppProtectedRouteRouteChildren: AppProtectedRouteRouteChildren = {
 const AppProtectedRouteRouteWithChildren =
   AppProtectedRouteRoute._addFileChildren(AppProtectedRouteRouteChildren)
 
+interface AppSearchSearchRouteRouteChildren {
+  AppSearchSearchListsRoute: typeof AppSearchSearchListsRoute
+  AppSearchSearchPostsRoute: typeof AppSearchSearchPostsRoute
+  AppSearchSearchPublicationsRoute: typeof AppSearchSearchPublicationsRoute
+  AppSearchSearchTagsRoute: typeof AppSearchSearchTagsRoute
+  AppSearchSearchUsersRoute: typeof AppSearchSearchUsersRoute
+  AppSearchSearchIndexRoute: typeof AppSearchSearchIndexRoute
+}
+
+const AppSearchSearchRouteRouteChildren: AppSearchSearchRouteRouteChildren = {
+  AppSearchSearchListsRoute: AppSearchSearchListsRoute,
+  AppSearchSearchPostsRoute: AppSearchSearchPostsRoute,
+  AppSearchSearchPublicationsRoute: AppSearchSearchPublicationsRoute,
+  AppSearchSearchTagsRoute: AppSearchSearchTagsRoute,
+  AppSearchSearchUsersRoute: AppSearchSearchUsersRoute,
+  AppSearchSearchIndexRoute: AppSearchSearchIndexRoute,
+}
+
+const AppSearchSearchRouteRouteWithChildren =
+  AppSearchSearchRouteRoute._addFileChildren(AppSearchSearchRouteRouteChildren)
+
 interface AppRouteRouteChildren {
   AppHomeRouteRoute: typeof AppHomeRouteRouteWithChildren
   AppProtectedRouteRoute: typeof AppProtectedRouteRouteWithChildren
   AppNeedLoginRoute: typeof AppNeedLoginRoute
+  AppSearchSearchRouteRoute: typeof AppSearchSearchRouteRouteWithChildren
   AppArticleArticleIdRoute: typeof AppArticleArticleIdRoute
 }
 
@@ -653,6 +807,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppHomeRouteRoute: AppHomeRouteRouteWithChildren,
   AppProtectedRouteRoute: AppProtectedRouteRouteWithChildren,
   AppNeedLoginRoute: AppNeedLoginRoute,
+  AppSearchSearchRouteRoute: AppSearchSearchRouteRouteWithChildren,
   AppArticleArticleIdRoute: AppArticleArticleIdRoute,
 }
 

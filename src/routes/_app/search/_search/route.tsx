@@ -1,14 +1,14 @@
-import HomePage from "@/ui/HomePage";
+import SearchPage from "@/ui/SearchPage";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_app/_home")({
+export const Route = createFileRoute("/_app/search/_search")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   return (
-    <HomePage>
+    <SearchPage>
       <Outlet />
-    </HomePage>
+    </SearchPage>
   );
 }

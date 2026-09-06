@@ -56,29 +56,28 @@ export default function NotificationsTab({
         <div className="w-full text-3xl md:text-4xl m-4 font-bold">
           {t("notification.title")}
         </div>
-        <ul className="menu bg-base-100 menu-horizontal shadow-xs">
+
+        <div role="tablist" className="tabs tabs-border">
           {notificationTabMap.map((item) => {
             const count =
               Number(unreadCount[unreadCountFieldMap[item.type]]) || 0;
             return (
-              <li key={item.path}>
-                <a
-                  className={
-                    location.pathname === item.path ? "menu-active" : ""
-                  }
-                  onClick={() => navigate({ to: item.path })}
-                >
-                  {item.name}
-                  {count > 0 && (
-                    <span className="badge badge-xs badge-primary">
-                      {count}
-                    </span>
-                  )}
-                </a>
-              </li>
+              <a
+                role="tab"
+                key={item.path}
+                className={`tab ${location.pathname === item.path ? "tab-active" : ""}`}
+                onClick={() => navigate({ to: item.path })}
+              >
+                {item.name}
+                {count > 0 && (
+                  <span className="badge badge-xs badge-primary ml-2">
+                    {count}
+                  </span>
+                )}
+              </a>
             );
           })}
-        </ul>
+        </div>
         <div>{children}</div>
       </div>
     </NormalLayout>

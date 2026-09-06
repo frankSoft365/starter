@@ -93,7 +93,7 @@ export default function ArticleDetail() {
       )}
       {!isLoading && !isError && article && (
         <>
-          <div className="flex flex-col items-center w-full md:w-3xl mx-auto p-4">
+          <div className="flex flex-col items-center w-full md:px-32 p-4">
             <div className="flex flex-col items-start w-full">
               {/* topics show */}
               {article.topics.length > 0 && (
