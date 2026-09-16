@@ -6,7 +6,7 @@ import {
 import { useLocation, useNavigate, useSearch } from "@tanstack/react-router";
 import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import AvatarDropdown from "./AvatarDropdown";
 import { Route as homeRoute } from "../routes/_app/_home/index";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
@@ -23,7 +23,6 @@ import { isDirtyAtom } from "@/atoms/article";
 import { Route as notificationsRoute } from "@/routes/_app/_protected/me/notifications";
 import NotificationBell from "../features/notifications/NotificationBell";
 import { useTranslation } from "react-i18next";
-import LanguageBtn from "./LanguageBtn";
 import { recentSearchesAtom } from "../atoms/search";
 import { useSearchInput } from "../features/search/search";
 
@@ -55,7 +54,7 @@ export default function NavBar() {
     location.pathname.startsWith(notificationsRoute.to + "/");
 
   // search input
-  const setRecentSearches = useSetAtom(recentSearchesAtom);
+  const [recentSearches, setRecentSearches] = useAtom(recentSearchesAtom);
   const { q = "" } = useSearch({
     strict: false,
   });
@@ -84,25 +83,34 @@ export default function NavBar() {
         {/* search input field */}
         {!isEditorRoute && (
           <>
-            <input
-              type="search"
-              onKeyDown={handleSearch}
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder={t("nav.searchInput.placeholder")}
-              className="input input-ghost bg-base-200 rounded-full hidden md:inline-flex md:w-56 mr-1"
-            />
-            <button
-              onClick={() => navigate({ to: "/search" })}
-              className="btn btn-ghost btn-square inline-flex md:hidden mr-1"
-            >
+            <label className="input input-ghost rounded-full bg-base-200 w-64 hidden md:inline-flex">
               <MagnifyingGlassIcon size={24} />
-            </button>
+              <input
+                onKeyDown={handleSearch}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder={t("nav.searchInput.placeholder")}
+                className="input input-ghost bg-base-200 md:grow"
+                list="resentSearches"
+              />
+            </label>
+
+            <datalist id="resentSearches">
+              {recentSearches.map((recent) => (
+                <option key={recent} value={recent}></option>
+              ))}
+            </datalist>
           </>
         )}
       </div>
       <div className="navbar-end">
-        {!isEditorRoute && <LanguageBtn />}
+        {/* search btn in small screen */}
+        <button
+          onClick={() => navigate({ to: "/search" })}
+          className="btn btn-ghost btn-square inline-flex md:hidden mr-2"
+        >
+          <MagnifyingGlassIcon size={24} />
+        </button>
         {/* can write only when is login */}
         <SignedIn>
           {!isEditorRoute && !isArticleEditRoute && (

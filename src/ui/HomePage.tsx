@@ -34,22 +34,21 @@ export default function HomePage({ children }: { children: React.ReactNode }) {
       </div>
       {/* The right part */}
       <div className="hidden lg:inline-flex lg:grow lg:flex-col lg:p-12 lg:items-start gap-3 lg:border-l-2 lg:border-base-300">
-        <div className="stack w-48">
-          <img
-            alt="Tailwind CSS example 1"
-            src="https://img.daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.webp"
-            className="rounded-box"
-          />
-          <img
-            alt="Tailwind CSS example 2"
-            src="https://img.daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.webp"
-            className="rounded-box"
-          />
-          <img
-            alt="Tailwind CSS example 3"
-            src="https://img.daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.webp"
-            className="rounded-box"
-          />
+        <div className="avatar">
+          <div className="w-24 rounded-xl">
+            <img
+              alt="Tailwind-CSS-Avatar-component"
+              src="https://img.daisyui.com/images/profile/demo/yellingwoman@192.webp"
+            />
+          </div>
+        </div>
+        <div className="avatar">
+          <div className="w-24 rounded-full">
+            <img
+              alt="Tailwind-CSS-Avatar-component"
+              src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp"
+            />
+          </div>
         </div>
       </div>
     </div>

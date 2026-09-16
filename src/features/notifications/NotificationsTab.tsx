@@ -56,7 +56,7 @@ export default function NotificationsTab({
         <div className="w-full text-3xl md:text-4xl m-4 font-bold">
           {t("notification.title")}
         </div>
-
+        {/* tab */}
         <div role="tablist" className="tabs tabs-border">
           {notificationTabMap.map((item) => {
             const count =
