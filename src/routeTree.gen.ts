@@ -11,10 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppNeedLoginRouteImport } from './routes/_app/needLogin'
+import { Route as ProtectedHcRouteRouteImport } from './routes/_protected/hc/route'
 import { Route as AppProtectedRouteRouteImport } from './routes/_app/_protected/route'
 import { Route as AppHomeRouteRouteImport } from './routes/_app/_home/route'
+import { Route as ProtectedHcIndexRouteImport } from './routes/_protected/hc/index'
 import { Route as AppHomeIndexRouteImport } from './routes/_app/_home/index'
 import { Route as AppArticleArticleIdRouteImport } from './routes/_app/article.$articleId'
 import { Route as AppProtectedSubmissionRouteImport } from './routes/_app/_protected/submission'
@@ -22,6 +25,7 @@ import { Route as AppProtectedEditorRouteImport } from './routes/_app/_protected
 import { Route as AppHomeFeatureRouteImport } from './routes/_app/_home/feature'
 import { Route as AppSearchSearchRouteRouteImport } from './routes/_app/search/_search/route'
 import { Route as AppSearchSearchIndexRouteImport } from './routes/_app/search/_search/index'
+import { Route as ProtectedHcCategoriesCardIdRouteImport } from './routes/_protected/hc/categories.$cardId'
 import { Route as AppSearchSearchUsersRouteImport } from './routes/_app/search/_search/users'
 import { Route as AppSearchSearchTagsRouteImport } from './routes/_app/search/_search/tags'
 import { Route as AppSearchSearchPublicationsRouteImport } from './routes/_app/search/_search/publications'
@@ -56,6 +60,10 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
+  id: '/_protected',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
@@ -65,6 +73,11 @@ const AppNeedLoginRoute = AppNeedLoginRouteImport.update({
   path: '/needLogin',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const ProtectedHcRouteRoute = ProtectedHcRouteRouteImport.update({
+  id: '/hc',
+  path: '/hc',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
 const AppProtectedRouteRoute = AppProtectedRouteRouteImport.update({
   id: '/_protected',
   getParentRoute: () => AppRouteRoute,
@@ -72,6 +85,11 @@ const AppProtectedRouteRoute = AppProtectedRouteRouteImport.update({
 const AppHomeRouteRoute = AppHomeRouteRouteImport.update({
   id: '/_home',
   getParentRoute: () => AppRouteRoute,
+} as any)
+const ProtectedHcIndexRoute = ProtectedHcIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProtectedHcRouteRoute,
 } as any)
 const AppHomeIndexRoute = AppHomeIndexRouteImport.update({
   id: '/',
@@ -108,6 +126,12 @@ const AppSearchSearchIndexRoute = AppSearchSearchIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppSearchSearchRouteRoute,
 } as any)
+const ProtectedHcCategoriesCardIdRoute =
+  ProtectedHcCategoriesCardIdRouteImport.update({
+    id: '/categories/$cardId',
+    path: '/categories/$cardId',
+    getParentRoute: () => ProtectedHcRouteRoute,
+  } as any)
 const AppSearchSearchUsersRoute = AppSearchSearchUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -246,12 +270,14 @@ export interface FileRoutesByFullPath {
   '/': typeof AppHomeIndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/hc': typeof ProtectedHcRouteRouteWithChildren
   '/needLogin': typeof AppNeedLoginRoute
   '/search': typeof AppSearchSearchRouteRouteWithChildren
   '/feature': typeof AppHomeFeatureRoute
   '/editor': typeof AppProtectedEditorRoute
   '/submission': typeof AppProtectedSubmissionRoute
   '/article/$articleId': typeof AppArticleArticleIdRoute
+  '/hc/': typeof ProtectedHcIndexRoute
   '/me/notifications': typeof AppProtectedMeNotificationsRouteRouteWithChildren
   '/me/settings': typeof AppProtectedMeSettingsRouteRouteWithChildren
   '/me/password': typeof AppProtectedMePasswordRoute
@@ -260,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/search/publications': typeof AppSearchSearchPublicationsRoute
   '/search/tags': typeof AppSearchSearchTagsRoute
   '/search/users': typeof AppSearchSearchUsersRoute
+  '/hc/categories/$cardId': typeof ProtectedHcCategoriesCardIdRoute
   '/search/': typeof AppSearchSearchIndexRoute
   '/profile/$userId': typeof AppProtectedProfileUserIdProfileRouteRouteWithChildren
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
@@ -286,12 +313,14 @@ export interface FileRoutesByTo {
   '/editor': typeof AppProtectedEditorRoute
   '/submission': typeof AppProtectedSubmissionRoute
   '/article/$articleId': typeof AppArticleArticleIdRoute
+  '/hc': typeof ProtectedHcIndexRoute
   '/me/password': typeof AppProtectedMePasswordRoute
   '/search/lists': typeof AppSearchSearchListsRoute
   '/search/posts': typeof AppSearchSearchPostsRoute
   '/search/publications': typeof AppSearchSearchPublicationsRoute
   '/search/tags': typeof AppSearchSearchTagsRoute
   '/search/users': typeof AppSearchSearchUsersRoute
+  '/hc/categories/$cardId': typeof ProtectedHcCategoriesCardIdRoute
   '/search': typeof AppSearchSearchIndexRoute
   '/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
   '/me/notifications/follow': typeof AppProtectedMeNotificationsFollowRoute
@@ -311,10 +340,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
+  '/_protected': typeof ProtectedRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/_app/_home': typeof AppHomeRouteRouteWithChildren
   '/_app/_protected': typeof AppProtectedRouteRouteWithChildren
+  '/_protected/hc': typeof ProtectedHcRouteRouteWithChildren
   '/_app/needLogin': typeof AppNeedLoginRoute
   '/_app/search/_search': typeof AppSearchSearchRouteRouteWithChildren
   '/_app/_home/feature': typeof AppHomeFeatureRoute
@@ -322,6 +353,7 @@ export interface FileRoutesById {
   '/_app/_protected/submission': typeof AppProtectedSubmissionRoute
   '/_app/article/$articleId': typeof AppArticleArticleIdRoute
   '/_app/_home/': typeof AppHomeIndexRoute
+  '/_protected/hc/': typeof ProtectedHcIndexRoute
   '/_app/_protected/me/notifications': typeof AppProtectedMeNotificationsRouteRouteWithChildren
   '/_app/_protected/me/settings': typeof AppProtectedMeSettingsRouteRouteWithChildren
   '/_app/_protected/me/password': typeof AppProtectedMePasswordRoute
@@ -330,6 +362,7 @@ export interface FileRoutesById {
   '/_app/search/_search/publications': typeof AppSearchSearchPublicationsRoute
   '/_app/search/_search/tags': typeof AppSearchSearchTagsRoute
   '/_app/search/_search/users': typeof AppSearchSearchUsersRoute
+  '/_protected/hc/categories/$cardId': typeof ProtectedHcCategoriesCardIdRoute
   '/_app/search/_search/': typeof AppSearchSearchIndexRoute
   '/_app/_protected/profile/$userId/_profile': typeof AppProtectedProfileUserIdProfileRouteRouteWithChildren
   '/_app/_protected/articles/edit/$articleId': typeof AppProtectedArticlesEditArticleIdRoute
@@ -353,12 +386,14 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/register'
+    | '/hc'
     | '/needLogin'
     | '/search'
     | '/feature'
     | '/editor'
     | '/submission'
     | '/article/$articleId'
+    | '/hc/'
     | '/me/notifications'
     | '/me/settings'
     | '/me/password'
@@ -367,6 +402,7 @@ export interface FileRouteTypes {
     | '/search/publications'
     | '/search/tags'
     | '/search/users'
+    | '/hc/categories/$cardId'
     | '/search/'
     | '/profile/$userId'
     | '/articles/edit/$articleId'
@@ -393,12 +429,14 @@ export interface FileRouteTypes {
     | '/editor'
     | '/submission'
     | '/article/$articleId'
+    | '/hc'
     | '/me/password'
     | '/search/lists'
     | '/search/posts'
     | '/search/publications'
     | '/search/tags'
     | '/search/users'
+    | '/hc/categories/$cardId'
     | '/search'
     | '/articles/edit/$articleId'
     | '/me/notifications/follow'
@@ -417,10 +455,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_app'
+    | '/_protected'
     | '/login'
     | '/register'
     | '/_app/_home'
     | '/_app/_protected'
+    | '/_protected/hc'
     | '/_app/needLogin'
     | '/_app/search/_search'
     | '/_app/_home/feature'
@@ -428,6 +468,7 @@ export interface FileRouteTypes {
     | '/_app/_protected/submission'
     | '/_app/article/$articleId'
     | '/_app/_home/'
+    | '/_protected/hc/'
     | '/_app/_protected/me/notifications'
     | '/_app/_protected/me/settings'
     | '/_app/_protected/me/password'
@@ -436,6 +477,7 @@ export interface FileRouteTypes {
     | '/_app/search/_search/publications'
     | '/_app/search/_search/tags'
     | '/_app/search/_search/users'
+    | '/_protected/hc/categories/$cardId'
     | '/_app/search/_search/'
     | '/_app/_protected/profile/$userId/_profile'
     | '/_app/_protected/articles/edit/$articleId'
@@ -456,6 +498,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
+  ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
 }
@@ -476,6 +519,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ProtectedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -490,6 +540,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppNeedLoginRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_protected/hc': {
+      id: '/_protected/hc'
+      path: '/hc'
+      fullPath: '/hc'
+      preLoaderRoute: typeof ProtectedHcRouteRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_app/_protected': {
       id: '/_app/_protected'
       path: ''
@@ -503,6 +560,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppHomeRouteRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/_protected/hc/': {
+      id: '/_protected/hc/'
+      path: '/'
+      fullPath: '/hc/'
+      preLoaderRoute: typeof ProtectedHcIndexRouteImport
+      parentRoute: typeof ProtectedHcRouteRoute
     }
     '/_app/_home/': {
       id: '/_app/_home/'
@@ -552,6 +616,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/search/'
       preLoaderRoute: typeof AppSearchSearchIndexRouteImport
       parentRoute: typeof AppSearchSearchRouteRoute
+    }
+    '/_protected/hc/categories/$cardId': {
+      id: '/_protected/hc/categories/$cardId'
+      path: '/categories/$cardId'
+      fullPath: '/hc/categories/$cardId'
+      preLoaderRoute: typeof ProtectedHcCategoriesCardIdRouteImport
+      parentRoute: typeof ProtectedHcRouteRoute
     }
     '/_app/search/_search/users': {
       id: '/_app/search/_search/users'
@@ -871,8 +942,34 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
   AppRouteRouteChildren,
 )
 
+interface ProtectedHcRouteRouteChildren {
+  ProtectedHcIndexRoute: typeof ProtectedHcIndexRoute
+  ProtectedHcCategoriesCardIdRoute: typeof ProtectedHcCategoriesCardIdRoute
+}
+
+const ProtectedHcRouteRouteChildren: ProtectedHcRouteRouteChildren = {
+  ProtectedHcIndexRoute: ProtectedHcIndexRoute,
+  ProtectedHcCategoriesCardIdRoute: ProtectedHcCategoriesCardIdRoute,
+}
+
+const ProtectedHcRouteRouteWithChildren =
+  ProtectedHcRouteRoute._addFileChildren(ProtectedHcRouteRouteChildren)
+
+interface ProtectedRouteRouteChildren {
+  ProtectedHcRouteRoute: typeof ProtectedHcRouteRouteWithChildren
+}
+
+const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedHcRouteRoute: ProtectedHcRouteRouteWithChildren,
+}
+
+const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
+  ProtectedRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
+  ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
 }

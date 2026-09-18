@@ -16,6 +16,7 @@ export default {
     resetToCenter: "Reset to center",
     save: "Save",
     favorite: "Save",
+    help: "Help",
     settings: "Settings",
     logout: "Logout",
     login: "Login",

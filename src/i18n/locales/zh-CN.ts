@@ -16,6 +16,7 @@ export default {
     resetToCenter: "重置为居中",
     save: "保存",
     favorite: "收藏",
+    help: "帮助中心",
     settings: "设置",
     logout: "退出登录",
     login: "登录",

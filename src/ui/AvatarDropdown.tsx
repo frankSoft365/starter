@@ -1,4 +1,9 @@
-import { BellIcon, GearIcon, NotePencilIcon } from "@phosphor-icons/react";
+import {
+  BellIcon,
+  GearIcon,
+  NotePencilIcon,
+  QuestionIcon,
+} from "@phosphor-icons/react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Route as meSettingsRoute } from "../routes/_app/_protected/me/settings";
 import { Route as profileRoute } from "../routes/_app/_protected/profile/$userId/_profile/index";
@@ -15,6 +20,7 @@ import { useState } from "react";
 import { totalUnreadCountAtom } from "@/atoms/notification";
 import { Route as notificationsRoute } from "@/routes/_app/_protected/me/notifications";
 import { Route as editorRoute } from "../routes/_app/_protected/editor";
+import { Route as HelpCenterRoute } from "@/routes/_protected/hc/index";
 
 export default function AvatarDropdown() {
   const { t } = useTranslation();
@@ -126,6 +132,20 @@ export default function AvatarDropdown() {
               {t("btn.settings")}
             </a>
           </li>
+          {/* help center link */}
+          <li
+            onClick={() => {
+              setIsOpen(false);
+              navigate({ to: HelpCenterRoute.to });
+            }}
+            className="list-row"
+          >
+            <a>
+              <QuestionIcon size={24} weight="light" />
+              {t("btn.help")}
+            </a>
+          </li>
+
           {/* logout link */}
           <li
             onClick={() => {
