@@ -28,8 +28,8 @@ export default function SettingsLayout({
     },
   ];
   return (
-    <div className="w-full h-dvh grid grid-cols-1 md:grid-cols-3">
-      <div className="col-span-2 border-r-2 border-base-300">
+    <div className="w-full min-h-dvh grid grid-cols-1 lg:grid-cols-3">
+      <div className="col-span-1 lg:col-span-2 border-r border-base-300">
         <div className="w-11/12 md:w-5/6 m-auto">
           <h1 className="text-3xl md:text-5xl font-bold my-4">
             {t("settings.page.title")}
@@ -52,7 +52,7 @@ export default function SettingsLayout({
           {children}
         </div>
       </div>
-      <div className="hidden md:inline-flex md:items-start md:col-span-1 md:p-4">
+      <div className="hidden lg:inline-flex md:items-start md:col-span-1 md:p-4">
         <div className="avatar">
           <div className="w-24 rounded-xl">
             <img

@@ -1,4 +1,4 @@
-import NotificationsTab from "@/features/notifications/NotificationsTab";
+import NotificationsLayout from "@/features/notifications/NotificationsLayout";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/_protected/me/notifications")({
@@ -7,8 +7,8 @@ export const Route = createFileRoute("/_app/_protected/me/notifications")({
 
 function RouteComponent() {
   return (
-    <NotificationsTab>
+    <NotificationsLayout>
       <Outlet />
-    </NotificationsTab>
+    </NotificationsLayout>
   );
 }

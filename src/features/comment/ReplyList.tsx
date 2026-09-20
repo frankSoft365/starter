@@ -68,7 +68,7 @@ export default function ReplyList({
     <>
       {/* reply preview (only newly added replies when not expanded) */}
       {repliesPreview.length > 0 && !expanded && (
-        <div className="ml-16 mr-2 border-gray-200 bg-base-200 pl-1 rounded-xl">
+        <div className="ml-10 mr-2 border-gray-200 bg-base-200 pl-1 rounded-xl">
           {repliesPreview.map((reply) => (
             <div
               key={reply.id}
@@ -120,7 +120,7 @@ export default function ReplyList({
       )}
       {!expanded && totalReplyCount > 0 && (
         <div
-          className="ml-16 mr-2 p-3 border-gray-200 bg-base-200 rounded-xl text-blue-400 hover:text-blue-600 cursor-pointer"
+          className="ml-10 mr-2 p-3 border-gray-200 bg-base-200 rounded-xl text-blue-400 hover:text-blue-600 cursor-pointer"
           onClick={() => {
             setExpanded(true);
             setActiveReplyTarget(null);
@@ -154,7 +154,7 @@ export default function ReplyList({
         </div>
       )}
       {status === "success" && expanded ? (
-        <div className="ml-16 mr-2 border-gray-200 bg-base-200 rounded-xl">
+        <div className="ml-10 mr-2 border-gray-200 bg-base-200 rounded-xl">
           {data.pages
             .flatMap((page) => page.items)
             .map((reply) => (

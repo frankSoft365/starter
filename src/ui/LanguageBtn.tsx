@@ -1,16 +1,14 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function LanguageBtn() {
   const { i18n } = useTranslation();
-  const [language, setLanguage] = useState(i18n.resolvedLanguage || "zh-CN");
+  const language = i18n.resolvedLanguage === "en" ? "en" : "zh-CN";
+
   return (
     <select
-      defaultValue="中文"
       className="select select-xs"
       value={language}
       onChange={(e) => {
-        setLanguage(e.target.value);
         i18n.changeLanguage(e.target.value);
       }}
     >

@@ -59,7 +59,10 @@ export default function SearchPage({
               <h1 className="text-3xl">{tagsRoute.to}</h1>
               <h1 className="text-3xl">{listsRoute.to}</h1> */}
               {/* The tab */}
-              <div role="tablist" className="tabs tabs-border">
+              <div
+                role="tablist"
+                className="tabs tabs-sm md:tabs-md tabs-border"
+              >
                 <a
                   role="tab"
                   className={`tab ${location.pathname === postsRoute.to || location.pathname === indexRoute.to ? "tab-active" : ""}`}

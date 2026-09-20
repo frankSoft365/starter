@@ -5,19 +5,19 @@ import { useSetAtom } from "jotai";
 import { useEffect } from "react";
 
 export function useUnreadCountQuery() {
-    const setUnreadCount = useSetAtom(unreadCountAtom);
+  const setUnreadCount = useSetAtom(unreadCountAtom);
 
-    const query = useQuery({
-        queryKey: ['unreadCount'],
-        queryFn: getUnreadCount,
-        staleTime: Infinity,
-    });
+  const query = useQuery({
+    queryKey: ["unreadCount"],
+    queryFn: getUnreadCount,
+    staleTime: Infinity,
+  });
 
-    useEffect(() => {
-        if (query.data) {
-            setUnreadCount(query.data);
-        }
-    }, [query.data, setUnreadCount]);
+  useEffect(() => {
+    if (query.data) {
+      setUnreadCount(query.data);
+    }
+  }, [query.data, setUnreadCount]);
 
-    return query;
+  return query;
 }

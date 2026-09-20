@@ -37,6 +37,7 @@ export default function CommentItem({
 }: CommentItemProps) {
   const { t } = useTranslation();
   const isSmall = size === "sm";
+  const avatarSize = isSmall ? "xs" : "sm";
   const actionSize = isSmall ? "btn-xs" : "btn-sm";
   const headingSize = isSmall ? "text-xs" : "text-sm";
   const bodySize = isSmall ? "text-sm" : "text-base";
@@ -46,9 +47,15 @@ export default function CommentItem({
 
   return (
     <li className="list-row">
+      {/* avatar */}
       <div>
         <UserHoverLink userId={userId}>
-          <Avatar imageUrl={avatarUrl} username={username} size={size} hover />
+          <Avatar
+            imageUrl={avatarUrl}
+            username={username}
+            size={avatarSize}
+            hover
+          />
         </UserHoverLink>
       </div>
       <div className="w-min-0 flex-1">
@@ -70,7 +77,9 @@ export default function CommentItem({
             </span>
           ) : null}
         </span>
+        {/* comment content */}
         <p className={`${bodySize} my-2`}>{body}</p>
+        {/* comment time, like button, reply button */}
         <div className="flex flex-row items-center justify-start">
           {createdAtStr ? (
             <span className={`opacity-60 ${createdAtStrSize}`}>

@@ -38,15 +38,15 @@ export default function ProfilePage({
   }
 
   return (
-    // flex-row layout
-    <div className="w-full flex">
+    // grid layout
+    <div className="w-full min-h-dvh grid grid-cols-1 lg:grid-cols-3">
       {/* left main layout */}
-      <div className="lg:mx-20 w-2xl">
+      <div className="col-span-1 px-4 lg:px-0 lg:col-span-2 border-r border-base-300">
         {/* flex-col layout */}
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full lg:w-5/6 mx-auto flex flex-col items-center">
           <div className="flex w-full justify-between px-2 lg:p-0">
             {/* user info */}
-            <div className="flex p-5 gap-3 px-2">
+            <div className="flex py-5 gap-3 lg:px-2">
               <div className="inline-flex lg:hidden">
                 <Avatar
                   imageUrl={user?.image ?? ""}
@@ -110,7 +110,7 @@ export default function ProfilePage({
         </div>
       </div>
       {/* right lg-screen-show profile info */}
-      <div className="hidden lg:inline-flex lg:grow lg:flex-col lg:p-12 lg:items-start gap-3 lg:border-l-2 lg:border-base-300">
+      <div className="hidden lg:inline-flex sticky top-0 self-start col-span-1 flex-col p-10 gap-3">
         <Avatar
           imageUrl={user?.image ?? ""}
           username={user?.username ?? ""}

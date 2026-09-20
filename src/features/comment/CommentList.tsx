@@ -221,6 +221,7 @@ export default function CommentList({
                           : ""
                       }
                     >
+                      {/* root comment */}
                       <CommentItem
                         avatarUrl={rootComment.userAvatar || ""}
                         userId={rootComment.userId}
@@ -272,6 +273,7 @@ export default function CommentList({
                       likeVariables={likeVariables}
                     />
 
+                    {/* comment text input */}
                     {activeReplyTarget?.rootId === rootComment.id && (
                       <div
                         id={`reply-textarea-${rootComment.id}`}
