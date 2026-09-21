@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-export default function LanguageBtn() {
+export default function LanguageToogle() {
   const { i18n } = useTranslation();
   const language = i18n.resolvedLanguage === "en" ? "en" : "zh-CN";
 

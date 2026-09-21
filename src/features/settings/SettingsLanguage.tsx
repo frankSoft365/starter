@@ -1,4 +1,4 @@
-import LanguageBtn from "@/ui/LanguageBtn";
+import LanguageBtn from "@/ui/LanguageToogle";
 import { useTranslation } from "react-i18next";
 
 export default function SettingsLanguage() {

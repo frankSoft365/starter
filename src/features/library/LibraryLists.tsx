@@ -1,6 +1,6 @@
 import { userAtom } from "@/atoms/user";
 import { useAtomValue } from "jotai";
-import Lists from "../profile/Lists";
+import Lists from "../collection/Lists";
 import NeedLogin from "@/ui/NeedLogin";
 
 export default function LibraryLists() {

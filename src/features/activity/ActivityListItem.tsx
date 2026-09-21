@@ -9,7 +9,7 @@ import {
 import ArticlePreviewImage from "../home/ArticlePreviewImage";
 import useOverflowHelper from "@/utils/overflowHelper";
 import { UserHoverLink } from "@/ui/ArticleAuthorInfo";
-import ArticlePreview from "../home/ArticlePreview";
+import ArticlePreview from "./ArticlePreview";
 import type { ArticleListItemVO } from "@/types/article";
 import { useProfileUser } from "../profile/ProfileUserContext";
 import { useNavigate, useRouter } from "@tanstack/react-router";

@@ -4,27 +4,27 @@ import {
   ListIcon,
 } from "@phosphor-icons/react";
 import { useLocation, useNavigate, useSearch } from "@tanstack/react-router";
-import SignedIn from "./SignedIn";
-import SignedOut from "./SignedOut";
+import SignedIn from "../SignedIn";
+import SignedOut from "../SignedOut";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import AvatarDropdown from "./AvatarDropdown";
-import { Route as homeRoute } from "../routes/_app/_home/index";
-import { Route as editorRoute } from "../routes/_app/_protected/editor";
-import { Route as loginRoute } from "../routes/login";
+import AvatarDropdown from "../AvatarDropdown";
+import { Route as homeRoute } from "../../routes/_app/_home/index";
+import { Route as editorRoute } from "../../routes/_app/_protected/editor";
+import { Route as loginRoute } from "../../routes/login";
 import {
   editorEmptySignalAtom,
   editorSubmissionSignalAtom,
   editorUpdateSignalAtom,
   isEditorEmptyAtom,
-} from "../atoms/editor";
-import { isLoadingAtom } from "../atoms/user";
+} from "../../atoms/editor";
+import { isLoadingAtom } from "../../atoms/user";
 import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
 import { isDirtyAtom } from "@/atoms/article";
 import { Route as notificationsRoute } from "@/routes/_app/_protected/me/notifications";
-import NotificationBell from "../features/notifications/NotificationBell";
+import NotificationBell from "../../features/notifications/NotificationBell";
 import { useTranslation } from "react-i18next";
-import { recentSearchesAtom } from "../atoms/search";
-import { useSearchInput } from "../features/search/search";
+import { recentSearchesAtom } from "../../atoms/search";
+import { useSearchInput } from "../../features/search/search";
 
 export default function NavBar() {
   const { t } = useTranslation();
@@ -65,32 +65,37 @@ export default function NavBar() {
   );
 
   return (
-    <div className="navbar bg-base-100 shadow-sm mb-1">
+    <div className="md:z-99 navbar dark:bg-base-200 shadow-xs mb-1">
       <div className="navbar-start">
-        <label
-          htmlFor="my-drawer-4"
-          className="btn drawer-button btn-square btn-ghost"
+        <div
+          className="md:tooltip md:tooltip-bottom md:tooltip-start md:ml-2"
+          data-tip="Close sidebar"
         >
-          {/* Sidebar toggle icon */}
-          <ListIcon size={24} />
-        </label>
-        <button
+          <label
+            htmlFor="my-drawer-4"
+            className="btn drawer-button btn-square btn-ghost"
+          >
+            {/* Sidebar toggle icon */}
+            <ListIcon size={24} />
+          </label>
+        </div>
+        <span
           onClick={() => navigate({ to: homeRoute.to })}
-          className="btn btn-ghost btn-sm text-sm mr-2 lg:text-xl lg:btn-md"
+          className="cursor-pointer font-serif ml-2 mr-6 text-2xl"
         >
           Aedium
-        </button>
+        </span>
         {/* search input field */}
         {!isEditorRoute && (
           <>
-            <label className="input input-ghost rounded-full bg-base-200 w-64 hidden md:inline-flex">
+            <label className="input input-ghost rounded-full bg-base-200 dark:bg-base-300 w-64 hidden md:inline-flex">
               <MagnifyingGlassIcon size={24} />
               <input
                 onKeyDown={handleSearch}
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t("nav.searchInput.placeholder")}
-                className="input input-ghost bg-base-200 md:grow"
+                className="input input-ghost bg-base-200 dark:bg-base-300 md:grow"
                 list="resentSearches"
               />
             </label>
@@ -117,13 +122,13 @@ export default function NavBar() {
         <SignedIn>
           {!isEditorRoute && !isArticleEditRoute && (
             <>
-              <button
+              <span
                 onClick={() => navigate({ to: editorRoute.to })}
-                className="btn btn-ghost hidden md:inline-flex mr-1"
+                className="cursor-pointer items-center px-2 font-light text-base-content/65 hover:text-base-content hidden md:inline-flex mr-4"
               >
                 <NotePencilIcon size={24} />
-                {t("btn.write")}
-              </button>
+                <span className="ml-1 text-sm">{t("btn.write")}</span>
+              </span>
               <NotificationBell
                 isNotificationRoute={isNotificationRoute}
                 hanleClick={() => navigate({ to: notificationsRoute.to })}

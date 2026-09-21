@@ -1,9 +1,9 @@
 import Loading from "@/ui/Loading";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { useCollectionListsQuery } from "../collection/collection";
+import { useCollectionListsQuery } from "./collection";
 import { BookmarkSimpleIcon } from "@phosphor-icons/react";
-import { CollectionListRow } from "../collection/CollectionListRow";
+import { CollectionListRow } from "./CollectionListRow";
 
 export default function Lists({ userId }: { userId: string }) {
   const { t } = useTranslation();

@@ -5,10 +5,10 @@ import {
   UserCircleIcon,
 } from "@phosphor-icons/react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
-import SignedIn from "./SignedIn";
-import { Route as editorRoute } from "../routes/_app/_protected/editor";
-import { Route as homeRoute } from "../routes/_app/_home/index";
-import { Route as profileRoute } from "../routes/_app/_protected/profile/$userId/_profile";
+import SignedIn from "../SignedIn";
+import { Route as editorRoute } from "../../routes/_app/_protected/editor";
+import { Route as homeRoute } from "../../routes/_app/_home/index";
+import { Route as profileRoute } from "../../routes/_app/_protected/profile/$userId/_profile";
 import { useTranslation } from "react-i18next";
 import { useAtomValue } from "jotai";
 import { isLoadingAtom, userAtom } from "@/atoms/user";
@@ -34,8 +34,16 @@ export default function DrawerSide({
     location.pathname === libraryRoute.to ||
     location.pathname.startsWith(libraryRoute.to + "/");
 
+  function ActiveIndicator({ isActive }: { isActive: boolean }) {
+    return (
+      <div
+        className={`w-0.5 h-6 mr-0.5 p-0 ${isActive ? "bg-black dark:bg-white" : "opacity-0"} shadow-2xl`}
+      ></div>
+    );
+  }
+
   return (
-    <div className="drawer-side">
+    <div className="drawer-side z-999 md:z-10">
       <label
         htmlFor="my-drawer-4"
         aria-label="close sidebar"
@@ -50,9 +58,7 @@ export default function DrawerSide({
               <SignedIn>
                 {/* List item : write button */}
                 <li className="flex flex-row items-center">
-                  <div
-                    className={`w-0.5 h-6 mr-1 p-0 ${isEditorRoute ? "bg-black" : "opacity-0"} shadow-2xl`}
-                  ></div>
+                  <ActiveIndicator isActive={isEditorRoute} />
                   <button
                     className={`grow ${isEditorRoute ? "" : "opacity-60"}`}
                     onClick={() => {
@@ -71,9 +77,7 @@ export default function DrawerSide({
               </SignedIn>
               {/* List item : home page */}
               <li className="flex flex-row items-center">
-                <div
-                  className={`w-0.5 h-6 mr-1 p-0 ${isHomeRoute ? "bg-black" : "opacity-0"} shadow-2xl`}
-                ></div>
+                <ActiveIndicator isActive={isHomeRoute} />
                 <button
                   className={`grow ${isHomeRoute ? "" : "opacity-60"}`}
                   onClick={() => {
@@ -91,9 +95,7 @@ export default function DrawerSide({
               </li>
               {/* List item : library */}
               <li className="flex flex-row items-center">
-                <div
-                  className={`w-0.5 h-6 mr-1 p-0 ${isLibraryRoute ? "bg-black" : "opacity-0"} shadow-2xl`}
-                ></div>
+                <ActiveIndicator isActive={isLibraryRoute} />
                 <button
                   className={`grow ${isLibraryRoute ? "" : "opacity-60"}`}
                   onClick={() => {
@@ -114,9 +116,7 @@ export default function DrawerSide({
               </li>
               {/* List item : user profile */}
               <li className="flex flex-row items-center">
-                <div
-                  className={`w-0.5 h-6 mr-1 p-0 ${isProfileRoute ? "bg-black" : "opacity-0"} shadow-2xl`}
-                ></div>
+                <ActiveIndicator isActive={isProfileRoute} />
                 <button
                   className={`grow ${isProfileRoute ? "" : "opacity-60"}`}
                   onClick={() => {

@@ -125,7 +125,10 @@ export default function ProfilePage({
         />
         {/* link to profile edit page */}
         <CurrentUser authorId={userId}>
-          <Link to="/me/settings" className="text-green-500 hover:text-black">
+          <Link
+            to="/me/settings"
+            className="text-success/75 hover:text-success"
+          >
             {t("profile.editProfile")}
           </Link>
         </CurrentUser>

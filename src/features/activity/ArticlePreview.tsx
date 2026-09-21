@@ -16,7 +16,7 @@ import SaveButton from "../article/SaveButton";
 import ArticleAuthorInfo from "@/ui/ArticleAuthorInfo";
 import SignedIn from "@/ui/SignedIn";
 import SignedOut from "@/ui/SignedOut";
-import ArticlePreviewImage from "./ArticlePreviewImage";
+import ArticlePreviewImage from "../home/ArticlePreviewImage";
 import { useLocation } from "@tanstack/react-router";
 import { Route as activityRoute } from "@/routes/_app/_protected/profile/$userId/_profile/activity";
 import useOverflowHelper from "@/utils/overflowHelper";
