@@ -1,4 +1,5 @@
 import {
+  BookmarksIcon,
   HouseIcon,
   NotePencilIcon,
   UserCircleIcon,
@@ -11,6 +12,7 @@ import { Route as profileRoute } from "../routes/_app/_protected/profile/$userId
 import { useTranslation } from "react-i18next";
 import { useAtomValue } from "jotai";
 import { isLoadingAtom, userAtom } from "@/atoms/user";
+import { Route as libraryRoute } from "@/routes/_app/_protected/me/lists/index";
 
 export default function DrawerSide({
   onNav,
@@ -28,6 +30,9 @@ export default function DrawerSide({
   const isProfileRoute = location.pathname.includes(
     profileRoute.to.replace("$userId", user?.id ?? ""),
   );
+  const isLibraryRoute =
+    location.pathname === libraryRoute.to ||
+    location.pathname.startsWith(libraryRoute.to + "/");
 
   return (
     <div className="drawer-side">
@@ -82,6 +87,29 @@ export default function DrawerSide({
                     weight={isHomeRoute ? "fill" : undefined}
                   />
                   <span>{t("btn.home")}</span>
+                </button>
+              </li>
+              {/* List item : library */}
+              <li className="flex flex-row items-center">
+                <div
+                  className={`w-0.5 h-6 mr-1 p-0 ${isLibraryRoute ? "bg-black" : "opacity-0"} shadow-2xl`}
+                ></div>
+                <button
+                  className={`grow ${isLibraryRoute ? "" : "opacity-60"}`}
+                  onClick={() => {
+                    navigate({
+                      to: libraryRoute.to,
+                    });
+                    onNav(false);
+                  }}
+                >
+                  {/* Library icon */}
+                  <BookmarksIcon
+                    size={24}
+                    weight={isLibraryRoute ? "fill" : undefined}
+                  />
+                  <span>Library</span>
+                  <div className="badge badge-secondary rounded-full">New</div>
                 </button>
               </li>
               {/* List item : user profile */}

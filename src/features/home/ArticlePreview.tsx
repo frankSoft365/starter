@@ -65,7 +65,7 @@ export default function ArticlePreview({
             />
           </div>
           {/* actions */}
-          <div className="flex flex-col lg:flex-row justify-between lg:items-center opacity-75">
+          <div className="flex flex-col lg:flex-row justify-between lg:items-center text-base-content/70 [&_button]:text-base-content/70 [&_svg]:text-base-content/70">
             <div className="flex flex-row">
               <div
                 className="lg:tooltip"

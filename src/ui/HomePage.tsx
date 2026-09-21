@@ -12,23 +12,27 @@ export default function HomePage({ children }: { children: React.ReactNode }) {
     <div className="w-full flex">
       <div className="lg:mx-20 w-2xl">
         {/* The tab */}
-        <div className="mt-4">
-          <div role="tablist" className="tabs tabs-border">
-            <a
-              role="tab"
-              className={`tab ${isHomeArticleListRoute ? "tab-active" : ""}`}
-              onClick={() => navigate({ to: homeArticleListRoute.to })}
-            >
-              For you
-            </a>
-            <a
-              role="tab"
-              className={`tab ${isHomeFeatureRoute ? "tab-active" : ""}`}
-              onClick={() => navigate({ to: homeFeatureRoute.to })}
-            >
-              Feature
-            </a>
-          </div>
+        <div
+          role="tablist"
+          className="mt-4 z-9 bg-base-100 tabs tabs-border sticky top-0"
+        >
+          <a
+            role="tab"
+            className={`tab ${isHomeArticleListRoute ? "tab-active" : ""}`}
+            onClick={() => navigate({ to: homeArticleListRoute.to })}
+          >
+            For you
+          </a>
+          <a
+            role="tab"
+            className={`tab ${isHomeFeatureRoute ? "tab-active" : ""}`}
+            onClick={() => navigate({ to: homeFeatureRoute.to })}
+          >
+            Activity
+            <div className="badge badge-xs bg-base-300 ml-2 badge-neutral badge-outline">
+              Beta
+            </div>
+          </a>
         </div>
         {children}
       </div>

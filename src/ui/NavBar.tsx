@@ -105,12 +105,14 @@ export default function NavBar() {
       </div>
       <div className="navbar-end">
         {/* search btn in small screen */}
-        <button
-          onClick={() => navigate({ to: "/search" })}
-          className="btn btn-ghost btn-square inline-flex md:hidden mr-2"
-        >
-          <MagnifyingGlassIcon size={24} />
-        </button>
+        {!isEditorRoute && (
+          <button
+            onClick={() => navigate({ to: "/search" })}
+            className="btn btn-ghost btn-square inline-flex md:hidden mr-2"
+          >
+            <MagnifyingGlassIcon size={24} />
+          </button>
+        )}
         {/* can write only when is login */}
         <SignedIn>
           {!isEditorRoute && !isArticleEditRoute && (

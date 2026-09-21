@@ -110,7 +110,7 @@ export default function ProfilePage({
         </div>
       </div>
       {/* right lg-screen-show profile info */}
-      <div className="hidden lg:inline-flex sticky top-0 self-start col-span-1 flex-col p-10 gap-3">
+      <div className="hidden lg:inline-flex sticky top-0 self-start col-span-1 flex-col items-start p-10 gap-3">
         <Avatar
           imageUrl={user?.image ?? ""}
           username={user?.username ?? ""}

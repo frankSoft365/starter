@@ -53,12 +53,12 @@ export default function ArticleListItem({
           <p className="text-lg md:text-2xl font-sans font-bold text-wrap mt-1 mb-2.5">
             {article.title}
           </p>
-          <p className="text-sm opacity-60 md:text-base font-sans font-light text-wrap">
+          <p className="text-sm text-base-content/70 md:text-base font-sans font-light text-wrap">
             {handleOverflow(article.subtitle, 118)}
           </p>
         </div>
         {/* actions */}
-        <div className="flex flex-col lg:flex-row justify-between lg:items-center opacity-75">
+        <div className="flex flex-col lg:flex-row justify-between lg:items-center [&_svg]:text-base-content/70">
           <div className="flex flex-row">
             <div
               className="lg:tooltip"

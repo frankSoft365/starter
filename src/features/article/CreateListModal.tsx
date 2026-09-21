@@ -43,7 +43,7 @@ export default function CreateListModal({
 
   return (
     <div
-      className="modal modal-open pointer-events-auto"
+      className="modal modal-open fixed inset-0 bg-black/50 pointer-events-auto"
       onClick={(e) => {
         e.stopPropagation();
         onClose();

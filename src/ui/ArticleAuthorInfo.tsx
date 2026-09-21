@@ -38,7 +38,7 @@ export default function ArticleAuthorInfo({
         <span>{authorName}</span>
       </UserHoverLink>
       <span>·</span>
-      <span className="opacity-60">
+      <span className="text-base-content/60">
         {getPublishDate(new Date(publishTime))}
       </span>
     </div>

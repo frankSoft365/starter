@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { useDeleteCollectionList } from "../collection/collection";
 
 export default function DeleteListModal({
@@ -54,6 +55,7 @@ export default function DeleteListModal({
             onClick={() => {
               mutate(listId, {
                 onSuccess: () => {
+                  toast.success(t("profile.list.deletedTip"));
                   onDeleted?.();
                   onClose();
                 },
