@@ -31,10 +31,10 @@ export default function LibraryLayout({
   return (
     <div className="w-full px-4 lg:px-0 lg:w-3/5 lg:mx-auto">
       <div className="my-6 lg:mt-12 lg:mb-10 flex flex-row items-center justify-between">
-        <h1 className="text-3xl md:text-4xl font-bold">Your library</h1>
+        <h1 className="text-2xl md:text-4xl font-bold">Your library</h1>
         <button
           type="button"
-          className="btn btn-success rounded-full"
+          className="btn btn-success btn-sm md:btn-md rounded-full"
           onClick={() => setIsCreateListModalOpen(true)}
         >
           New list

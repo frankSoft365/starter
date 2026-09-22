@@ -65,7 +65,7 @@ export default function NavBar() {
   );
 
   return (
-    <div className="md:z-99 navbar dark:bg-base-200 shadow-xs mb-1">
+    <div className="z-10 md:z-99 navbar dark:bg-base-200 shadow-xs mb-1">
       <div className="navbar-start">
         <div
           className="md:tooltip md:tooltip-bottom md:tooltip-start md:ml-2"
@@ -81,7 +81,7 @@ export default function NavBar() {
         </div>
         <span
           onClick={() => navigate({ to: homeRoute.to })}
-          className="cursor-pointer font-serif ml-2 mr-6 text-2xl"
+          className="cursor-pointer font-serif ml-2 mr-6 text-xl md:text-2xl"
         >
           Aedium
         </span>
