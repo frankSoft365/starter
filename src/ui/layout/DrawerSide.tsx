@@ -43,7 +43,7 @@ export default function DrawerSide({
   }
 
   return (
-    <div className="drawer-side h-full">
+    <div className="drawer-side md:sticky md:top-16 md:h-[calc(100dvh-4rem)] md:self-start">
       <label
         htmlFor="my-drawer-4"
         aria-label="close sidebar"

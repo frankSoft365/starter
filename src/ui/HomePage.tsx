@@ -15,7 +15,7 @@ export default function HomePage({ children }: { children: React.ReactNode }) {
         {/* 保持置顶固定 */}
         <div
           role="tablist"
-          className="z-2 bg-base-100 tabs tabs-border sticky top-0"
+          className="z-2 bg-base-100 tabs tabs-border sticky top-16"
         >
           <a
             role="tab"

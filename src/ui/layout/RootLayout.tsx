@@ -32,7 +32,7 @@ export default function RootLayout({
       </SignedIn>
       {/* Navbar */}
       <NavBar />
-      <div className="drawer h-[calc(100dvh-4rem)] md:drawer-open">
+      <div className="drawer md:drawer-open">
         <input
           id="my-drawer-4"
           type="checkbox"
@@ -40,7 +40,7 @@ export default function RootLayout({
           checked={drawerOpen}
           onChange={(e) => setDrawerOpen(e.target.checked)}
         />
-        <div className="drawer-content flex h-full min-h-0 flex-col overflow-y-auto">
+        <div className="drawer-content flex min-h-dvh flex-col">
           {/* Page content here */}
           <div className="flex-1">{children}</div>
           {!isEditorRoute && !isArticleEditRoute && <Footer />}
