@@ -12,7 +12,7 @@ export default function LinkDetailBar() {
       <div className="breadcrumbs text-sm">
         <ul>
           <li>
-            <a onClick={linkToHCHome} className="opacity-65">
+            <a onClick={linkToHCHome} className="text-base-content/65">
               Aedium Help Center
             </a>
           </li>

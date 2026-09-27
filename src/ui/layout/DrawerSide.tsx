@@ -43,7 +43,7 @@ export default function DrawerSide({
   }
 
   return (
-    <div className="drawer-side z-999 md:z-10">
+    <div className="drawer-side h-full">
       <label
         htmlFor="my-drawer-4"
         aria-label="close sidebar"

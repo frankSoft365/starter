@@ -3,7 +3,7 @@ import {
   Outlet,
   stripSearchParams,
 } from "@tanstack/react-router";
-import RootLayout from "@/ui/RootLayout";
+import RootLayout from "@/ui/layout/RootLayout";
 import { SearchParamSchema } from "@/schemas/searchParam";
 import { zodValidator } from "@tanstack/zod-adapter";
 

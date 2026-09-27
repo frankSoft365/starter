@@ -36,7 +36,7 @@ export function HelpCenterLayout({ children }: { children: React.ReactNode }) {
               >
                 Aedium
               </a>
-              <span className="hidden md:inline-flex text-sm font-light opacity-85">
+              <span className="hidden md:inline-flex text-sm font-light text-white/80">
                 Help Center
               </span>
             </div>
@@ -53,14 +53,14 @@ export function HelpCenterLayout({ children }: { children: React.ReactNode }) {
               <ul className="hidden md:inline-flex menu menu-horizontal px-1">
                 <li>
                   <a
-                    className="opacity-85 hover:opacity-100"
+                    className="text-white/85 hover:text-white"
                     onClick={linkToHome}
                   >
                     Back to home
                   </a>
                 </li>
                 <li>
-                  <a className="btn btn-outline opacity-85 rounded-full border-base-100 text-white hover:opacity-100 hover:bg-neutral">
+                  <a className="btn btn-outline rounded-full border-base-100 text-white/85 hover:text-white hover:bg-neutral">
                     Submit a request
                   </a>
                 </li>

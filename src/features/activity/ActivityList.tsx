@@ -112,7 +112,9 @@ export default function ActivityList() {
             )}
           </ul>
         ) : (
-          <div className="h-48 opacity-60 text-center p-5">没有数据了！</div>
+          <div className="h-48 text-base-content/65 text-center p-5">
+            没有数据了！
+          </div>
         ))}
     </div>
   );

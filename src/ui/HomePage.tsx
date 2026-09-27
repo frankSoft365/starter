@@ -9,12 +9,13 @@ export default function HomePage({ children }: { children: React.ReactNode }) {
   const isHomeFeatureRoute = location.pathname === homeFeatureRoute.to;
 
   return (
-    <div className="w-full flex">
+    <div className="w-full flex isolate">
       <div className="lg:mx-20 w-2xl">
         {/* The tab */}
+        {/* 保持置顶固定 */}
         <div
           role="tablist"
-          className="mt-4 z-9 bg-base-100 tabs tabs-border sticky top-0"
+          className="z-2 bg-base-100 tabs tabs-border sticky top-0"
         >
           <a
             role="tab"
@@ -34,7 +35,7 @@ export default function HomePage({ children }: { children: React.ReactNode }) {
             </div>
           </a>
         </div>
-        {children}
+        <div className="z-1">{children}</div>
       </div>
       {/* The right part */}
       <div className="hidden lg:inline-flex lg:grow lg:flex-col lg:p-12 lg:items-start gap-3 lg:border-l lg:border-base-300">

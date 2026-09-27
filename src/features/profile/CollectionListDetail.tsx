@@ -197,7 +197,7 @@ function DeletedArticleItem({
       <div className=" flex flex-col items-end justify-center col-span-5 gap-4">
         <div role="alert" className="alert w-full p-6">
           <WarningCircleIcon size={24} />
-          <span className="opacity-65 text-base">
+          <span className="text-base-content/65 text-base">
             {t("profile.list.storyNoLongerAvailable")}
           </span>
         </div>

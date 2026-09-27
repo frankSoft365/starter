@@ -40,7 +40,7 @@ export default function SettingsAccount() {
             <div className="text-right">
               <button
                 type="button"
-                className="cursor-pointer hover:opacity-70"
+                className="cursor-pointer text-base-content/80 hover:text-base-content"
                 onClick={() => setIsModalOpen(true)}
               >
                 {user?.username}

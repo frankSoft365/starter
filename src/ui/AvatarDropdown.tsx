@@ -70,7 +70,7 @@ export default function AvatarDropdown() {
         )}
       </summary>
       {isOpen && (
-        <ul className="menu dropdown-content bg-base-100 rounded-box z-1 mt-1 p-2 shadow-sm">
+        <ul className="menu dropdown-content bg-base-100 rounded-box mt-1 p-2 shadow-sm">
           {user && (
             <li className="list-row">
               <Link
@@ -158,7 +158,7 @@ export default function AvatarDropdown() {
             <div className="flex flex-col items-start p-4">
               <p>{t("btn.logout")}</p>
               <div className="tooltip" data-tip={user?.email}>
-                <div className="text-xs opacity-70">
+                <div className="text-xs text-base-content/70">
                   {handleOverflow(user?.email, 25)}
                 </div>
               </div>

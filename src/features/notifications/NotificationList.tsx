@@ -271,7 +271,7 @@ export default function NotificationList({
                         >
                           <span>{actorUsername}</span>
                         </UserHoverLink>
-                        <span className="opacity-65">
+                        <span className="text-base-content/65">
                           {t(notificationActionTextMap[notification.type])}
                         </span>
                       </div>
@@ -280,9 +280,9 @@ export default function NotificationList({
                         <div className="text-lg my-2 py-2">
                           {notification.parentComment &&
                           notification.parentComment.parentId ? (
-                            <span className="opacity-60">
+                            <span className="text-base-content/60">
                               <em> {t("notification.replyTo")} </em>
-                              <span className="text-blue-500">
+                              <span className="text-blue-500/70">
                                 {notification.reply.replyToUsername}
                               </span>
                               <span> : </span>
@@ -295,7 +295,7 @@ export default function NotificationList({
                       {isReplyNotification(notification) &&
                         notification.parentComment &&
                         notification.parentComment.parentId && (
-                          <div className="text-xs bg-base-300 p-2 opacity-70 mb-1">
+                          <div className="text-xs bg-base-300 p-2 text-base-content/70 mb-1">
                             <span>{`${notification.parentComment.username} : `}</span>
                             <span>
                               {notification.parentComment.parentId !==
@@ -306,7 +306,7 @@ export default function NotificationList({
                           </div>
                         )}
                       {/* notification time */}
-                      <span className="text-xs opacity-60">
+                      <span className="text-xs text-base-content/60">
                         {formatDateTime(new Date(notification.createTime))}
                       </span>
                     </div>
@@ -317,7 +317,7 @@ export default function NotificationList({
                           <>
                             {notification.targetType === "ARTICLE" && (
                               <div>
-                                <span className="opacity-70 text-xs">
+                                <span className="text-base-content/70 text-xs">
                                   {t("notification.relatedArticle")}{" "}
                                 </span>
                                 {notification.article ? (
@@ -331,7 +331,7 @@ export default function NotificationList({
                             )}
                             {notification.targetType === "COMMENT" && (
                               <div>
-                                <span className="opacity-70 text-xs">
+                                <span className="text-base-content/70 text-xs">
                                   {t("notification.relatedRootComment")}{" "}
                                 </span>
                                 <span>{notification.rootComment.content}</span>
@@ -343,7 +343,7 @@ export default function NotificationList({
                           <>
                             {notification.type === "LIKE_ARTICLE" && (
                               <div>
-                                <span className="opacity-70 text-xs">
+                                <span className="text-base-content/70 text-xs">
                                   {t("notification.relatedArticle")}{" "}
                                 </span>
                                 {notification.article ? (
@@ -358,7 +358,7 @@ export default function NotificationList({
                             {notification.type === "LIKE_COMMENT" &&
                               notification.comment && (
                                 <div>
-                                  <span className="opacity-70 text-xs">
+                                  <span className="text-base-content/70 text-xs">
                                     {t("notification.relatedRootComment")}{" "}
                                   </span>
                                   <span>{notification.comment.content}</span>
@@ -387,7 +387,7 @@ export default function NotificationList({
             )}
           </ul>
         ) : (
-          <div className="h-48 opacity-60 text-center p-5">
+          <div className="h-48 text-base-content/60 text-center p-5">
             {t("notification.empty")}
           </div>
         ))}

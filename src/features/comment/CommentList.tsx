@@ -361,7 +361,7 @@ export default function CommentList({
             )}
           </ul>
         ) : (
-          <div className="h-48 opacity-60 text-center p-5">
+          <div className="h-48 text-base-content/60 text-center p-5">
             {t("comment.noComment")}
           </div>
         ))}

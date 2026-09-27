@@ -146,7 +146,7 @@ export default function SaveButton({ articleId }: { articleId: string }) {
                   );
                 })
               ) : (
-                <li className="px-4 py-3 text-sm opacity-60">
+                <li className="px-4 py-3 text-sm text-base-content/60">
                   {t("article.collect.emptyList")}
                 </li>
               )}

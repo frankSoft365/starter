@@ -50,7 +50,7 @@ export default function SearchPage({
             <>
               {/* The result declare */}
               <h1 className="text-2xl px-4 lg:text-5xl font-medium my-6">
-                <span className="opacity-60">Results for</span> {q}
+                <span className="text-base-content/65">Results for</span> {q}
               </h1>
               {/* <h1 className="text-4xl text-red-500">{location.pathname}</h1>
               <h1 className="text-3xl">{postsRoute.to}</h1>
@@ -147,7 +147,9 @@ export default function SearchPage({
                 </ul>
               ) : (
                 <div className="flex items-center justify-center min-h-24">
-                  <h1 className="text-xl opacity-70">No rencent searches</h1>
+                  <h1 className="text-xl text-base-content/70">
+                    No rencent searches
+                  </h1>
                 </div>
               )}
             </>

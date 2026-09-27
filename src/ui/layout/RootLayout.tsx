@@ -1,11 +1,11 @@
-import DrawerSide from "./layout/DrawerSide";
-import Footer from "./layout/Footer";
-import NavBar from "./layout/NavBar";
+import DrawerSide from "./DrawerSide";
+import Footer from "./Footer";
+import NavBar from "./NavBar";
 import { useLocation } from "@tanstack/react-router";
-import { Route as editorRoute } from "../routes/_app/_protected/editor";
+import { Route as editorRoute } from "../../routes/_app/_protected/editor";
 import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
 import { useState } from "react";
-import SignedIn from "./SignedIn";
+import SignedIn from "../SignedIn";
 import NotificationSync from "@/features/notifications/NotificationSync";
 
 /**
@@ -32,7 +32,7 @@ export default function RootLayout({
       </SignedIn>
       {/* Navbar */}
       <NavBar />
-      <div className="drawer md:drawer-open">
+      <div className="drawer h-[calc(100dvh-4rem)] md:drawer-open">
         <input
           id="my-drawer-4"
           type="checkbox"
@@ -40,7 +40,7 @@ export default function RootLayout({
           checked={drawerOpen}
           onChange={(e) => setDrawerOpen(e.target.checked)}
         />
-        <div className="drawer-content flex flex-col min-h-dvh">
+        <div className="drawer-content flex h-full min-h-0 flex-col overflow-y-auto">
           {/* Page content here */}
           <div className="flex-1">{children}</div>
           {!isEditorRoute && !isArticleEditRoute && <Footer />}

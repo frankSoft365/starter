@@ -1,90 +1,96 @@
-import { useState } from 'react'
-import Cropper, { type Area, type Point } from 'react-easy-crop'
-import { focalPercentFromArea, focalRatioFromArea, objectPositionFromRatio } from '@/utils/coverFocus'
-import { useTranslation } from 'react-i18next'
+import { useState } from "react";
+import Cropper, { type Area, type Point } from "react-easy-crop";
+import {
+  focalPercentFromArea,
+  focalRatioFromArea,
+  objectPositionFromRatio,
+} from "@/utils/coverFocus";
+import { useTranslation } from "react-i18next";
 
 interface AdjustImageProps {
-    image: string
-    onSave?: (focalRatio: number) => void,
+  image: string;
+  onSave?: (focalRatio: number) => void;
 }
 
 export default function AdjustImage({ image, onSave }: AdjustImageProps) {
-    const { t } = useTranslation();
-    const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
-    const [zoom, setZoom] = useState(1)
+  const { t } = useTranslation();
+  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
 
-    const [croppedArea, setCroppedArea] = useState<Area | null>(null);
+  const [croppedArea, setCroppedArea] = useState<Area | null>(null);
 
-    function onCropComplete(area: Area) {
-        setCroppedArea(area)
+  function onCropComplete(area: Area) {
+    setCroppedArea(area);
+  }
+
+  const focalYPercent = focalPercentFromArea(croppedArea);
+
+  function saveCrop() {
+    if (onSave) {
+      const focalRatio = focalRatioFromArea(croppedArea);
+      onSave(focalRatio);
     }
+  }
 
-    const focalYPercent = focalPercentFromArea(croppedArea)
+  function resetCrop() {
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setCroppedArea(null);
+  }
 
-    function saveCrop() {
-        if (onSave) {
-            const focalRatio = focalRatioFromArea(croppedArea);
-            onSave(focalRatio);
-        }
+  return (
+    <div className="w-full">
+      {/* 裁剪器主容器 */}
+      <div className="relative w-full h-84">
+        <Cropper
+          image={image}
+          crop={crop}
+          zoom={zoom}
+          maxZoom={1}
+          zoomWithScroll={false}
+          aspect={2 / 1}
+          onCropChange={setCrop}
+          onCropComplete={onCropComplete}
+          onZoomChange={setZoom}
+          showGrid={false}
+          objectFit="contain"
+        />
+      </div>
 
-    }
-
-    function resetCrop() {
-        setCrop({ x: 0, y: 0 })
-        setZoom(1)
-        setCroppedArea(null)
-    }
-
-    return (
-        <div className="w-full">
-            {/* 裁剪器主容器 */}
-            <div className="relative w-full h-84">
-                <Cropper
-                    image={image}
-                    crop={crop}
-                    zoom={zoom}
-                    maxZoom={1}
-                    zoomWithScroll={false}
-                    aspect={2 / 1}
-                    onCropChange={setCrop}
-                    onCropComplete={onCropComplete}
-                    onZoomChange={setZoom}
-                    showGrid={false}
-                    objectFit="contain"
-                />
-            </div>
-
-            {/* 实时预览区域 */}
-            <div className="w-full mt-6 pt-4">
-                <p className="text-sm font-medium opacity-60 mb-2 text-left">{t('submission.coverImage.adjust.preview')}</p>
-                <div className="w-4/5 border border-gray-200 overflow-hidden bg-gray-50 shadow-inner">
-                    <img
-                        src={image}
-                        alt="preview"
-                        className="w-full aspect-2/1 object-cover transition-all duration-75"
-                        style={{ objectPosition: objectPositionFromRatio(focalYPercent / 100) }}
-                    />
-                </div>
-            </div>
-
-            {/* 操作控制栏 */}
-            <div className="flex flex-row items-center justify-end gap-2 mt-6">
-                <button
-                    onClick={resetCrop}
-                    type="button"
-                    className="btn rounded-full btn-outline"
-                >
-                    {t('btn.resetToCenter')}
-                </button>
-                <button
-                    onClick={saveCrop}
-                    type="button"
-                    className="btn btn-neutral rounded-full"
-                >
-                    {t('btn.save')}
-                </button>
-            </div>
+      {/* 实时预览区域 */}
+      <div className="w-full mt-6 pt-4">
+        <p className="text-sm font-medium text-base-content/60 mb-2 text-left">
+          {t("submission.coverImage.adjust.preview")}
+        </p>
+        <div className="w-4/5 border border-gray-200 overflow-hidden bg-gray-50 shadow-inner">
+          <img
+            src={image}
+            alt="preview"
+            className="w-full aspect-2/1 object-cover transition-all duration-75"
+            style={{
+              objectPosition: objectPositionFromRatio(focalYPercent / 100),
+            }}
+          />
         </div>
-    )
-}
+      </div>
 
+      {/* 操作控制栏 */}
+      <div className="flex flex-row items-center justify-end gap-2 mt-6">
+        <button
+          onClick={resetCrop}
+          type="button"
+          className="btn rounded-full btn-outline"
+        >
+          {t("btn.resetToCenter")}
+        </button>
+        <button
+          onClick={saveCrop}
+          type="button"
+          className="btn btn-neutral rounded-full"
+        >
+          {t("btn.save")}
+        </button>
+      </div>
+    </div>
+  );
+}

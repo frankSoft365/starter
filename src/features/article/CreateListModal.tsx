@@ -86,7 +86,7 @@ export default function CreateListModal({
                 />
                 <div className="flex items-center justify-between mt-1">
                   <FieldInfo field={field} />
-                  <span className="text-xs opacity-50 ml-auto">
+                  <span className="text-xs text-base-content/60 ml-auto">
                     {field.state.value.length}/60
                   </span>
                 </div>
@@ -109,7 +109,7 @@ export default function CreateListModal({
                 />
                 <div className="flex items-center justify-between mt-1">
                   <FieldInfo field={field} />
-                  <span className="text-xs opacity-50 ml-auto">
+                  <span className="text-xs text-base-content/60 ml-auto">
                     {field.state.value.length}/280
                   </span>
                 </div>

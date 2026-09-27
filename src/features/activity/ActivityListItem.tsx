@@ -188,7 +188,7 @@ export default function ActivityListItem({
           </div>
         ) : (
           <div className="bg-base-200 text-center p-8">
-            <p className="opacity-65">The article is deleted.</p>
+            <p className="text-base-content/65">The article is deleted.</p>
           </div>
         )}
       </div>

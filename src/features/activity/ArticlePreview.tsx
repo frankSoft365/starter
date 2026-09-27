@@ -49,7 +49,7 @@ export default function ArticlePreview({
           <p className="text-lg md:text-2xl font-sans font-bold text-wrap">
             {article.title}
           </p>
-          <p className="text-sm opacity-60 md:text-base font-sans font-light text-wrap mb-1">
+          <p className="text-sm text-base-content/70 md:text-base font-sans font-light text-wrap mb-1">
             {handleOverflow(article.subtitle, 118)}
           </p>
         </div>

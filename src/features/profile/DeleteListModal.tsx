@@ -36,7 +36,7 @@ export default function DeleteListModal({
         <h1 className="text-center font-bold text-xl md:text-3xl">
           {t("profile.list.deleteTitle")}
         </h1>
-        <p className="pt-2 pb-3 text-sm md:text-base opacity-60 text-center max-w-9/12">
+        <p className="pt-2 pb-3 text-sm md:text-base text-base-content/60 text-center max-w-9/12">
           {t("profile.list.deleteConfirmDesc")}
         </p>
         <div className="modal-action justify-center items-center gap-2 md:gap-4">

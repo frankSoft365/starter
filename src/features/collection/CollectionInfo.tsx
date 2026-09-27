@@ -52,11 +52,13 @@ export default function CollectionInfo({
           )}
         </div>
         {/* 第二层：描述 */}
-        <div className="text-xs opacity-60">{list.description || ""}</div>
+        <div className="text-xs text-base-content/60">
+          {list.description || ""}
+        </div>
         {/* 第三层：文章数 + 公开状态 + more 按钮 */}
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-sm opacity-60">
+            <span className="text-sm text-base-content/60">
               {t("profile.list.stories", { count: list.articleCount })}
             </span>
             {list.isPublic === 0 && (

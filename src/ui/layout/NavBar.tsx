@@ -63,9 +63,11 @@ export default function NavBar() {
     setRecentSearches,
     navigate,
   );
-
   return (
-    <div className="z-10 md:z-99 navbar dark:bg-base-200 shadow-xs mb-1">
+    // 前提：Drawerside的z轴为默认的z-10
+    // 在小屏幕下NavBar的z轴需要低于Drawerside且高于页面主要内容，故使用z-10
+    // 在大屏幕下NavBar的z轴需要高于Drawerside且高于页面主要内容，故使用z-11
+    <div className="z-10 md:z-11 sticky top-0 navbar bg-base-100 dark:bg-base-200 border-b border-base-300">
       <div className="navbar-start">
         <div
           className="md:tooltip md:tooltip-bottom md:tooltip-start md:ml-2"

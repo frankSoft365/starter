@@ -57,12 +57,14 @@ export default function ProfilePage({
                 <div className="w-full text-xl lg:text-4xl lg:my-4 font-bold">
                   {user?.username || t("profile.unknownUsername")}
                 </div>
-                <FollowStats
-                  userId={userId}
-                  followerCount={user?.followerCount}
-                  type="followers"
-                  className="opacity-60 lg:hidden"
-                />
+                <div className="lg:hidden">
+                  <FollowStats
+                    userId={userId}
+                    followerCount={user?.followerCount}
+                    type="followers"
+                    className="text-base-content/60"
+                  />
+                </div>
               </div>
             </div>
             {/* 'more' button */}
@@ -121,7 +123,7 @@ export default function ProfilePage({
           userId={userId}
           followerCount={user?.followerCount}
           type="followers"
-          className="opacity-60"
+          className="text-base-content/60"
         />
         {/* link to profile edit page */}
         <CurrentUser authorId={userId}>
