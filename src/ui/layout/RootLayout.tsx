@@ -40,7 +40,7 @@ export default function RootLayout({
           checked={drawerOpen}
           onChange={(e) => setDrawerOpen(e.target.checked)}
         />
-        <div className="drawer-content flex min-h-dvh flex-col">
+        <div className="drawer-content flex min-h-[calc(100dvh-4rem)] flex-col">
           {/* Page content here */}
           <div className="flex-1">{children}</div>
           {!isEditorRoute && !isArticleEditRoute && <Footer />}
