@@ -3,6 +3,7 @@ import {
   HouseIcon,
   NotePencilIcon,
   UserCircleIcon,
+  UsersIcon,
 } from "@phosphor-icons/react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import SignedIn from "../SignedIn";
@@ -51,7 +52,7 @@ export default function DrawerSide({
       ></label>
       {/* Sidebar content here */}
       <div className="flex min-h-full flex-col items-start bg-base-100 border-r-2 border-base-200 w-64 md:is-drawer-close:w-64 md:is-drawer-open:w-0">
-        <ul className="menu w-full md:is-drawer-open:hidden">
+        <ul className="menu menu-lg w-full md:is-drawer-open:hidden">
           {!isLoading && (
             <>
               {/* login then user can write */}
@@ -133,6 +134,15 @@ export default function DrawerSide({
                     weight={isProfileRoute ? "fill" : undefined}
                   />
                   <span>{t("btn.profile")}</span>
+                </button>
+              </li>
+              <hr className="my-4 border-gray-200 border-0 border-t ml-6 mr-2" />
+              {/* List item : following */}
+              <li className="flex flex-row items-center">
+                <ActiveIndicator isActive={isLibraryRoute} />
+                <button className={`grow ${""}`} onClick={undefined}>
+                  <UsersIcon size={24} weight={undefined} />
+                  <span>Following</span>
                 </button>
               </li>
             </>

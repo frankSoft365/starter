@@ -70,6 +70,7 @@ export default function CommentList({
     true,
   );
 
+  // jump to pinned comment
   const [pinnedComment, setPinnedComment] = useState<CommentThreadDTO | null>(
     null,
   );
@@ -79,7 +80,6 @@ export default function CommentList({
     return match ? match[1] : null;
   }, []);
   const hasFetchedPin = useRef(false);
-
   useEffect(() => {
     if (!targetReplyId || hasFetchedPin.current) {
       return;
@@ -126,7 +126,8 @@ export default function CommentList({
 
   useEffect(() => {
     const handleVisible = () => {
-      if (document.visibilityState === "visible") {
+      const hash = window.location.hash;
+      if (hash && document.visibilityState === "visible") {
         location.reload();
       }
     };

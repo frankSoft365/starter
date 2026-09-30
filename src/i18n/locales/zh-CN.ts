@@ -27,6 +27,7 @@ export default {
     copyLink: "复制链接",
     shareOnX: "分享到 X",
 
+    removeFromReadingHistory: "从阅读历史中移除",
     notInterested: "不感兴趣",
     more: "更多",
     createNewList: "创建新列表",

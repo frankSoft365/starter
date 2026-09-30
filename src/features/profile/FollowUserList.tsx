@@ -141,7 +141,7 @@ export default function FollowUserList({
               fallback={
                 <FollowButton
                   userId={user.id}
-                  className="btn-sm"
+                  btnStyle="btn-sm"
                   pendingVariant="skeleton"
                   status={{
                     isFollowing: followStatusMap[user.id] ?? false,

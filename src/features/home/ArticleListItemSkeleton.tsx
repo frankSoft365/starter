@@ -1,4 +1,10 @@
-export default function ArticleListItemSkeleton() {
+export default function ArticleListSkeleton({ size = 6 }: { size?: number }) {
+  return Array.from({ length: size }, (_, index) => (
+    <ArticleListItemSkeleton key={index} />
+  ));
+}
+
+function ArticleListItemSkeleton() {
   return (
     <div className="w-full h-42 grid grid-cols-5 gap-4 md:grid-cols-7 p-4">
       <div className="col-span-3 md:col-span-5 flex flex-col gap-4">

@@ -1,6 +1,8 @@
-import CollectionListDetail from '@/features/profile/CollectionListDetail'
-import { createFileRoute } from '@tanstack/react-router'
+import CollectionListDetail from "@/features/collection/CollectionListDetail";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_app/_protected/profile/$userId/lists/$listId')({
-    component: CollectionListDetail,
-})
+export const Route = createFileRoute(
+  "/_app/_protected/profile/$userId/lists/$listId",
+)({
+  component: CollectionListDetail,
+});

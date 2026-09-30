@@ -11,7 +11,7 @@ import {
   useAddArticleToList,
   useRemoveArticleFromList,
 } from "@/features/collection/collection";
-import CreateListModal from "./CreateListModal";
+import CreateListModal from "../collection/CreateListModal";
 
 export default function SaveButton({ articleId }: { articleId: string }) {
   const { t } = useTranslation();

@@ -37,7 +37,7 @@ export default function Lists({ userId }: { userId: string }) {
         </div>
       )}
       {status === "success" && lists.length > 0 && (
-        <ul className="list bg-base-100 rounded-box shadow-md">
+        <ul className="list bg-base-100">
           {lists.map((list) => (
             <CollectionListRow key={list.id} list={list} />
           ))}

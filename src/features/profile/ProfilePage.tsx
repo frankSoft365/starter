@@ -97,10 +97,9 @@ export default function ProfilePage({
           <CurrentUser
             authorId={userId}
             fallback={
-              <FollowButton
-                userId={userId}
-                className="inline-flex lg:hidden w-11/12 mb-3 mx-auto"
-              />
+              <div className="inline-flex lg:hidden mb-3 w-full">
+                <FollowButton userId={userId} btnStyle="mx-auto w-11/12" />
+              </div>
             }
           />
           {/* profile menu */}
@@ -137,7 +136,11 @@ export default function ProfilePage({
         {/* 'follow' button */}
         <CurrentUser
           authorId={userId}
-          fallback={<FollowButton userId={userId} className="mt-2" />}
+          fallback={
+            <div className="mt-2">
+              <FollowButton userId={userId} />
+            </div>
+          }
         />
       </div>
     </div>

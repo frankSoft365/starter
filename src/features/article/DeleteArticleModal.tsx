@@ -1,36 +1,50 @@
-import { useNavigate } from "@tanstack/react-router";
+import { deleteArticleModalAtom } from "@/atoms/deleteArticleModal";
+import { DELETE_ARTICLE_MODAL_ID } from "@/constants/modal";
+import { useAtom } from "jotai";
 import { useDeleteArticle } from "./article";
+import { useNavigate } from "@tanstack/react-router";
 import { Route as homeRoute } from "@/routes/_app/_home/index";
-import { useEffect, useRef } from "react";
 
-export default function DeleteArticleModal({
-  articleId,
-  onClose,
-}: {
-  articleId: string | null;
-  onClose: () => void;
-}) {
+export default function DeleteArticleModal() {
   const navigate = useNavigate();
-  const { handleDelete, isDeleting } = useDeleteArticle();
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [options, setOptions] = useAtom(deleteArticleModalAtom);
+  const { isDeleting, handleDelete } = useDeleteArticle();
+  function handleModalClose() {
+    setOptions(null);
+  }
 
-  useEffect(() => {
-    if (articleId && dialogRef.current && !dialogRef.current.open) {
-      dialogRef.current.showModal();
+  const handleConfirm = () => {
+    if (options) {
+      handleDelete(
+        { articleDeletedId: options.articleDeletedId },
+        {
+          onSuccess: () => {
+            (
+              document.getElementById(
+                DELETE_ARTICLE_MODAL_ID,
+              ) as HTMLDialogElement
+            )?.close();
+            // 只要删除就跳回主页
+            navigate({ to: homeRoute.to });
+          },
+        },
+      );
     }
-  }, [articleId]);
+  };
 
   return (
     <dialog
-      ref={dialogRef}
+      id={DELETE_ARTICLE_MODAL_ID}
       className="modal"
-      onClick={(event) => event.stopPropagation()}
-      onClose={onClose}
+      onClose={handleModalClose}
     >
       <div className="modal-box w-11/12 md:max-w-4xl md:aspect-5/3 flex flex-col items-center justify-center text-center">
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+          <button
+            disabled={isDeleting}
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          >
             ✕
           </button>
         </form>
@@ -44,31 +58,20 @@ export default function DeleteArticleModal({
         <div className="modal-action justify-center items-center gap-2 md:gap-4">
           <form method="dialog">
             {/* if there is a button, it will close the modal */}
-            <button className="btn btn-outline btn-sm md:btn-md rounded-full">
+            <button
+              disabled={isDeleting}
+              className="btn btn-outline btn-sm md:btn-md rounded-full"
+            >
               Cancel
             </button>
           </form>
           <button
             disabled={isDeleting}
-            onClick={() => {
-              if (!articleId) {
-                return;
-              }
-              const deleteRequest = { id: articleId };
-              handleDelete(
-                { deleteRequest },
-                {
-                  onSuccess: () => {
-                    dialogRef.current?.close();
-                    onClose();
-                    navigate({ to: homeRoute.to });
-                  },
-                },
-              );
-            }}
-            className="btn btn-error btn-sm md:btn-md rounded-full"
+            onClick={handleConfirm}
+            className="btn btn-error btn-sm md:btn-md rounded-full text-base-100"
           >
-            Delete
+            {isDeleting && <span className="loading loading-spinner"></span>}
+            {!isDeleting && "Delete"}
           </button>
         </div>
       </div>

@@ -12,15 +12,14 @@ import {
   useCollectionListQuery,
   useRemoveArticleFromList,
   useRemoveArticlesFromList,
-} from "../collection/collection.ts";
+} from "./collection.ts";
 import { Route as listRoute } from "@/routes/_app/_protected/profile/$userId/_profile/lists";
-import { Route as articleRoute } from "@/routes/_app/article.$articleId";
-import CollectionInfo from "../collection/CollectionInfo.tsx";
+import CollectionInfo from "./CollectionInfo.tsx";
 import { Route as listDetailRoute } from "@/routes/_app/_protected/profile/$userId/lists.$listId";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
 
-function isDeletedArticle(article: ArticleListItemVO): boolean {
+export function isDeletedArticle(article: ArticleListItemVO): boolean {
   return !!article.id && !article.title;
 }
 
@@ -114,7 +113,7 @@ export default function CollectionListDetail() {
           </div>
         )}
         {status === "success" && articles.length > 0 && !removeMode && (
-          <ul className="list w-full lg:w-3xl bg-base-100 shadow-md">
+          <ul className="list w-full lg:w-3xl bg-base-100">
             {articles.map((article) =>
               isDeletedArticle(article) ? (
                 <DeletedArticleItem
@@ -131,31 +130,19 @@ export default function CollectionListDetail() {
                   }
                 />
               ) : (
-                <div
+                <ArticleListItem
                   key={article.id}
-                  onClick={() =>
-                    navigate({
-                      to: articleRoute.to,
-                      params: { articleId: article.id },
-                    })
+                  article={article}
+                  onRemoveFromList={() =>
+                    removeMutation.mutate(
+                      { articleId: article.id, listId },
+                      {
+                        onSuccess: () =>
+                          toast.success(t("profile.list.removedTip")),
+                      },
+                    )
                   }
-                >
-                  <ArticleListItem
-                    article={article}
-                    onDelete={() =>
-                      toast.error(t("common.featureNotAvailable"))
-                    }
-                    onRemoveFromList={() =>
-                      removeMutation.mutate(
-                        { articleId: article.id, listId },
-                        {
-                          onSuccess: () =>
-                            toast.success(t("profile.list.removedTip")),
-                        },
-                      )
-                    }
-                  />
-                </div>
+                />
               ),
             )}
           </ul>

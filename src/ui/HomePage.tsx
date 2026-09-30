@@ -9,7 +9,7 @@ export default function HomePage({ children }: { children: React.ReactNode }) {
   const isHomeFeatureRoute = location.pathname === homeFeatureRoute.to;
 
   return (
-    <div className="w-full flex isolate">
+    <div className="w-full flex">
       <div className="lg:mx-20 w-2xl">
         {/* The tab */}
         {/* 保持置顶固定 */}

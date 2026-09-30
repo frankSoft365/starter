@@ -140,7 +140,7 @@ export default function SettingsPageUpdateModal({
                 isUpdating ||
                 isUploading
               }
-              className="btn btn-success rounded-full"
+              className="btn btn-neutral rounded-full"
             >
               {(isUpdating || isUploading) && (
                 <span className="loading loading-spinner"></span>

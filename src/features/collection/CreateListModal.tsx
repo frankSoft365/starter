@@ -143,7 +143,7 @@ export default function CreateListModal({
             </button>
             <button
               type="submit"
-              className="btn btn-success btn-sm md:btn-md rounded-full"
+              className="btn btn-success btn-sm md:btn-md rounded-full text-base-100"
               disabled={isPending}
             >
               {isPending && (

@@ -27,6 +27,7 @@ export default {
     copyLink: "Copy link",
     shareOnX: "Share on X",
 
+    removeFromReadingHistory: "Remove from reading history",
     notInterested: "I'm not interested in this story",
     more: "More",
     createNewList: "Create new list",

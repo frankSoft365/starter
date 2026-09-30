@@ -12,14 +12,14 @@ export type FollowButtonStatus = {
 
 type FollowButtonProps = {
   userId: string;
-  className?: string;
+  btnStyle?: string;
   pendingVariant?: "spinner" | "skeleton";
   status?: FollowButtonStatus;
 };
 
 function FollowButtonContent({
   userId,
-  className = "",
+  btnStyle = "",
   pendingVariant = "spinner",
   status,
 }: FollowButtonProps & { status: FollowButtonStatus }) {
@@ -50,7 +50,7 @@ function FollowButtonContent({
   if (status.isPending && pendingVariant === "skeleton") {
     return (
       <div
-        className={`skeleton h-8 w-24 rounded-full ${className}`}
+        className={`skeleton h-8 w-24 rounded-full ${btnStyle}`}
         aria-label={t("common.loading")}
       ></div>
     );
@@ -60,7 +60,7 @@ function FollowButtonContent({
     return (
       <button
         type="button"
-        className={`btn btn-outline rounded-full min-w-24 ${className}`}
+        className={`btn btn-outline rounded-full min-w-24 ${btnStyle}`}
         onClick={status.onRetry}
       >
         {t("common.retry")}
@@ -72,7 +72,7 @@ function FollowButtonContent({
     <>
       <button
         type="button"
-        className={`btn rounded-full px-4 ${status.isFollowing ? "btn-outline" : "btn-neutral"} ${className}`}
+        className={`btn rounded-full px-4 ${status.isFollowing ? "btn-outline" : "btn-neutral"} ${btnStyle}`}
         style={{ anchorName }}
         aria-controls={popoverId}
         popoverTarget={status.isFollowing ? popoverId : undefined}

@@ -10,7 +10,7 @@ import {
 import ArticleMenuButton from "@/ui/ArticleMenuButton";
 import { useAtomValue } from "jotai";
 import { userAtom, isLoginAtom } from "@/atoms/user";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useForm, useStore } from "@tanstack/react-form";
 import { useCreateBlockNote } from "@blocknote/react";
 import { useCurrentArticle, useLikeStatus, useLikeArticle } from "./article";
@@ -22,17 +22,22 @@ import { useAddComment } from "../comment/comment";
 import CommentList from "../comment/CommentList";
 import ShareButton from "./ShareButton";
 import { useTranslation } from "react-i18next";
-import DeleteArticleModal from "./DeleteArticleModal";
 import MoreButton from "./MoreButton";
 import SaveButton from "./SaveButton";
 import { TopicShow } from "@/ui/Topic";
 import ArticleAuthorInfo from "@/ui/ArticleAuthorInfo";
+import CurrentUser from "@/ui/CurrentUser";
+import FollowButton from "../follow/FollowButton";
+import { useSaveReadingHistory } from "../readingHistory/readingHistory";
 
 export default function ArticleDetail() {
   const { t } = useTranslation();
   const { articleId } = articleRoute.useParams();
   const user = useAtomValue(userAtom);
   const editor = useCreateBlockNote();
+
+  // reading history save
+  useSaveReadingHistory(articleId);
 
   const { processedArticle, isLoading, isError, error } = useCurrentArticle(
     articleId,
@@ -45,7 +50,6 @@ export default function ArticleDetail() {
 
   const article = processedArticle?.article;
   const title = processedArticle?.title;
-  const [deleteArticleId, setDeleteArticleId] = useState<string | null>(null);
 
   const isOwnStory = article?.authorId === user?.id;
   const meneButtonColor = isOwnStory ? "#adadad" : "#676565";
@@ -99,7 +103,7 @@ export default function ArticleDetail() {
               {article.topics.length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-2">
                   {article.topics.map((topicVO) => (
-                    <TopicShow topicContent={topicVO.name} />
+                    <TopicShow key={topicVO.id} topicContent={topicVO.name} />
                   ))}
                 </div>
               )}
@@ -107,14 +111,23 @@ export default function ArticleDetail() {
               <h1 className="font-sans font-bold text-3xl/10 lg:text-5xl/16 my-6">
                 {title}
               </h1>
-              {/* Author info */}
-              <ArticleAuthorInfo
-                authorId={article.authorId}
-                authorAvatar={article.authorAvatar}
-                authorName={article.authorName}
-                publishTime={article.publishTime}
-                className="text-sm"
-              />
+              <div className="flex items-center gap-2">
+                {/* Author info */}
+                <ArticleAuthorInfo
+                  authorId={article.authorId}
+                  authorAvatar={article.authorAvatar}
+                  authorName={article.authorName}
+                  publishTime={article.publishTime}
+                  className="text-sm"
+                />
+                {/* 'follow' button */}
+                <SignedIn>
+                  <CurrentUser
+                    authorId={article.authorId}
+                    fallback={<FollowButton userId={article.authorId} />}
+                  />
+                </SignedIn>
+              </div>
             </div>
             {/* Interaction Bar */}
             <div className="divider mb-0"></div>
@@ -182,7 +195,6 @@ export default function ArticleDetail() {
                   isOwnStory={isOwnStory}
                   authorId={article.authorId}
                   articleId={article.id}
-                  onDelete={() => setDeleteArticleId(article.id)}
                 />
               </div>
             </div>
@@ -192,11 +204,7 @@ export default function ArticleDetail() {
               <EditorComponent editor={editor} editable={false} />
             </div>
           </div>
-          {/* Delete article Modal */}
-          <DeleteArticleModal
-            articleId={deleteArticleId}
-            onClose={() => setDeleteArticleId(null)}
-          />
+
           {/* comment area */}
           <div className="divider mb-0"></div>
           <SignedOut>
