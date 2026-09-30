@@ -183,7 +183,6 @@ export default function ActivityListItem({
                   repostNum: 20,
                 } as ArticleListItemVO
               }
-              onDelete={() => {}}
             />
           </div>
         ) : (

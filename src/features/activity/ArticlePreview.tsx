@@ -23,11 +23,9 @@ import useOverflowHelper from "@/utils/overflowHelper";
 
 export default function ArticlePreview({
   article,
-  onDelete,
   onRemoveFromList,
 }: {
   article: ArticleListItemVO;
-  onDelete: () => void;
   onRemoveFromList?: () => void;
 }) {
   const { t } = useTranslation();
@@ -123,7 +121,6 @@ export default function ArticlePreview({
                 isOwnStory={isOwnStory}
                 authorId={article.authorId}
                 articleId={article.id}
-                onDelete={onDelete}
                 onRemoveFromList={onRemoveFromList}
               />
             </div>
