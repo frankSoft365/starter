@@ -26,21 +26,19 @@ export default function ArticleAuthorInfo({
   className?: string;
 }) {
   return (
-    <div className={`flex flex-row items-center gap-1 ${className}`}>
+    <div className={`flex flex-row items-center gap-2 ${className}`}>
       <UserHoverLink userId={authorId}>
         <Avatar imageUrl={authorAvatar} username={authorName} size="sm" hover />
       </UserHoverLink>
-      <UserHoverLink
-        userId={authorId}
-        className="ml-1.5"
-        linkClassName="link link-hover"
-      >
-        <span>{authorName}</span>
-      </UserHoverLink>
-      <span>·</span>
-      <span className="text-base-content/60">
-        {getPublishDate(new Date(publishTime))}
-      </span>
+      <div className="flex flex-wrap">
+        <UserHoverLink userId={authorId} linkClassName="link link-hover">
+          <span>{authorName}</span>
+        </UserHoverLink>
+        <span className="mx-1">·</span>
+        <span className="text-base-content/60">
+          {getPublishDate(new Date(publishTime))}
+        </span>
+      </div>
     </div>
   );
 }

@@ -51,7 +51,7 @@ export default function ReadingHistoryList() {
       {/* the clear-history button */}
       {status === "success" &&
         data.pages.flatMap((page) => page.items).length > 0 && (
-          <div className="w-full bg-base-200 flex items-center justify-between py-6 px-5 my-6">
+          <div className="w-full bg-base-200 flex gap-4 items-center justify-between py-6 px-5 my-6">
             <p className="text-xs md:text-sm">
               You can clear your reading history for a fresh start.
             </p>

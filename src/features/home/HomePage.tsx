@@ -20,7 +20,15 @@ export default function HomePage({ children }: { children: React.ReactNode }) {
           <a
             role="tab"
             className={`tab ${isHomeArticleListRoute ? "tab-active" : ""}`}
-            onClick={() => navigate({ to: homeArticleListRoute.to })}
+            onClick={() => {
+              navigate({ to: homeArticleListRoute.to });
+              if (isHomeArticleListRoute) {
+                setTimeout(() => {
+                  const el = document.getElementById(`article-list-item-0`);
+                  el?.scrollIntoView({ behavior: "smooth", block: "center" });
+                }, 0);
+              }
+            }}
           >
             For you
           </a>

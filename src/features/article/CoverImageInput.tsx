@@ -8,6 +8,7 @@ import { useChangeCoverImage } from "./article";
 import AdjustImage from "@/ui/AdjustImage";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 export default function CoverImageInput({
   form,
@@ -18,13 +19,20 @@ export default function CoverImageInput({
 }: {
   form: any;
   field: AnyFieldApi;
-  coverImages: string[] | undefined;
+  coverImages: string[];
   isImageArraryModalShow: boolean;
   setIsImageArraryModalShow: (value: boolean) => void;
 }) {
   const { t } = useTranslation();
   const { newImage, setNewImage, isAdjustModalOpen, setIsAdjustModalOpen } =
     useChangeCoverImage(coverImages);
+
+  // 当前没有设置封面且有候选封面时默认将第一个候选图片作为封面
+  useEffect(() => {
+    if (!field.state.value && coverImages.length > 0) {
+      field.handleChange(newImage);
+    }
+  }, []);
 
   const coverFocusY =
     useStore(
@@ -36,7 +44,7 @@ export default function CoverImageInput({
 
   return (
     <>
-      {field.state.value ? (
+      {coverImages.length > 0 ? (
         <>
           {!isImageArraryModalShow && (
             <div className="relative w-full">

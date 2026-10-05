@@ -1,71 +1,71 @@
 import type { TopicInArticleVO } from "./topic";
 
 export type ArticleListRequest = {
-    isMyArticle?: boolean;
-    userId?: string;
-}
+  isMyArticle?: boolean;
+  userId?: string;
+};
 
 export type ArticlePublishRequest = {
-    title: string;
-    subtitle?: string;
-    content: string;
-    coverImage?: string;
-    /** vertical focus point (0-1) for frontend rendering, optional */
-    coverFocusY?: number;
-    topics: string[];
-    status: 'published' | 'scheduled';
-    publishAt?: Date;
-}
+  title: string;
+  subtitle?: string;
+  content: string;
+  coverImage?: string;
+  /** vertical focus point (0-1) for frontend rendering, optional */
+  coverFocusY?: number;
+  topics: string[];
+  status: "published" | "scheduled";
+  publishAt?: Date;
+};
 
 export type ArticleUpdateRequest = {
-    articleId: string;
-    content: string;
-    title?: string;
-    subtitle?: string;
-    coverImage?: string;
-    coverFocusY?: number;
-}
+  articleId: string;
+  content: string;
+  title?: string;
+  subtitle?: string;
+  coverImage?: string;
+  coverFocusY?: number;
+};
 
 export type ArticlePublishPreview = {
-    title: string;
-    subtitle: string;
-    content: string;
-    coverImage: string[];
-}
+  title: string;
+  subtitle: string;
+  content: string;
+  coverImage: string[];
+};
 
 export type ArticleListItemVO = {
-    id: string;
-    authorId: string;
-    authorName: string;
-    authorAvatar: string;
-    publishTime: Date;
-    title: string;
-    subtitle: string;
-    coverImage?: string;
-    /** vertical focus point returned by backend, range 0-1 (0 top, 1 bottom) */
-    coverFocusY: number;
+  id: string;
+  authorId: string;
+  authorName: string;
+  authorAvatar: string;
+  publishTime: Date;
+  title: string;
+  subtitle: string;
+  coverImage?: string;
+  /** vertical focus point returned by backend, range 0-1 (0 top, 1 bottom) */
+  coverFocusY: number;
 
-    likeCount: number;
-    responseNum: number;
-    repostNum?: number;
-}
+  likeCount: number;
+  responseNum: number;
+  repostNum?: number;
+};
 
 export type ArticleVO = {
-    id: string;
-    title: string;
-    subtitle: string;
-    coverImage?: string;
-    coverFocusY: number;
-    content: string;
+  id: string;
+  title: string;
+  subtitle: string | null;
+  coverImage: string | null;
+  coverFocusY: number;
+  content: string;
 
-    topics: TopicInArticleVO[];
+  topics: TopicInArticleVO[];
 
-    likeCount: number;
-    responseNum: number;
-    repostNum?: number;
+  likeCount: number;
+  responseNum: number;
+  repostNum?: number;
 
-    authorId: string;
-    authorAvatar: string;
-    authorName: string;
-    publishTime: string;
-}
+  authorId: string;
+  authorAvatar: string;
+  authorName: string;
+  publishTime: string;
+};

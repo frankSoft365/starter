@@ -129,12 +129,7 @@ export function useCurrentArticle(
   editor: BlockNoteEditor,
   detail = true,
 ) {
-  const {
-    data: processedArticle,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  return useQuery({
     queryKey: ["get-article", articleId],
     queryFn: async () => {
       const article = await getArticleById(articleId);
@@ -154,19 +149,12 @@ export function useCurrentArticle(
       };
     },
   });
-
-  return {
-    processedArticle,
-    isLoading,
-    isError,
-    error,
-  };
 }
 
-export function useChangeCoverImage(coverImages: string[] | undefined) {
+export function useChangeCoverImage(coverImages: string[]) {
   const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
 
-  const [newImage, setNewImage] = useState(coverImages?.[0]);
+  const [newImage, setNewImage] = useState(coverImages[0]);
 
   return {
     newImage,

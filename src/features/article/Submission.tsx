@@ -16,15 +16,22 @@ import { useTranslation } from "react-i18next";
 
 export default function Submission() {
   const { t } = useTranslation();
-  const articlePreview = useAtomValue(articlePreviewAtom);
   const navigate = useNavigate();
+  const articlePreview = useAtomValue(articlePreviewAtom);
+
+  useEffect(() => {
+    if (!articlePreview) {
+      navigate({ to: editorRoute.to });
+    }
+  }, [articlePreview, navigate]);
+
   const { handlePublish, isPublishing } = useArticlePublish(articlePreview);
 
   const defaultValues: ArticleSubmissionForm = {
-    coverImage: articlePreview?.coverImage[0],
+    coverImage: articlePreview?.coverImage[0] ?? null,
     coverFocusY: 0.5,
-    title: articlePreview?.title ?? "Title",
-    subtitle: articlePreview?.subtitle,
+    title: articlePreview?.title ?? "",
+    subtitle: articlePreview?.subtitle ?? null,
     topics: [],
     topicCandidate: "",
   };
@@ -42,12 +49,6 @@ export default function Submission() {
       onSubmit: ArticleSubmissionSchema,
     },
   });
-
-  useEffect(() => {
-    if (!articlePreview) {
-      navigate({ to: editorRoute.to });
-    }
-  }, [articlePreview, navigate]);
 
   return (
     <div className="card w-full card-md lg:w-4xl bg-base-100 lg:card-xl shadow-sm lg:mx-auto my-12">
@@ -72,7 +73,7 @@ export default function Submission() {
                       <CoverImageInput
                         field={coverImageField}
                         form={form}
-                        coverImages={articlePreview?.coverImage}
+                        coverImages={articlePreview?.coverImage ?? []}
                         isImageArraryModalShow={isImageArraryModalShow}
                         setIsImageArraryModalShow={setIsImageArraryModalShow}
                       />
@@ -114,7 +115,7 @@ export default function Submission() {
                           </legend>
                           <div className="flex items-center gap-2">
                             <input
-                              value={field.state.value}
+                              value={field.state.value ?? ""}
                               onBlur={field.handleBlur}
                               onChange={(e) =>
                                 field.handleChange(e.target.value)

@@ -39,10 +39,12 @@ export default function ArticleDetail() {
   // reading history save
   useSaveReadingHistory(articleId);
 
-  const { processedArticle, isLoading, isError, error } = useCurrentArticle(
-    articleId,
-    editor,
-  );
+  const {
+    data: processedArticle,
+    isLoading,
+    isError,
+    error,
+  } = useCurrentArticle(articleId, editor);
 
   const isLogin = useAtomValue(isLoginAtom);
   const { data: isLiked } = useLikeStatus(articleId, isLogin);

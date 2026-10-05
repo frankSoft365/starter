@@ -1,4 +1,4 @@
-import HomePage from "@/ui/HomePage";
+import HomePage from "@/features/home/HomePage";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/_home")({

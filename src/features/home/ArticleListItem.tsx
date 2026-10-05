@@ -7,7 +7,6 @@ import {
   TrashIcon,
 } from "@phosphor-icons/react";
 import type { ArticleListItemVO } from "@/types/article";
-import ArticleMenuButton from "@/ui/ArticleMenuButton";
 import { useTranslation } from "react-i18next";
 import { formatLargeNumber } from "@/utils/number";
 import { useAtomValue } from "jotai";
@@ -27,9 +26,11 @@ import { Route as readingHistoryRoute } from "@/routes/_app/_protected/me/lists/
 import { useDeleteHistoryItem } from "../readingHistory/readingHistory";
 
 export default function ArticleListItem({
+  index,
   article,
   onRemoveFromList,
 }: {
+  index?: number;
   article: ArticleListItemVO;
   onRemoveFromList?: () => void;
 }) {
@@ -74,7 +75,7 @@ export default function ArticleListItem({
       }}
     >
       <li
-        id={`article-list-item-${article.id}`}
+        id={index !== undefined ? "article-list-item-0" : undefined}
         onTransitionEnd={(event) => {
           if (
             event.target === event.currentTarget &&
@@ -100,43 +101,43 @@ export default function ArticleListItem({
           />
           {/* article content */}
           <div>
-            <p className="text-lg md:text-2xl font-sans font-bold text-wrap mt-1 mb-2.5">
+            <p className="text-lg/tight md:text-2xl/tight font-sans font-bold text-wrap mt-1 mb-2.5">
               {article.title}
             </p>
-            <p className="text-sm text-base-content/70 md:text-base font-sans font-light text-wrap">
+            <p className="text-sm/tight md:text-base/tight text-base-content/70 font-sans font-light text-wrap">
               {handleOverflow(article.subtitle, 118)}
             </p>
           </div>
           {/* actions */}
-          <div className="flex flex-col lg:flex-row justify-between lg:items-center [&_svg]:text-base-content/70">
+          <div className="flex py-1 flex-col lg:flex-row justify-between lg:items-center [&_svg]:text-base-content/70">
             {/* left part actions */}
-            <div className="flex flex-row">
+            <div className="flex flex-row gap-3">
               <div
                 className="lg:tooltip"
                 data-tip={t("btn.clap", { count: article.likeCount })}
               >
-                <ArticleMenuButton>
+                <span className="inline-flex items-center gap-0.5 text-sm font-light">
                   <HandsClappingIcon size={20} />
                   {formatLargeNumber(article.likeCount)}
-                </ArticleMenuButton>
+                </span>
               </div>
               <div
                 className="lg:tooltip"
                 data-tip={t("btn.response", { count: article.responseNum })}
               >
-                <ArticleMenuButton>
-                  <ChatCircleDotsIcon weight="fill" size={20} />
+                <span className="inline-flex items-center gap-0.5 text-sm font-light">
+                  <ChatCircleDotsIcon weight="duotone" size={20} />
                   {article.responseNum}
-                </ArticleMenuButton>
+                </span>
               </div>
               <div
                 className="lg:tooltip"
                 data-tip={t("btn.repost", { count: 20 })}
               >
-                <ArticleMenuButton>
+                <span className="inline-flex items-center gap-0.5 text-sm font-light">
                   <RepeatIcon size={20} weight="light" />
                   20
-                </ArticleMenuButton>
+                </span>
               </div>
             </div>
             {/* right part actions */}

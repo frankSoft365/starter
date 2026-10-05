@@ -2,6 +2,7 @@ import { Route as articleEditRoute } from "@/routes/_app/_protected/articles.edi
 import EditorComponent from "@/ui/EditorComponent";
 import Loading from "@/ui/Loading";
 import { useCreateBlockNote } from "@blocknote/react";
+import type { BlockNoteEditor } from "@blocknote/core";
 import { useUpdateArticle, useCurrentArticle } from "./article";
 import { useEffect, useRef, useState } from "react";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
@@ -27,10 +28,9 @@ import CoverImageInput from "./CoverImageInput";
 import FieldInfo from "@/ui/FieldInfo";
 import TopicInput from "@/ui/TopicInput";
 import { toast } from "sonner";
+import type { ArticleVO } from "@/types/article";
 
 export default function ArticleEdit() {
-  const navigate = useNavigate();
-  const setEditorUpdateSignal = useSetAtom(editorUpdateSignalAtom);
   const { articleId } = articleEditRoute.useParams();
   const editor = useCreateBlockNote(
     {
@@ -39,23 +39,76 @@ export default function ArticleEdit() {
     [],
   );
 
-  const { processedArticle, isLoading, isError, error } = useCurrentArticle(
-    articleId,
-    editor,
-    false,
+  const {
+    data: processedArticle,
+    isLoading,
+    isError,
+    error,
+  } = useCurrentArticle(articleId, editor, false);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isError) {
+    return (
+      <main className="flex items-center justify-center min-h-screen">
+        <div className="text-3xl text-red-600">
+          {error?.message || "Failed to load article content."}
+        </div>
+      </main>
+    );
+  }
+
+  if (!processedArticle) {
+    return <Loading />;
+  }
+
+  return (
+    <ArticleEditContent
+      articleId={articleId}
+      article={processedArticle.article}
+      editor={editor}
+    />
   );
-  const article = processedArticle?.article;
+}
+
+function ArticleEditContent({
+  articleId,
+  article,
+  editor,
+}: {
+  articleId: string;
+  article: ArticleVO;
+  editor: BlockNoteEditor;
+}) {
+  const navigate = useNavigate();
+  const setEditorUpdateSignal = useSetAtom(editorUpdateSignalAtom);
 
   const editorUpdateSignal = useAtomValue(editorUpdateSignalAtom);
 
   const { handleUpdate } = useUpdateArticle();
 
+  // change cover image
+  // cover image modal show and title/subtitle input show
+  const [isImageArraryModalShow, setIsImageArraryModalShow] = useState(false);
+  function getImagesNow() {
+    const editorImages = getImagesFromEditor(editor);
+    const mergedCoverImages = Array.from(
+      new Set([
+        ...(article.coverImage ? [article.coverImage] : []),
+        ...editorImages,
+      ]),
+    );
+    return mergedCoverImages;
+  }
+
   const defaultValues: ArticleSubmissionForm = {
-    coverImage: article?.coverImage,
-    coverFocusY: 0.5,
-    title: article?.title ?? "article is undefined",
-    subtitle: article?.subtitle,
-    topics: (article?.topics ?? []).map((item) => item.name),
+    coverImage: article.coverImage,
+    coverFocusY: article.coverFocusY,
+    title: article.title,
+    subtitle: article.subtitle,
+    topics: article.topics.map((item) => item.name),
     topicCandidate: "",
   };
   const form = useForm({
@@ -75,19 +128,6 @@ export default function ArticleEdit() {
     }
     setIsDirty(true);
   }
-  // change cover image
-  // cover image modal show and title/subtitle input show
-  const [isImageArraryModalShow, setIsImageArraryModalShow] = useState(false);
-  function getImagesNow() {
-    const editorImages = getImagesFromEditor(editor);
-    const mergedCoverImages = Array.from(
-      new Set([
-        ...(article?.coverImage ? [article.coverImage] : []),
-        ...editorImages,
-      ]),
-    );
-    return mergedCoverImages;
-  }
 
   const [isDirty, setIsDirty] = useAtom(isDirtyAtom);
   const isSkipBlocker = useRef(false);
@@ -96,10 +136,8 @@ export default function ArticleEdit() {
   const initialContent = useRef<string | null>(null);
   useEffect(() => {
     setIsDirty(false);
-    if (!isLoading && article) {
-      initialContent.current = article.content;
-    }
-  }, [isLoading, article]);
+    initialContent.current = article.content;
+  }, [article, setIsDirty]);
 
   function handleEditorChange(changedEditor: typeof editor) {
     if (!initialContent.current) {
@@ -167,191 +205,174 @@ export default function ArticleEdit() {
 
   return (
     <>
-      {isLoading && <Loading />}
-      {isError && !isLoading && (
-        <main className="flex items-center justify-center min-h-screen">
-          <div className="text-3xl text-red-600">
-            {error?.message || "Failed to load article content."}
-          </div>
-        </main>
-      )}
-      {!isLoading && article && (
-        <>
-          {/* Settings bar */}
-          <div className="m-2 shadow-xl rounded-xl border-2 border-gray-100 p-1">
-            <button
-              className="btn btn-square btn-ghost mx-4"
-              popoverTarget="popover-1"
-              style={{ anchorName: "--anchor-1" }}
-            >
-              <DotsThreeIcon size={24} color="#676565" weight="bold" />
-            </button>
-            <ul
-              className="dropdown menu w-56 bg-base-100 shadow-lg"
-              popover="auto"
-              id="popover-1"
-              style={{ positionAnchor: "--anchor-1" }}
-            >
-              {/* Manage unlisted settings */}
-              <li>
-                <Modal
-                  onCancel={() =>
-                    console.log("Make this story unlisted? cancel")
-                  }
-                  onDone={() => console.log("Make this story unlisted?")}
-                  buttonName="Manage unlisted settings"
-                >
-                  <h3 className="font-bold text-md">
-                    Make this story unlisted?
-                  </h3>
-                  <p className="py-4">Not found</p>
-                </Modal>
-              </li>
-              {/* Change featured image */}
-              <li>
-                <Modal
-                  onDone={onDone}
-                  onCancel={() => {
-                    form.resetField("coverImage");
-                    form.resetField("coverFocusY");
-                  }}
-                  buttonName="Change featured image"
-                  disabled={isImageArraryModalShow || !canSubmit}
-                >
-                  <h3 className="font-bold text-md mb-2">
-                    Select one of your images to feature.
-                  </h3>
-                  <form.Field
-                    name="coverImage"
-                    children={(coverImageField) => (
-                      <>
-                        <CoverImageInput
-                          field={coverImageField}
-                          form={form}
-                          coverImages={getImagesNow()}
-                          isImageArraryModalShow={isImageArraryModalShow}
-                          setIsImageArraryModalShow={setIsImageArraryModalShow}
+      <>
+        {/* Settings bar */}
+        <div className="m-2 shadow-xl rounded-xl border-2 border-gray-100 p-1">
+          <button
+            className="btn btn-square btn-ghost mx-4"
+            popoverTarget="popover-1"
+            style={{ anchorName: "--anchor-1" }}
+          >
+            <DotsThreeIcon size={24} color="#676565" weight="bold" />
+          </button>
+          <ul
+            className="dropdown menu w-56 bg-base-100 shadow-lg"
+            popover="auto"
+            id="popover-1"
+            style={{ positionAnchor: "--anchor-1" }}
+          >
+            {/* Manage unlisted settings */}
+            <li>
+              <Modal
+                onCancel={() => console.log("Make this story unlisted? cancel")}
+                onDone={() => console.log("Make this story unlisted?")}
+                buttonName="Manage unlisted settings"
+              >
+                <h3 className="font-bold text-md">Make this story unlisted?</h3>
+                <p className="py-4">Not found</p>
+              </Modal>
+            </li>
+            {/* Change featured image */}
+            <li>
+              <Modal
+                onDone={onDone}
+                onCancel={() => {
+                  form.resetField("coverImage");
+                  form.resetField("coverFocusY");
+                }}
+                buttonName="Change featured image"
+                disabled={isImageArraryModalShow || !canSubmit}
+              >
+                <h3 className="font-bold text-md mb-2">
+                  Select one of your images to feature.
+                </h3>
+                <form.Field
+                  name="coverImage"
+                  children={(coverImageField) => (
+                    <>
+                      <CoverImageInput
+                        field={coverImageField}
+                        form={form}
+                        coverImages={getImagesNow()}
+                        isImageArraryModalShow={isImageArraryModalShow}
+                        setIsImageArraryModalShow={setIsImageArraryModalShow}
+                      />
+                      <FieldInfo field={coverImageField} />
+                    </>
+                  )}
+                />
+              </Modal>
+            </li>
+            {/* Change display title / subtitle */}
+            <li>
+              <Modal
+                onDone={onDone}
+                onCancel={() => {
+                  form.resetField("title");
+                  form.resetField("subtitle");
+                }}
+                buttonName="Change display title / subtitle"
+                disabled={!canSubmit}
+              >
+                <form.Field
+                  name="title"
+                  children={(field) => (
+                    <>
+                      <fieldset className="fieldset w-full">
+                        <legend className="fieldset-legend text-sm font-normal">
+                          Title
+                        </legend>
+                        <input
+                          value={field.state.value ?? ""}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          type="text"
+                          className="input w-full font-bold input-sm"
+                          placeholder="Write a preview title..."
                         />
-                        <FieldInfo field={coverImageField} />
-                      </>
-                    )}
-                  />
-                </Modal>
-              </li>
-              {/* Change display title / subtitle */}
-              <li>
-                <Modal
-                  onDone={onDone}
-                  onCancel={() => {
-                    form.resetField("title");
-                    form.resetField("subtitle");
-                  }}
-                  buttonName="Change display title / subtitle"
-                  disabled={!canSubmit}
-                >
-                  <form.Field
-                    name="title"
-                    children={(field) => (
-                      <>
-                        <fieldset className="fieldset w-full">
-                          <legend className="fieldset-legend text-sm font-normal">
-                            Title
-                          </legend>
+                      </fieldset>
+                      <FieldInfo field={field} />
+                    </>
+                  )}
+                />
+                <form.Field
+                  name="subtitle"
+                  children={(field) => (
+                    <>
+                      <fieldset className="fieldset w-full">
+                        <legend className="fieldset-legend text-sm font-normal">
+                          Subtitle
+                        </legend>
+                        <div className="flex items-center gap-2">
                           <input
-                            value={field.state.value}
+                            value={field.state.value ?? ""}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
                             type="text"
-                            className="input w-full font-bold input-sm"
-                            placeholder="Write a preview title..."
+                            className="input w-full input-sm"
+                            placeholder="Write a preview subtitle..."
                           />
-                        </fieldset>
-                        <FieldInfo field={field} />
-                      </>
-                    )}
-                  />
-                  <form.Field
-                    name="subtitle"
-                    children={(field) => (
-                      <>
-                        <fieldset className="fieldset w-full">
-                          <legend className="fieldset-legend text-sm font-normal">
-                            Subtitle
-                          </legend>
-                          <div className="flex items-center gap-2">
-                            <input
-                              value={field.state.value}
-                              onBlur={field.handleBlur}
-                              onChange={(e) =>
-                                field.handleChange(e.target.value)
-                              }
-                              type="text"
-                              className="input w-full input-sm"
-                              placeholder="Write a preview subtitle..."
+                        </div>
+                      </fieldset>
+                      <FieldInfo field={field} />
+                    </>
+                  )}
+                />
+                <p className="py-4 text-sm text-base-content/60">
+                  The title and subtitle are used on your publication homepage,
+                  in previews of your story on Aedium, and on social media.
+                </p>
+              </Modal>
+            </li>
+            {/* Change topics */}
+            <li>
+              <Modal
+                onCancel={() => {
+                  form.resetField("topics");
+                  form.resetField("topicCandidate");
+                }}
+                onDone={() => {
+                  toast.success(
+                    "感谢测试！你的topics现在是 " +
+                      form.getFieldValue("topics") +
+                      " 。不过修改topics功能暂未上线！",
+                  );
+                }}
+                buttonName="Change topics"
+                disabled={canSubmit}
+              >
+                <p className="py-4 text-sm text-base-content/60">
+                  Add or change topics (up to 5) so readers know what your story
+                  is about:
+                </p>
+                <form.Field
+                  name="topicCandidate"
+                  children={(candidateField) => (
+                    <form.Field
+                      name="topics"
+                      mode="array"
+                      children={(topicsField) => (
+                        <>
+                          <fieldset className="fieldset w-full">
+                            <TopicInput
+                              topicsField={topicsField}
+                              candidateField={candidateField}
                             />
-                          </div>
-                        </fieldset>
-                        <FieldInfo field={field} />
-                      </>
-                    )}
-                  />
-                  <p className="py-4 text-sm text-base-content/60">
-                    The title and subtitle are used on your publication
-                    homepage, in previews of your story on Aedium, and on social
-                    media.
-                  </p>
-                </Modal>
-              </li>
-              {/* Change topics */}
-              <li>
-                <Modal
-                  onCancel={() => {
-                    form.resetField("topics");
-                    form.resetField("topicCandidate");
-                  }}
-                  onDone={() => {
-                    toast.success(
-                      "感谢测试！你的topics现在是 " +
-                        form.getFieldValue("topics") +
-                        " 。不过修改topics功能暂未上线！",
-                    );
-                  }}
-                  buttonName="Change topics"
-                  disabled={canSubmit}
-                >
-                  <p className="py-4 text-sm text-base-content/60">
-                    Add or change topics (up to 5) so readers know what your
-                    story is about:
-                  </p>
-                  <form.Field
-                    name="topicCandidate"
-                    children={(candidateField) => (
-                      <form.Field
-                        name="topics"
-                        mode="array"
-                        children={(topicsField) => (
-                          <>
-                            <fieldset className="fieldset w-full">
-                              <TopicInput
-                                topicsField={topicsField}
-                                candidateField={candidateField}
-                              />
-                            </fieldset>
+                          </fieldset>
 
-                            <FieldInfo field={topicsField} />
-                          </>
-                        )}
-                      />
-                    )}
-                  />
-                </Modal>
-              </li>
-            </ul>
-          </div>
-          {/* Editor area */}
-          <EditorComponent editor={editor} onChange={handleEditorChange} />
-        </>
-      )}
+                          <FieldInfo field={topicsField} />
+                        </>
+                      )}
+                    />
+                  )}
+                />
+              </Modal>
+            </li>
+          </ul>
+        </div>
+        {/* Editor area */}
+        <EditorComponent editor={editor} onChange={handleEditorChange} />
+      </>
     </>
   );
 }
