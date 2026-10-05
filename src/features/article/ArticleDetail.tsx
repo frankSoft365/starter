@@ -1,24 +1,20 @@
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import Loading from "@/ui/Loading";
-import Avatar from "@/ui/Avatar";
 import EditorComponent from "@/ui/EditorComponent";
 import {
+  ArrowsClockwiseIcon,
   ChatCircleDotsIcon,
   HandsClappingIcon,
-  RepeatIcon,
+  NotePencilIcon,
 } from "@phosphor-icons/react";
 import ArticleMenuButton from "@/ui/ArticleMenuButton";
 import { useAtomValue } from "jotai";
 import { userAtom, isLoginAtom } from "@/atoms/user";
-import { useRef } from "react";
-import { useForm, useStore } from "@tanstack/react-form";
+import { useState } from "react";
 import { useCreateBlockNote } from "@blocknote/react";
 import { useCurrentArticle, useLikeStatus, useLikeArticle } from "./article";
-import FieldInfo from "@/ui/FieldInfo";
 import SignedIn from "@/ui/SignedIn";
 import SignedOut from "@/ui/SignedOut";
-import { CreateCommentSchema, type CreateCommentForm } from "@/schemas/comment";
-import { useAddComment } from "../comment/comment";
 import CommentList from "../comment/CommentList";
 import ShareButton from "./ShareButton";
 import { useTranslation } from "react-i18next";
@@ -29,12 +25,17 @@ import ArticleAuthorInfo from "@/ui/ArticleAuthorInfo";
 import CurrentUser from "@/ui/CurrentUser";
 import FollowButton from "../follow/FollowButton";
 import { useSaveReadingHistory } from "../readingHistory/readingHistory";
+import { useCommentAreaScroll } from "./commentScroll";
+import CommentPublishInput from "./CommentPublishInput";
 
 export default function ArticleDetail() {
   const { t } = useTranslation();
   const { articleId } = articleRoute.useParams();
   const user = useAtomValue(userAtom);
   const editor = useCreateBlockNote();
+
+  // scroll to comment area
+  const { commentRef, scrollToComments } = useCommentAreaScroll();
 
   // reading history save
   useSaveReadingHistory(articleId);
@@ -56,36 +57,9 @@ export default function ArticleDetail() {
   const isOwnStory = article?.authorId === user?.id;
   const meneButtonColor = isOwnStory ? "#adadad" : "#676565";
 
-  // click to link to comment area
-  const commentRef = useRef<HTMLDivElement | null>(null);
-  const scrollToComments = () => {
-    commentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const { handleAddComment, isAddingComment } = useAddComment(articleId);
-
-  // write your comment form
-  const defaultValues: CreateCommentForm = {
-    commentContent: "",
-  };
-  const form = useForm({
-    defaultValues,
-    onSubmit: ({ value }) => {
-      handleAddComment(
-        { params: { content: value.commentContent } },
-        {
-          onSuccess: () => {
-            form.resetField("commentContent");
-          },
-        },
-      );
-    },
-    validators: {
-      onChange: CreateCommentSchema,
-      onSubmit: CreateCommentSchema,
-    },
-  });
-  const canSubmit = useStore(form.store, (state) => state.canSubmit);
+  const [repostState, setRepostState] = useState<
+    "idle" | "rotating" | "reposted"
+  >("idle");
 
   return (
     <>
@@ -135,7 +109,7 @@ export default function ArticleDetail() {
             <div className="divider mb-0"></div>
             <div className="flex flex-row items-center justify-around w-full">
               {/* left buttons */}
-              <div className="flex flex-row">
+              <div className="flex flex-row items-center">
                 <div
                   className="lg:tooltip mx-1"
                   data-tip={
@@ -163,22 +137,130 @@ export default function ArticleDetail() {
                     {!isOwnStory && article.responseNum}
                   </ArticleMenuButton>
                 </div>
-                <div
-                  className="lg:tooltip mx-1"
-                  data-tip={
-                    isOwnStory
-                      ? t("btn.repostIsOwn")
-                      : t("btn.repost", { count: 20 })
-                  }
-                >
-                  <ArticleMenuButton disable={isOwnStory}>
-                    <RepeatIcon
-                      size={24}
-                      color={meneButtonColor}
-                      weight="light"
-                    />
-                    {!isOwnStory && "20"}
-                  </ArticleMenuButton>
+                {/* repost */}
+                <div className="flex items-center gap-1">
+                  <div className="dropdown">
+                    <div
+                      className="lg:tooltip"
+                      data-tip={
+                        isOwnStory
+                          ? t("btn.repostIsOwn")
+                          : t("btn.repost", { count: 20 })
+                      }
+                    >
+                      <div
+                        tabIndex={0}
+                        role="button"
+                        className={`btn p-0 bg-base-100 border-0 ${isOwnStory ? "btn-disabled opacity-60" : ""}`}
+                      >
+                        <svg
+                          viewBox="0 0 256 256"
+                          width="24"
+                          height="24"
+                          fill="none"
+                          color={
+                            repostState === "reposted"
+                              ? undefined
+                              : meneButtonColor
+                          }
+                          className={
+                            repostState === "reposted"
+                              ? "text-success"
+                              : "text-base-content/60 hover:text-base-content"
+                          }
+                          aria-hidden="true"
+                        >
+                          <g
+                            className={`origin-center transition-transform duration-700 ${repostState === "idle" ? "rotate-0" : "rotate-180"}`}
+                            onTransitionEnd={(event) => {
+                              if (
+                                event.target === event.currentTarget &&
+                                (event.propertyName === "rotate" ||
+                                  event.propertyName === "transform") &&
+                                repostState === "rotating"
+                              ) {
+                                setRepostState("reposted");
+                              }
+                            }}
+                          >
+                            <polyline
+                              points="168 96 216 96 216 48"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="16"
+                            />
+                            <path
+                              d="M216 96 187.72 67.72A88 88 0 0 0 64 67"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="16"
+                            />
+                            <polyline
+                              points="88 160 40 160 40 208"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="16"
+                            />
+                            <path
+                              d="M40 160 68.28 188.28A88 88 0 0 0 192 189"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="16"
+                            />
+                          </g>
+                          <path
+                            d="M100 128l18 18 38-40"
+                            stroke="currentColor"
+                            strokeWidth="16"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className={`transition-opacity duration-200 ${repostState === "reposted" ? "opacity-100" : "opacity-0"}`}
+                          />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content menu z-1 w-52 bg-base-100 p-2 shadow-sm"
+                    >
+                      <li>
+                        <button
+                          onClick={(event) => {
+                            if (repostState === "idle") {
+                              setRepostState("rotating");
+                            }
+                            event.currentTarget.blur();
+                          }}
+                        >
+                          <ArrowsClockwiseIcon size={24} />
+                          Repost
+                        </button>
+                      </li>
+                      <li>
+                        <button>
+                          <NotePencilIcon size={24} />
+                          Repost with a note
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="lg:tooltip" data-tip="hello!">
+                    {!isOwnStory && (
+                      <span className="text-base-content/60 hover:text-base-content">
+                        20
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
               {/* right buttons */}
@@ -207,8 +289,8 @@ export default function ArticleDetail() {
             </div>
           </div>
 
-          {/* comment area */}
           <div className="divider mb-0"></div>
+          {/* comment area */}
           <SignedOut>
             <div className="w-full lg:w-4xl mx-auto h-48 bg-base-200 text-xl items-center text-center p-6">
               {t("comment.noAuth")}
@@ -216,58 +298,11 @@ export default function ArticleDetail() {
           </SignedOut>
           <SignedIn>
             {/* write your comment */}
-            <div
-              ref={commentRef}
-              className="flex flex-col items-start p-4 w-full lg:w-4xl mx-auto"
-            >
-              <h2 className="text-lg md:text-2xl font-bold">
-                {t("comment.response", { count: article.responseNum })}
-              </h2>
-              <div className="flex flex-row items-center text-sm gap-1 my-3">
-                <Avatar
-                  imageUrl={user?.image ?? undefined}
-                  username={user?.username || ""}
-                  size="sm"
-                />
-                <span className="ml-1.5">{user?.username}</span>
-              </div>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  form.handleSubmit();
-                }}
-                className="w-full"
-              >
-                <form.Field
-                  name="commentContent"
-                  children={(field) => (
-                    <>
-                      <textarea
-                        placeholder={t("comment.commentInput.placeholder")}
-                        className="textarea w-full textarea-md lg:textarea-lg xl:textarea-xl"
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                      />
-                      <FieldInfo field={field} />
-                    </>
-                  )}
-                />
-                <div className="w-full flex">
-                  <button
-                    disabled={!canSubmit || isAddingComment}
-                    type="submit"
-                    className="btn btn-sm md:btn-base btn-neutral rounded-full my-3 ml-auto"
-                  >
-                    {isAddingComment ? (
-                      <span className="loading loading-spinner"></span>
-                    ) : (
-                      t("btn.publish")
-                    )}
-                  </button>
-                </div>
-              </form>
-            </div>
+            <CommentPublishInput
+              articleId={articleId}
+              article={article}
+              commentRef={commentRef}
+            />
             {/* comment list */}
             <CommentList articleId={articleId} authorId={article.authorId} />
           </SignedIn>

@@ -39,38 +39,28 @@ export default function ArticleEdit() {
     [],
   );
 
-  const {
-    data: processedArticle,
-    isLoading,
-    isError,
-    error,
-  } = useCurrentArticle(articleId, editor, false);
+  const articleQuery = useCurrentArticle(articleId, editor, false);
 
-  if (isLoading) {
-    return <Loading />;
+  switch (articleQuery.status) {
+    case "pending":
+      return <Loading />;
+    case "error":
+      return (
+        <main className="flex items-center justify-center min-h-screen">
+          <div className="text-3xl text-red-600">
+            {articleQuery.error.message || "Failed to load article content."}
+          </div>
+        </main>
+      );
+    case "success":
+      return (
+        <ArticleEditContent
+          articleId={articleId}
+          article={articleQuery.data.article}
+          editor={editor}
+        />
+      );
   }
-
-  if (isError) {
-    return (
-      <main className="flex items-center justify-center min-h-screen">
-        <div className="text-3xl text-red-600">
-          {error?.message || "Failed to load article content."}
-        </div>
-      </main>
-    );
-  }
-
-  if (!processedArticle) {
-    return <Loading />;
-  }
-
-  return (
-    <ArticleEditContent
-      articleId={articleId}
-      article={processedArticle.article}
-      editor={editor}
-    />
-  );
 }
 
 function ArticleEditContent({
