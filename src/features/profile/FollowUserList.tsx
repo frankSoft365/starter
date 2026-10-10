@@ -7,7 +7,7 @@ import { Route as profileRoute } from "@/routes/_app/_protected/profile/$userId/
 import type { FollowListType } from "@/types/follow";
 import type { UserVO } from "@/types/user";
 import Avatar from "@/ui/Avatar";
-import CurrentUser from "@/ui/CurrentUser";
+import CurrentUser from "@/ui/utils/CurrentUser";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";

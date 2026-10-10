@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useGetInfiniteReadingHistoryList } from "./readingHistory";
 import { useTranslation } from "react-i18next";
 import ArticleListItem from "../home/ArticleListItem";
-import ArticleListSkeleton from "../home/ArticleListItemSkeleton";
+import ArticleListSkeleton from "../../ui/article/ArticleListSkeleton";
 import { CLEAR_READING_HISTORY_MODAL_ID } from "@/constants/modal";
 
 export default function ReadingHistoryList() {

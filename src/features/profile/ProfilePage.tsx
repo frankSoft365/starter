@@ -7,7 +7,7 @@ import { useProfile } from "../account/userProfile";
 import { Route as profileTabRoute } from "@/routes/_app/_protected/profile/$userId/_profile/route";
 import Loading from "@/ui/Loading";
 import { handleShareCopyLink } from "@/utils/copyHelper";
-import CurrentUser from "@/ui/CurrentUser";
+import CurrentUser from "@/ui/utils/CurrentUser";
 import FollowStats from "../follow/FollowStats";
 import FollowButton from "../follow/FollowButton";
 import ProfileTab from "./ProfileTab";

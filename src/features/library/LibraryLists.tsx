@@ -1,7 +1,7 @@
 import { userAtom } from "@/atoms/user";
 import { useAtomValue } from "jotai";
 import Lists from "../collection/Lists";
-import NeedLogin from "@/ui/NeedLogin";
+import NeedLogin from "@/ui/utils/NeedLogin";
 
 export default function LibraryLists() {
   const user = useAtomValue(userAtom);

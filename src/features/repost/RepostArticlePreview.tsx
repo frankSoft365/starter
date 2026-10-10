@@ -1,5 +1,5 @@
 import Avatar from "@/ui/Avatar";
-import ArticlePreviewImage from "../home/ArticlePreviewImage";
+import ArticlePreviewImage from "../../ui/article/ArticlePreviewImage";
 import { getPublishDate } from "@/utils/dateHelper";
 import type { ArticleListItemVO, ArticleVO } from "@/types/article";
 

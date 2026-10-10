@@ -1,4 +1,4 @@
-import CurrentUser from "@/ui/CurrentUser";
+import CurrentUser from "@/ui/utils/CurrentUser";
 import { BookmarkIcon, DotsThreeIcon, UsersIcon } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import {

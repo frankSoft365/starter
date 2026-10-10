@@ -6,7 +6,7 @@ import {
   HandsClappingIcon,
   ImageIcon,
 } from "@phosphor-icons/react";
-import ArticlePreviewImage from "../home/ArticlePreviewImage";
+import ArticlePreviewImage from "../../ui/article/ArticlePreviewImage";
 import useOverflowHelper from "@/utils/overflowHelper";
 import { UserHoverLink } from "@/ui/ArticleAuthorInfo";
 import ArticlePreview from "./ArticlePreview";

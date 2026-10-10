@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getArticleList } from "@/services/apiArticle";
 import { useTranslation } from "react-i18next";
-import ArticleList from "@/ui/ArticleList";
-import ArticleListSkeleton from "./ArticleListItemSkeleton";
+import ArticleList from "@/features/profile/ArticleList";
+import ArticleListSkeleton from "../../ui/article/ArticleListSkeleton";
 
-export default function HomeArticleList() {
+export default function ForYouArticleList() {
   const { t } = useTranslation();
 
   const {

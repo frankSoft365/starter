@@ -6,7 +6,7 @@ import {
   UsersIcon,
 } from "@phosphor-icons/react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
-import SignedIn from "../SignedIn";
+import SignedIn from "../utils/SignedIn";
 import { Route as editorRoute } from "../../routes/_app/_protected/editor";
 import { Route as homeRoute } from "../../routes/_app/_home/index";
 import { Route as profileRoute } from "../../routes/_app/_protected/profile/$userId/_profile";

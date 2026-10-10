@@ -6,7 +6,7 @@ import type { CollectionListDetailVO } from "@/types/collection";
 import { useToggleListPublic } from "./collection";
 import DeleteListModal from "../profile/DeleteListModal";
 import EditListModal from "../profile/EditListModal";
-import CurrentUser from "@/ui/CurrentUser";
+import CurrentUser from "@/ui/utils/CurrentUser";
 
 export default function CollectionInfo({
   list,

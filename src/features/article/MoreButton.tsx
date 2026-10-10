@@ -1,4 +1,4 @@
-import CurrentUser from "@/ui/CurrentUser";
+import CurrentUser from "@/ui/utils/CurrentUser";
 import { DotsThreeIcon, ThumbsDownIcon } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "@tanstack/react-router";

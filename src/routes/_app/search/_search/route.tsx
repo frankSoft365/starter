@@ -1,4 +1,4 @@
-import SearchPage from "@/ui/SearchPage";
+import SearchPage from "@/features/search/SearchPage";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/search/_search")({

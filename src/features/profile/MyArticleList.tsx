@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { getUserArticleList } from "@/services/apiArticle";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/ui/Loading";
-import ArticleList from "@/ui/ArticleList";
+import ArticleList from "@/features/profile/ArticleList";
 
 export default function MyArticleList() {
   const { t } = useTranslation();

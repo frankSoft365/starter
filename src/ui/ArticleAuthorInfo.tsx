@@ -8,8 +8,8 @@ import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Avatar from "./Avatar";
-import CurrentUser from "./CurrentUser";
-import SignedIn from "./SignedIn";
+import CurrentUser from "./utils/CurrentUser";
+import SignedIn from "./utils/SignedIn";
 import FollowStats from "@/features/follow/FollowStats";
 
 export default function ArticleAuthorInfo({
