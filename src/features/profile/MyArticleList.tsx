@@ -17,7 +17,7 @@ export default function MyArticleList() {
   } = useQuery({
     queryKey: ["get-profile-my-article-list", userId],
     queryFn: async () => {
-      return await getUserArticleList({ isMyArticle: true, userId: userId });
+      return await getUserArticleList({ userId });
     },
   });
 

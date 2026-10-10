@@ -84,7 +84,9 @@ export function useDeleteArticle() {
     onSuccess() {
       toast.success("Article deleted successfully.");
       // 针对在主页删除文章的刷新
-      queryClient.invalidateQueries({ queryKey: ["get-home-article-list"] });
+      queryClient.invalidateQueries({
+        queryKey: ["get-public-home-article-list"],
+      });
     },
     onError: (error) => {
       toast.error(

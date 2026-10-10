@@ -1,8 +1,7 @@
 import type { TopicInArticleVO } from "./topic";
 
-export type ArticleListRequest = {
-  isMyArticle?: boolean;
-  userId?: string;
+export type UserArticleListRequest = {
+  userId: string;
 };
 
 export type ArticlePublishRequest = {
@@ -68,4 +67,10 @@ export type ArticleVO = {
   authorAvatar: string;
   authorName: string;
   publishTime: string;
+};
+
+export type HomeArticleListRequest = {
+  lastCreatedAt: Date | null;
+  lastId: string | null;
+  size?: number;
 };
