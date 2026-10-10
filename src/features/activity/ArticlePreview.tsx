@@ -6,7 +6,6 @@ import {
   ThumbsDownIcon,
 } from "@phosphor-icons/react";
 import type { ArticleListItemVO } from "@/types/article";
-import ArticleMenuButton from "@/ui/ArticleMenuButton";
 import { useTranslation } from "react-i18next";
 import { formatLargeNumber } from "@/utils/number";
 import { useAtomValue } from "jotai";
@@ -63,34 +62,35 @@ export default function ArticlePreview({
             />
           </div>
           {/* actions */}
-          <div className="flex flex-col lg:flex-row justify-between lg:items-center text-base-content/70 [&_button]:text-base-content/70 [&_svg]:text-base-content/70">
-            <div className="flex flex-row">
+
+          <div className="flex py-1 flex-col lg:flex-row justify-between lg:items-center [&_svg]:text-base-content/70">
+            <div className="flex flex-row gap-3">
               <div
                 className="lg:tooltip"
                 data-tip={t("btn.clap", { count: article.likeCount })}
               >
-                <ArticleMenuButton>
+                <span className="inline-flex items-center gap-0.5 text-sm font-light">
                   <HandsClappingIcon size={20} />
                   {formatLargeNumber(article.likeCount)}
-                </ArticleMenuButton>
+                </span>
               </div>
               <div
                 className="lg:tooltip"
                 data-tip={t("btn.response", { count: article.responseNum })}
               >
-                <ArticleMenuButton>
-                  <ChatCircleDotsIcon weight="fill" size={20} />
+                <span className="inline-flex items-center gap-0.5 text-sm font-light">
+                  <ChatCircleDotsIcon weight="duotone" size={20} />
                   {article.responseNum}
-                </ArticleMenuButton>
+                </span>
               </div>
               <div
                 className="lg:tooltip"
                 data-tip={t("btn.repost", { count: 20 })}
               >
-                <ArticleMenuButton>
+                <span className="inline-flex items-center gap-0.5 text-sm font-light">
                   <RepeatIcon size={20} weight="light" />
                   20
-                </ArticleMenuButton>
+                </span>
               </div>
             </div>
             <div className="flex flex-row justify-start gap-1">

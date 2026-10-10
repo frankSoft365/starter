@@ -1,8 +1,8 @@
-import ProfileLists from "@/features/profile/ProfileLists";
+import ListsPage from "@/features/collection/ListsPage";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
   "/_app/_protected/profile/$userId/_profile/lists",
 )({
-  component: ProfileLists,
+  component: ListsPage,
 });

@@ -41,7 +41,7 @@ export default function ProfilePage({
     // grid layout
     <div className="w-full min-h-dvh grid grid-cols-1 lg:grid-cols-3">
       {/* left main layout */}
-      <div className="col-span-1 px-4 lg:px-0 lg:col-span-2 border-r border-base-300">
+      <div className="col-span-1 px-2 lg:px-0 lg:col-span-2 border-r border-base-300">
         {/* flex-col layout */}
         <div className="w-full lg:w-5/6 mx-auto flex flex-col items-center">
           <div className="flex w-full justify-between px-2 lg:p-0">

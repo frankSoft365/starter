@@ -62,17 +62,19 @@ export default function ActivityListItem({
           </div>
         </div>
         {/* the comment content */}
-        <div
-          className="flex flex-row items-center gap-2 cursor-pointer"
-          onClick={() =>
-            linkToComment(
-              userActivity.post.responseRootPost.post.id,
-              responsePost.id,
-            )
-          }
-        >
-          <div className="mx-2 p-0 divider divider-horizontal"></div>
-          <span>{responsePost.content}</span>
+        <div className="flex flex-row items-center gap-2">
+          <div className="w-6 mx-0 p-0 divider divider-horizontal"></div>
+          <span
+            className="cursor-pointer"
+            onClick={() =>
+              linkToComment(
+                userActivity.post.responseRootPost.post.id,
+                responsePost.id,
+              )
+            }
+          >
+            {responsePost.content}
+          </span>
         </div>
         {/* the parent comment */}
         {userActivity.post.extendedPreviewContent.isFullContent && (
