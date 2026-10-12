@@ -168,7 +168,7 @@ export default function CommentList({
   }, [hasNextPage, isFetching, fetchNextPage]);
 
   return (
-    <div className="w-full lg:w-4xl mx-auto">
+    <div className="w-full mx-auto">
       {status === "pending" && (
         <div className="w-full p-6 m-auto flex items-center justify-center gap-2">
           <span className="loading loading-spinner loading-xl"></span>

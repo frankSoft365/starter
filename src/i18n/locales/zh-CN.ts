@@ -39,6 +39,8 @@ export default {
     response_other: "{{count}} 回复",
     repostIsOwn: "你不能转发自己的文章",
     repost: "转发",
+    repostCount_one: "{{count}} 转发",
+    repostCount_other: "{{count}} 转发",
     editArticle: "编辑文章",
     deleteArticle: "删除文章",
   },

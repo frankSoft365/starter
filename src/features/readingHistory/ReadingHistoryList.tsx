@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import ArticleListItem from "../home/ArticleListItem";
 import ArticleListSkeleton from "../../ui/article/ArticleListSkeleton";
 import { CLEAR_READING_HISTORY_MODAL_ID } from "@/constants/modal";
+import { useBatchArticleResults } from "../article/useBatchArticleResults";
 
 export default function ReadingHistoryList() {
   const { t } = useTranslation();
@@ -17,6 +18,13 @@ export default function ReadingHistoryList() {
     isFetchingNextPage,
     status,
   } = query;
+  const articleIdBatches =
+    data?.pages
+      .map((page) => [...new Set(page.items.map((article) => article.id))])
+      .filter((articleIds) => articleIds.length > 0) ?? [];
+
+  const { articleResultsById, articleResultStatusById } =
+    useBatchArticleResults(articleIdBatches);
   // infinite scrolling list
   const listBottomRef = useRef<HTMLLIElement | null>(null);
   useEffect(() => {
@@ -82,12 +90,31 @@ export default function ReadingHistoryList() {
               {/* normal comment list */}
               {data.pages
                 .flatMap((page) => page.items)
-                .map((articleListItemVO) => (
-                  <ArticleListItem
-                    key={articleListItemVO.id}
-                    article={articleListItemVO}
-                  />
-                ))}
+                .map((articleListItemVO) => {
+                  const articleResult = articleResultsById.get(
+                    articleListItemVO.id,
+                  );
+                  const article = {
+                    ...articleListItemVO,
+                    repostCount:
+                      articleResult?.repostCount ??
+                      articleListItemVO.repostCount,
+                    isCollected:
+                      articleResult?.viewerEdge?.collectionsConnection
+                        .hasCollected ?? articleListItemVO.isCollected,
+                  };
+
+                  return (
+                    <ArticleListItem
+                      key={articleListItemVO.id}
+                      article={article}
+                      articleResultStatus={
+                        articleResultStatusById.get(articleListItemVO.id) ??
+                        "pending"
+                      }
+                    />
+                  );
+                })}
               <li
                 ref={listBottomRef}
                 className="list-row h-0.5"

@@ -5,6 +5,7 @@ import ArticleListSkeleton from "../../ui/article/ArticleListSkeleton";
 import type { HomeArticleListRequest } from "@/types/article";
 import { useEffect, useRef } from "react";
 import ArticleListItem from "./ArticleListItem";
+import { useBatchArticleResults } from "../article/useBatchArticleResults";
 
 export default function ForYouArticleList() {
   const { t } = useTranslation();
@@ -35,6 +36,13 @@ export default function ForYouArticleList() {
         : undefined;
     },
   });
+  const articleIdBatches =
+    data?.pages
+      .map((page) => [...new Set(page.items.map((article) => article.id))])
+      .filter((articleIds) => articleIds.length > 0) ?? [];
+  const { articleResultsById, articleResultStatusById } =
+    useBatchArticleResults(articleIdBatches);
+
   // infinite scrolling list
   const listBottomRef = useRef<HTMLLIElement | null>(null);
   useEffect(() => {
@@ -70,13 +78,30 @@ export default function ForYouArticleList() {
           <ul className="list bg-base-100">
             {data.pages
               .flatMap((page) => page.items)
-              .map((articleListItemVO, index) => (
-                <ArticleListItem
-                  index={index}
-                  key={articleListItemVO.id}
-                  article={articleListItemVO}
-                />
-              ))}
+              .map((articleListItemVO, index) => {
+                const articleResult = articleResultsById.get(
+                  articleListItemVO.id,
+                );
+                return (
+                  <ArticleListItem
+                    index={index}
+                    key={articleListItemVO.id}
+                    article={{
+                      ...articleListItemVO,
+                      repostCount:
+                        articleResult?.repostCount ??
+                        articleListItemVO.repostCount,
+                      isCollected:
+                        articleResult?.viewerEdge?.collectionsConnection
+                          .hasCollected ?? articleListItemVO.isCollected,
+                    }}
+                    articleResultStatus={
+                      articleResultStatusById.get(articleListItemVO.id) ??
+                      "pending"
+                    }
+                  />
+                );
+              })}
             <li ref={listBottomRef} className="list-row h-0.5" aria-hidden></li>
             {isFetchingNextPage && (
               <li className="list-row">{t("common.loadingMore")}</li>

@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { BookmarkSimpleIcon, WarningCircleIcon } from "@phosphor-icons/react";
 import Loading from "@/ui/Loading";
 import ArticleListItem from "@/features/home/ArticleListItem";
-import type { ArticleListItemVO } from "@/types/article";
+import type {
+  ArticleListItemVO,
+  ArticleResult,
+  OperationList,
+} from "@/types/article";
 import {
   useCollectionListArticlesQuery,
   useCollectionListQuery,
@@ -18,9 +22,25 @@ import CollectionInfo from "./CollectionInfo.tsx";
 import { Route as listDetailRoute } from "@/routes/_app/_protected/profile/$userId/lists.$listId";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
+import { batchQueryCountOrViewerEdge } from "@/services/apiArticle.ts";
 
 export function isDeletedArticle(article: ArticleListItemVO): boolean {
   return !!article.id && !article.title;
+}
+
+function selectArticleResults(results: ArticleResult[]) {
+  const resultsByArticleId = new Map<string, ArticleResult>();
+
+  for (const result of results) {
+    const previous = resultsByArticleId.get(result.id);
+    resultsByArticleId.set(result.id, {
+      id: result.id,
+      repostCount: result.repostCount ?? previous?.repostCount,
+      viewerEdge: result.viewerEdge ?? previous?.viewerEdge,
+    });
+  }
+
+  return resultsByArticleId;
 }
 
 export default function CollectionListDetail() {
@@ -38,6 +58,20 @@ export default function CollectionListDetail() {
     status,
     error,
   } = useCollectionListArticlesQuery(listId);
+
+  const articleIds = articles?.map((article) => article.id) ?? [];
+  const operationList: OperationList["operationList"] = articleIds.flatMap(
+    (articleId) => [
+      { operationName: "RepostCountQuery", articleId },
+      { operationName: "CollectionBaseQuery", articleId },
+    ],
+  );
+  const { data: articleResults, status: articleResultStatus } = useQuery({
+    queryKey: ["batch-query-count-or-viewer-edge", articleIds],
+    queryFn: () => batchQueryCountOrViewerEdge({ params: { operationList } }),
+    select: selectArticleResults,
+    enabled: articleIds.length > 0 && status !== "pending",
+  });
 
   const removeMutation = useRemoveArticleFromList();
   const batchRemoveMutation = useRemoveArticlesFromList();
@@ -132,7 +166,17 @@ export default function CollectionListDetail() {
               ) : (
                 <ArticleListItem
                   key={article.id}
-                  article={article}
+                  article={{
+                    ...article,
+                    repostCount:
+                      articleResults?.get(article.id)?.repostCount ??
+                      article.repostCount,
+                    isCollected:
+                      articleResults?.get(article.id)?.viewerEdge
+                        ?.collectionsConnection.hasCollected ??
+                      article.isCollected,
+                  }}
+                  articleResultStatus={articleResultStatus}
                   onRemoveFromList={() =>
                     removeMutation.mutate(
                       { articleId: article.id, listId },

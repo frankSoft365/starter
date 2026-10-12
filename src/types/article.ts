@@ -2,6 +2,9 @@ import type { TopicInArticleVO } from "./topic";
 
 export type UserArticleListRequest = {
   userId: string;
+  lastCreatedAt: Date | null;
+  lastId: string | null;
+  size?: number;
 };
 
 export type ArticlePublishRequest = {
@@ -46,7 +49,9 @@ export type ArticleListItemVO = {
 
   likeCount: number;
   responseNum: number;
-  repostNum?: number;
+
+  repostCount?: number;
+  isCollected?: boolean;
 };
 
 export type ArticleVO = {
@@ -61,16 +66,42 @@ export type ArticleVO = {
 
   likeCount: number;
   responseNum: number;
-  repostNum?: number;
 
   authorId: string;
   authorAvatar: string;
   authorName: string;
   publishTime: string;
+
+  repostCount?: number;
+  isCollected?: boolean;
 };
 
 export type HomeArticleListRequest = {
   lastCreatedAt: Date | null;
   lastId: string | null;
   size?: number;
+};
+
+export type Operation = {
+  operationName: "RepostCountQuery" | "CollectionBaseQuery";
+  articleId: string;
+};
+
+export type OperationList = {
+  operationList: Operation[];
+};
+
+export type CollectionsConnection = {
+  hasCollected: boolean;
+};
+
+export type ArticleViewerEdge = {
+  id: string;
+  collectionsConnection: CollectionsConnection;
+};
+
+export type ArticleResult = {
+  id: string;
+  repostCount?: number;
+  viewerEdge?: ArticleViewerEdge;
 };

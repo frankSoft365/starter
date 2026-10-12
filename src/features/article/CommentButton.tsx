@@ -15,8 +15,8 @@ export default function CommentButton({
         className="inline-flex items-center gap-0.5 cursor-pointer opacity-65 hover:opacity-100"
         onClick={scrollToComments}
       >
-        <ChatCircleDotsIcon size={24} weight="light" />
-        <span className="text-sm font-light">{responseNum && responseNum}</span>
+        <ChatCircleDotsIcon size={24} />
+        <span className="text-sm">{responseNum && responseNum}</span>
       </div>
     </div>
   );

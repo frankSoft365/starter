@@ -1,4 +1,4 @@
-import type { UserActivity } from "@/types/activity";
+import type { Post, UserActivity } from "@/types/activity";
 import Avatar from "@/ui/Avatar";
 import { getPublishDate } from "@/utils/dateHelper";
 import {
@@ -9,29 +9,23 @@ import {
 import ArticlePreviewImage from "../../ui/article/ArticlePreviewImage";
 import useOverflowHelper from "@/utils/overflowHelper";
 import { UserHoverLink } from "@/ui/ArticleAuthorInfo";
-import ArticlePreview from "./ArticlePreview";
 import type { ArticleListItemVO } from "@/types/article";
 import { useProfileUser } from "../profile/ProfileUserContext";
-import { useNavigate, useRouter } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import { Route as articleDetailRoute } from "@/routes/_app/article.$articleId";
+import ArticleListItem from "../home/ArticleListItem";
 
 export default function ActivityListItem({
   userActivity,
+  articleResultStatus,
 }: {
   userActivity: UserActivity;
+  articleResultStatus?: "error" | "success" | "pending";
 }) {
   const { handleOverflow } = useOverflowHelper();
   const user = useProfileUser();
-  const navigate = useNavigate();
   const responsePost = userActivity.responsePost;
   const router = useRouter();
-
-  function linkToArticle(articleId: string) {
-    navigate({
-      to: articleDetailRoute.to,
-      params: { articleId: articleId },
-    });
-  }
 
   function linkToComment(articleId: string, commentId: string) {
     const hash = `reply${commentId}`;
@@ -41,6 +35,45 @@ export default function ActivityListItem({
       ...(hash && { hash }),
     }).href;
     window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  function postToArticleListItemVO(post: Post) {
+    const article: ArticleListItemVO = {
+      id: post.id,
+      authorId: post.creator?.id ?? "",
+      authorName: post.creator?.username ?? "",
+      authorAvatar: post.creator?.avatar ?? "",
+      publishTime: post.publishAt,
+      title: post.title ?? "",
+      subtitle: post.extendedPreviewContent.subtitle,
+      coverImage: post.previewImage?.url,
+      coverFocusY: post.previewImage?.coverFocusY ?? 0.5,
+      likeCount: post.clapCount ?? 0,
+      responseNum: post.responseCount ?? 0,
+
+      repostCount: post.repostCount,
+      isCollected: post.isCollected,
+    };
+    return article;
+  }
+
+  function UserInfo() {
+    return (
+      <div className="flex flex-row items-center justify-start gap-2">
+        <Avatar
+          imageUrl={user?.image ?? ""}
+          username={user?.username ?? ""}
+          size="xs"
+        />
+        <div className="text-xs flex flex-row items-center justify-start gap-1 opacity-65">
+          <span>{user?.username}</span>
+          <HandsClappingIcon size={16} weight="duotone" />
+          <span>Clapped</span>
+          <span>·</span>
+          <span>{getPublishDate(new Date(userActivity.occurredAt))}</span>
+        </div>
+      </div>
+    );
   }
 
   return userActivity.activityType === "RESPONSE_CREATED" && responsePost ? (
@@ -143,56 +176,11 @@ export default function ActivityListItem({
       </div>
     </li>
   ) : (
-    <li className="list-row grid-cols-1">
-      <div className="flex flex-col gap-3">
-        {/* the user info */}
-        <div className="flex flex-row items-center justify-start gap-2">
-          <Avatar
-            imageUrl={user?.image ?? ""}
-            username={user?.username ?? ""}
-            size="xs"
-          />
-          <div className="text-xs flex flex-row items-center justify-start gap-1 opacity-65">
-            <span>{user?.username}</span>
-            <HandsClappingIcon size={16} weight="duotone" />
-            <span>Clapped</span>
-            <span>·</span>
-            <span>{getPublishDate(new Date(userActivity.occurredAt))}</span>
-          </div>
-        </div>
-
-        {/* the relative article (detail info) */}
-        {userActivity.post.id ? (
-          <div onClick={() => linkToArticle(userActivity.post.id)}>
-            <ArticlePreview
-              article={
-                {
-                  id: userActivity.post.id,
-                  authorId: userActivity.post.creator?.id ?? "",
-                  authorName: userActivity.post.creator?.username ?? "",
-                  authorAvatar: userActivity.post.creator?.avatar ?? "",
-                  publishTime: userActivity.post.publishAt ?? new Date(),
-                  title: userActivity.post.title ?? "",
-                  subtitle: !userActivity.post.extendedPreviewContent
-                    .isFullContent
-                    ? userActivity.post.extendedPreviewContent.subtitle
-                    : "",
-                  coverImage: userActivity.post.previewImage?.url,
-                  coverFocusY:
-                    userActivity.post.previewImage?.coverFocusY ?? 0.5,
-                  likeCount: userActivity.post.clapCount ?? 0,
-                  responseNum: userActivity.post.responseCount ?? 0,
-                  repostNum: 20,
-                } as ArticleListItemVO
-              }
-            />
-          </div>
-        ) : (
-          <div className="bg-base-200 text-center p-8">
-            <p className="text-base-content/65">The article is deleted.</p>
-          </div>
-        )}
-      </div>
-    </li>
+    // the relative article (detail info)
+    <ArticleListItem
+      article={postToArticleListItemVO(userActivity.post)}
+      articleResultStatus={articleResultStatus}
+      activityInfo={<UserInfo />}
+    />
   );
 }

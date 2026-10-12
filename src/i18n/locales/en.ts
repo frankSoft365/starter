@@ -39,6 +39,8 @@ export default {
     response_other: "{{count}} responses",
     repostIsOwn: "Your cannot repost your own story",
     repost: "Repost",
+    repostCount_one: "{{count}} repost",
+    repostCount_other: "{{count}} reposts",
     editArticle: "Edit story",
     deleteArticle: "Delete story",
   },

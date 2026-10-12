@@ -46,7 +46,7 @@ export default function CommentPublishInput({
   return (
     <div
       ref={commentRef}
-      className="flex flex-col items-start p-4 w-full lg:w-4xl mx-auto"
+      className="flex flex-col items-start p-4 w-full mx-auto"
     >
       <h2 className="text-lg md:text-2xl font-bold">
         {t("comment.response", { count: article.responseNum })}

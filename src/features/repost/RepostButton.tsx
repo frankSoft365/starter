@@ -65,6 +65,15 @@ export default function RepostButton({
         <div className="lg:tooltip font-light" data-tip={t("btn.repostIsOwn")}>
           <button disabled className="btn btn-ghost px-0">
             <ArrowsClockwiseIcon size={24} />
+            {isLoading ? (
+              <span className="text-sm text-base-content/60">--</span>
+            ) : (
+              <div className="lg:tooltip" data-tip="View reposts">
+                <span className="text-sm text-base-content/60 cursor-pointer">
+                  {repostDisplayCount}
+                </span>
+              </div>
+            )}
           </button>
         </div>
       ) : (
@@ -242,28 +251,24 @@ export default function RepostButton({
               )}
             </ul>
           </div>
-          {!isOwnStory && (
-            <>
-              {isLoading ? (
-                <span className="text-sm text-base-content/60">--</span>
-              ) : (
-                <div className="lg:tooltip" data-tip="View reposts">
-                  <span
-                    onClick={() => {
-                      setShowSignal((pre) => pre + 1);
-                      (
-                        document.getElementById(
-                          REPOST_USER_LIST_MODAL_ID,
-                        ) as HTMLDialogElement
-                      )?.showModal();
-                    }}
-                    className="text-sm text-base-content/60 hover:text-base-content cursor-pointer"
-                  >
-                    {repostDisplayCount}
-                  </span>
-                </div>
-              )}
-            </>
+          {isLoading ? (
+            <span className="text-sm text-base-content/60">--</span>
+          ) : (
+            <div className="lg:tooltip" data-tip="View reposts">
+              <span
+                onClick={() => {
+                  setShowSignal((pre) => pre + 1);
+                  (
+                    document.getElementById(
+                      REPOST_USER_LIST_MODAL_ID,
+                    ) as HTMLDialogElement
+                  )?.showModal();
+                }}
+                className="text-sm text-base-content/60 hover:text-base-content cursor-pointer"
+              >
+                {repostDisplayCount}
+              </span>
+            </div>
           )}
         </div>
       )}

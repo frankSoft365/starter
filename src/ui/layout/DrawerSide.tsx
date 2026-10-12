@@ -133,7 +133,7 @@ export default function DrawerSide({
                     weight={isProfileRoute ? "fill" : undefined}
                   />
                   <span>{t("btn.profile")}</span>
-                  <div className="badge badge-secondary rounded-full">New</div>
+                  {/* <div className="badge badge-secondary rounded-full">New</div> */}
                 </button>
               </li>
               <hr className="my-4 border-gray-200 border-0 border-t ml-6 mr-2" />

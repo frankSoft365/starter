@@ -1,11 +1,8 @@
 import { BookmarkIcon, LockIcon } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import {
-  useArticleCollectStatusQuery,
-  useIsArticleCollectedQuery,
-} from "./useArticleCollectStatus";
+import { useArticleCollectStatusQuery } from "./useArticleCollectStatus";
 import {
   useAddArticleToDefaultList,
   useAddArticleToList,
@@ -13,7 +10,13 @@ import {
 } from "@/features/collection/collection";
 import CreateListModal from "../collection/CreateListModal";
 
-export default function SaveButton({ articleId }: { articleId: string }) {
+export default function SaveButton({
+  articleId,
+  initialIsCollected,
+}: {
+  articleId: string;
+  initialIsCollected: boolean;
+}) {
   const { t } = useTranslation();
   const popoverId = `popover-save-${articleId}`;
   const anchorName = `--anchor-save-${articleId}`;
@@ -21,18 +24,31 @@ export default function SaveButton({ articleId }: { articleId: string }) {
   const [open, setOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const { isPending: isCollectedPending, data: isCollected } =
-    useIsArticleCollectedQuery(articleId);
+  const [colleced, setCollected] = useState(initialIsCollected);
   const addMutation = useAddArticleToDefaultList(articleId);
   const addToListMutation = useAddArticleToList();
   const removeFromListMutation = useRemoveArticleFromList();
 
   // 未收藏文章打开 popover 后先 add，add 成功（或已收藏）才查 status
-  const statusEnabled = open && (!!isCollected || addMutation.isSuccess);
+  const statusEnabled = open && (!!colleced || addMutation.isSuccess);
   const { data: statusList } = useArticleCollectStatusQuery(
     articleId,
     statusEnabled,
   );
+
+  // 当没有任何收藏夹收藏时使按钮收藏状态消失
+  useEffect(() => {
+    if (statusList) {
+      for (let index = 0; index < statusList.length; index++) {
+        const element = statusList[index];
+        if (element.isCollected) {
+          setCollected(true);
+          return;
+        }
+      }
+      setCollected(false);
+    }
+  }, [statusList]);
 
   // loading 持续到 statusList 有数据为止，避免 checkbox 未打勾状态闪现
   const isPopoverLoading =
@@ -44,14 +60,14 @@ export default function SaveButton({ articleId }: { articleId: string }) {
   };
 
   const handleButtonClick = () => {
+    setOpen((open) => !open);
+
     // open 是切换前的状态，!open 表示即将打开
-    if (
-      !open &&
-      !isCollected &&
-      !addMutation.isSuccess &&
-      !addMutation.isPending
-    ) {
+    if (!open && !colleced && !addMutation.isPending) {
       addMutation.mutate(undefined, {
+        onSuccess: () => {
+          setCollected(true);
+        },
         onError: (err) => {
           toast.error(err.message);
           popoverRef.current?.hidePopover?.();
@@ -78,9 +94,8 @@ export default function SaveButton({ articleId }: { articleId: string }) {
           popoverTarget={popoverId}
           style={{ anchorName }}
           onClick={handleButtonClick}
-          disabled={isCollectedPending}
         >
-          <BookmarkIcon size={24} weight={isCollected ? "fill" : "light"} />
+          <BookmarkIcon size={24} weight={colleced ? "fill" : "light"} />
         </button>
         <ul
           ref={popoverRef}

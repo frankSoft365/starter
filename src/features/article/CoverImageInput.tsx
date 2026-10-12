@@ -50,7 +50,7 @@ export default function CoverImageInput({
             <div className="relative w-full">
               <img
                 src={field.state.value}
-                className="w-full aspect-2/1 object-cover"
+                className="w-full aspect-3/2 object-cover"
                 style={{ objectPosition: objectPositionFromRatio(coverFocusY) }}
               />
 

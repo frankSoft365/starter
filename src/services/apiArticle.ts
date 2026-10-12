@@ -6,6 +6,8 @@ import type {
   ArticleUpdateRequest,
   ArticleVO,
   HomeArticleListRequest,
+  OperationList,
+  ArticleResult,
 } from "../types/article";
 import request from "../utils/request";
 import type { CursorPage } from "@/types/comment";
@@ -28,8 +30,12 @@ export async function getPublicHomeArticleList({
   );
 }
 
-export async function getUserArticleList(params: UserArticleListRequest) {
-  return request.post<UserArticleListRequest, ArticleListItemVO[]>(
+export async function getUserArticleList({
+  params,
+}: {
+  params: UserArticleListRequest;
+}) {
+  return request.post<UserArticleListRequest, CursorPage<ArticleListItemVO>>(
     "/article/user/list",
     params,
   );
@@ -48,4 +54,15 @@ export async function updateArticle(params: ArticleUpdateRequest) {
 
 export async function deleteArticle(params: DeleteRequest) {
   return request.post<DeleteRequest, void>("/article/user/delete", params);
+}
+
+export async function batchQueryCountOrViewerEdge({
+  params,
+}: {
+  params: OperationList;
+}) {
+  return request.post<OperationList, ArticleResult[]>(
+    "/article/articleResult",
+    params,
+  );
 }

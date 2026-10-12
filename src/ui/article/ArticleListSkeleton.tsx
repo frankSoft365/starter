@@ -20,7 +20,7 @@ function ArticleListItemSkeleton() {
         </div>
       </div>
       <div className="col-span-2 flex items-center">
-        <div className="skeleton w-full aspect-2/1"></div>
+        <div className="skeleton w-full aspect-3/2"></div>
       </div>
     </div>
   );

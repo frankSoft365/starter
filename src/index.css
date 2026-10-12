@@ -1,8 +1,14 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-.write-btn-sidebar-bg {
-  background-color: var(--color-info);
+.article-editor .bn-editor {
+  padding-right: 1rem;
+  background-color: var(--color-base-100);
+}
+
+.article-readonly .bn-editor {
+  padding: 0.5rem;
+  background-color: var(--color-base-100);
 }
 
 @theme {

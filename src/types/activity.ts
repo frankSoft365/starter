@@ -26,8 +26,11 @@ export type Post = {
   extendedPreviewContent: PreviewContent;
   content?: string;
   creator?: Creator;
-  publishAt?: Date;
+  publishAt: Date;
   responseRootPost: ResponseRootPost;
+
+  repostCount?: number;
+  isCollected?: boolean;
 };
 
 export type PreviewContent = {

@@ -38,9 +38,6 @@ export default function ProfileTab() {
             }
           >
             {item.name}
-            {index === 1 && (
-              <div className="ml-1 badge badge-xs badge-primary">New</div>
-            )}
           </a>
         );
       })}

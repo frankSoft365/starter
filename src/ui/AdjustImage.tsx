@@ -48,7 +48,7 @@ export default function AdjustImage({ image, onSave }: AdjustImageProps) {
           zoom={zoom}
           maxZoom={1}
           zoomWithScroll={false}
-          aspect={2 / 1}
+          aspect={3 / 2}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
@@ -66,7 +66,7 @@ export default function AdjustImage({ image, onSave }: AdjustImageProps) {
           <img
             src={image}
             alt="preview"
-            className="w-full aspect-2/1 object-cover transition-all duration-75"
+            className="w-full aspect-3/2 object-cover transition-all duration-75"
             style={{
               objectPosition: objectPositionFromRatio(focalYPercent / 100),
             }}

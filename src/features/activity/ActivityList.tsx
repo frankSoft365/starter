@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 import ActivityListItem from "./ActivityListItem";
+import { useBatchArticleResults } from "../article/useBatchArticleResults";
+import type { UserActivity } from "@/types/activity";
 
 type ActivityQueryType = "all" | "claps" | "responses";
 
@@ -23,6 +25,20 @@ export default function ActivityList() {
     isFetchingNextPage,
     status,
   } = useGetInfiniteActivityList(userId, activityQueryType);
+
+  const articleIds =
+    data?.pages.map((page) => [
+      ...new Set(
+        page.items.flatMap((userActivity) =>
+          userActivity.activityType === "POST_CLAPPED" && userActivity.post.id
+            ? [userActivity.post.id]
+            : [],
+        ),
+      ),
+    ]) ?? [];
+
+  const { articleResultsById, articleResultStatusById } =
+    useBatchArticleResults(articleIds);
 
   // auto fetch comment list
   const listBottomRef = useRef<HTMLLIElement | null>(null);
@@ -87,9 +103,30 @@ export default function ActivityList() {
             {data.pages
               .flatMap((page) => page.items)
               .map((userActivity) => {
+                const postClappedTypeUserActivity: UserActivity = {
+                  ...userActivity,
+                  post: {
+                    ...userActivity.post,
+                    repostCount:
+                      articleResultsById.get(userActivity.post.id)
+                        ?.repostCount ?? 0,
+                    isCollected:
+                      articleResultsById.get(userActivity.post.id)?.viewerEdge
+                        ?.collectionsConnection.hasCollected ?? false,
+                  },
+                };
                 return (
                   <ActivityListItem
-                    userActivity={userActivity}
+                    userActivity={
+                      userActivity.activityType === "POST_CLAPPED"
+                        ? postClappedTypeUserActivity
+                        : userActivity
+                    }
+                    articleResultStatus={
+                      userActivity.activityType === "POST_CLAPPED"
+                        ? articleResultStatusById.get(userActivity.post.id)
+                        : undefined
+                    }
                     key={userActivity.activityId}
                   />
                 );
