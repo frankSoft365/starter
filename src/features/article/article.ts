@@ -191,10 +191,18 @@ export function useLikeArticle(articleId: string) {
     },
     onMutate: async ({ action }) => {
       const newLiked = action === 1;
-      const previousLiked = !newLiked;
 
-      await queryClient.cancelQueries({ queryKey: likeStatusKey });
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: likeStatusKey }),
+        queryClient.cancelQueries({ queryKey: articleKey }),
+      ]);
 
+      const previousLiked = queryClient.getQueryData<boolean>(likeStatusKey);
+      const previousArticle = queryClient.getQueryData<{
+        title: string;
+        article: ArticleDetail;
+      }>(articleKey);
+      const delta = newLiked ? 1 : -1;
       queryClient.setQueryData<boolean>(likeStatusKey, newLiked);
 
       queryClient.setQueryData<
@@ -205,29 +213,25 @@ export function useLikeArticle(articleId: string) {
           ...old,
           article: {
             ...old.article,
-            likeCount: old.article.clapCount + (newLiked ? 1 : -1),
+            clapCount: old.article.clapCount + delta,
           },
         };
       });
 
-      return { previousLiked };
+      return { previousLiked, previousArticle };
     },
     onError: (error, _vars, context) => {
       if (context) {
-        queryClient.setQueryData(likeStatusKey, context.previousLiked);
-        queryClient.setQueryData<
-          { title: string; article: ArticleDetail } | undefined
-        >(articleKey, (old) => {
-          if (!old) return old;
-          return {
-            ...old,
-            article: {
-              ...old.article,
-              likeCount:
-                old.article.clapCount + (context.previousLiked ? 1 : -1),
-            },
-          };
-        });
+        if (context.previousLiked === undefined) {
+          queryClient.removeQueries({ queryKey: likeStatusKey, exact: true });
+        } else {
+          queryClient.setQueryData(likeStatusKey, context.previousLiked);
+        }
+        if (context.previousArticle === undefined) {
+          queryClient.removeQueries({ queryKey: articleKey, exact: true });
+        } else {
+          queryClient.setQueryData(articleKey, context.previousArticle);
+        }
       }
       toast.error(error.message);
     },
