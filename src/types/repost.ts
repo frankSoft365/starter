@@ -1,4 +1,4 @@
-import type { ArticleListItemVO } from "./article";
+import type { ArticlePreview } from "./article";
 
 export type RepostCount = {
   id: string;
@@ -56,5 +56,5 @@ export type UserRepost = {
 
 export type RepostListItem = {
   repost: UserRepost;
-  post: ArticleListItemVO;
+  post: ArticlePreview;
 };

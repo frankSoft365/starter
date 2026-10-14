@@ -6,21 +6,19 @@ import { useAddComment } from "../comment/comment";
 import FieldInfo from "@/ui/FieldInfo";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
-import type { ArticleVO } from "@/types/article";
+import type { ArticleDetailType } from "@/types/article";
 import type { RefObject } from "react";
 
 export default function CommentPublishInput({
-  articleId,
   article,
   commentRef,
 }: {
-  articleId: string;
-  article: ArticleVO;
+  article: ArticleDetailType;
   commentRef: RefObject<HTMLDivElement | null>;
 }) {
   const { t } = useTranslation();
   const user = useAtomValue(userAtom);
-  const { handleAddComment, isAddingComment } = useAddComment(articleId);
+  const { handleAddComment, isAddingComment } = useAddComment(article.id);
   // write your comment form
   const defaultValues: CreateCommentForm = {
     commentContent: "",
@@ -49,7 +47,7 @@ export default function CommentPublishInput({
       className="flex flex-col items-start p-4 w-full mx-auto"
     >
       <h2 className="text-lg md:text-2xl font-bold">
-        {t("comment.response", { count: article.responseNum })}
+        {t("comment.response", { count: article.responseCount })}
       </h2>
       <div className="flex flex-row items-center text-sm gap-1 my-3">
         <Avatar

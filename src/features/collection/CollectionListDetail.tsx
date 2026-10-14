@@ -7,7 +7,8 @@ import { BookmarkSimpleIcon, WarningCircleIcon } from "@phosphor-icons/react";
 import Loading from "@/ui/Loading";
 import ArticleListItem from "@/features/home/ArticleListItem";
 import type {
-  ArticleListItemVO,
+  ArticleListItemType,
+  ArticlePreview,
   ArticleResult,
   OperationList,
 } from "@/types/article";
@@ -24,7 +25,7 @@ import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
 import { batchQueryCountOrViewerEdge } from "@/services/apiArticle.ts";
 
-export function isDeletedArticle(article: ArticleListItemVO): boolean {
+export function isDeletedArticle(article: ArticleListItemType): boolean {
   return !!article.id && !article.title;
 }
 
@@ -166,16 +167,16 @@ export default function CollectionListDetail() {
               ) : (
                 <ArticleListItem
                   key={article.id}
-                  article={{
-                    ...article,
-                    repostCount:
-                      articleResults?.get(article.id)?.repostCount ??
-                      article.repostCount,
-                    isCollected:
-                      articleResults?.get(article.id)?.viewerEdge
-                        ?.collectionsConnection.hasCollected ??
-                      article.isCollected,
-                  }}
+                  article={
+                    {
+                      ...article,
+                      repostCount:
+                        articleResults?.get(article.id)?.repostCount ?? 0,
+                      isCollected:
+                        articleResults?.get(article.id)?.viewerEdge
+                          ?.collectionsConnection.hasCollected ?? false,
+                    } as ArticleListItemType
+                  }
                   articleResultStatus={articleResultStatus}
                   onRemoveFromList={() =>
                     removeMutation.mutate(
@@ -219,7 +220,7 @@ function DeletedArticleItem({
   article,
   onRemove,
 }: {
-  article: ArticleListItemVO;
+  article: ArticlePreview;
   onRemove: () => void;
 }) {
   const { t } = useTranslation();

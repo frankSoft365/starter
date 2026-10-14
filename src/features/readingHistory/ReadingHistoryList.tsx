@@ -5,6 +5,7 @@ import ArticleListItem from "../home/ArticleListItem";
 import ArticleListSkeleton from "../../ui/article/ArticleListSkeleton";
 import { CLEAR_READING_HISTORY_MODAL_ID } from "@/constants/modal";
 import { useBatchArticleResults } from "../article/useBatchArticleResults";
+import type { ArticleListItemType } from "@/types/article";
 
 export default function ReadingHistoryList() {
   const { t } = useTranslation();
@@ -90,26 +91,24 @@ export default function ReadingHistoryList() {
               {/* normal comment list */}
               {data.pages
                 .flatMap((page) => page.items)
-                .map((articleListItemVO) => {
+                .map((articlePreview) => {
                   const articleResult = articleResultsById.get(
-                    articleListItemVO.id,
+                    articlePreview.id,
                   );
-                  const article = {
-                    ...articleListItemVO,
-                    repostCount:
-                      articleResult?.repostCount ??
-                      articleListItemVO.repostCount,
+                  const article: ArticleListItemType = {
+                    ...articlePreview,
+                    repostCount: articleResult?.repostCount ?? 0,
                     isCollected:
                       articleResult?.viewerEdge?.collectionsConnection
-                        .hasCollected ?? articleListItemVO.isCollected,
+                        .hasCollected ?? false,
                   };
 
                   return (
                     <ArticleListItem
-                      key={articleListItemVO.id}
+                      key={articlePreview.id}
                       article={article}
                       articleResultStatus={
-                        articleResultStatusById.get(articleListItemVO.id) ??
+                        articleResultStatusById.get(articlePreview.id) ??
                         "pending"
                       }
                     />

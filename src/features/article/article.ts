@@ -8,10 +8,10 @@ import type { BlockNoteEditor } from "@blocknote/core";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type {
+  ArticleDetail,
   ArticlePublishPreview,
   ArticlePublishRequest,
   ArticleUpdateRequest,
-  ArticleVO,
 } from "../../types/article";
 import { useSetAtom } from "jotai";
 import { editorPublishSignalAtom } from "../../atoms/editor";
@@ -198,14 +198,14 @@ export function useLikeArticle(articleId: string) {
       queryClient.setQueryData<boolean>(likeStatusKey, newLiked);
 
       queryClient.setQueryData<
-        { title: string; article: ArticleVO } | undefined
+        { title: string; article: ArticleDetail } | undefined
       >(articleKey, (old) => {
         if (!old) return old;
         return {
           ...old,
           article: {
             ...old.article,
-            likeCount: old.article.likeCount + (newLiked ? 1 : -1),
+            likeCount: old.article.clapCount + (newLiked ? 1 : -1),
           },
         };
       });
@@ -216,7 +216,7 @@ export function useLikeArticle(articleId: string) {
       if (context) {
         queryClient.setQueryData(likeStatusKey, context.previousLiked);
         queryClient.setQueryData<
-          { title: string; article: ArticleVO } | undefined
+          { title: string; article: ArticleDetail } | undefined
         >(articleKey, (old) => {
           if (!old) return old;
           return {
@@ -224,7 +224,7 @@ export function useLikeArticle(articleId: string) {
             article: {
               ...old.article,
               likeCount:
-                old.article.likeCount + (context.previousLiked ? 1 : -1),
+                old.article.clapCount + (context.previousLiked ? 1 : -1),
             },
           };
         });

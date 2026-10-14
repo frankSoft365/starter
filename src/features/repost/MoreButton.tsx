@@ -10,7 +10,7 @@ import RepostWithNoteModal from "./RepostWithNoteModal";
 import RemoveNoteModal from "./RemoveNoteModal";
 import type { RepostState } from "@/types/repost";
 import { getRepostNoteStatus } from "./repost";
-import type { ArticleListItemVO } from "@/types/article";
+import type { ArticlePreview } from "@/types/article";
 import DeleteRepostModal from "./DeleteRepostModal";
 
 export default function MoreButton({
@@ -18,7 +18,7 @@ export default function MoreButton({
   article,
 }: {
   repostState: RepostState;
-  article: ArticleListItemVO;
+  article: ArticlePreview;
 }) {
   const REPOST_WITH_NOTE_MODAL = `${REPOST_WITH_NOTE_MODAL_ID}_${article.id}`;
   const REMOVE_NOTE_OF_REPOST_MODAL = `${REMOVE_NOTE_OF_REPOST_MODAL_ID}_${article.id}`;

@@ -4,7 +4,7 @@ import type {
   CollectionListDetailVO,
   CollectionListVO,
 } from "@/types/collection";
-import type { ArticleListItemVO } from "@/types/article";
+import type { ArticlePreview } from "@/types/article";
 
 export async function getUserCollectionLists(userId: string) {
   return request.get<void, CollectionListVO[]>("/collection/user/lists", {
@@ -19,7 +19,7 @@ export async function getCollectionList(listId: string) {
 }
 
 export async function getCollectionListArticles(listId: string) {
-  return request.get<void, ArticleListItemVO[]>(
+  return request.get<void, ArticlePreview[]>(
     `/collection/user/list/${listId}/articles`,
   );
 }
@@ -32,12 +32,6 @@ export async function getArticleCollectStatus(articleId: string) {
     },
   );
 }
-
-// export async function isArticleCollected(articleId: string) {
-//     return request.get<void, boolean>('/collection/user/article/collected', {
-//         params: { articleId },
-//     });
-// }
 
 export async function addArticleToList(articleId: string, listId?: string) {
   return request.post<{ articleId: string; listId?: string }, void>(

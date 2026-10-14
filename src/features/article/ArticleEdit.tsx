@@ -12,7 +12,7 @@ import {
   getImagesFromEditor,
   isEditorEmpty,
 } from "@/utils/editorHelper";
-import type { ArticleUpdateRequest } from "@/types/article";
+import type { ArticleDetail, ArticleUpdateRequest } from "@/types/article";
 import { useBlocker, useNavigate } from "@tanstack/react-router";
 import { Route as articleRoute } from "@/routes/_app/article.$articleId";
 import { isDirtyAtom } from "@/atoms/article";
@@ -28,7 +28,6 @@ import CoverImageInput from "./CoverImageInput";
 import FieldInfo from "@/ui/FieldInfo";
 import TopicInput from "@/ui/TopicInput";
 import { toast } from "sonner";
-import type { ArticleVO } from "@/types/article";
 
 export default function ArticleEdit() {
   const { articleId } = articleEditRoute.useParams();
@@ -69,7 +68,7 @@ function ArticleEditContent({
   editor,
 }: {
   articleId: string;
-  article: ArticleVO;
+  article: ArticleDetail;
   editor: BlockNoteEditor;
 }) {
   const navigate = useNavigate();
@@ -86,7 +85,7 @@ function ArticleEditContent({
     const editorImages = getImagesFromEditor(editor);
     const mergedCoverImages = Array.from(
       new Set([
-        ...(article.coverImage ? [article.coverImage] : []),
+        ...(article.previewImage.url ? [article.previewImage.url] : []),
         ...editorImages,
       ]),
     );
@@ -94,10 +93,10 @@ function ArticleEditContent({
   }
 
   const defaultValues: ArticleSubmissionForm = {
-    coverImage: article.coverImage,
-    coverFocusY: article.coverFocusY,
+    coverImage: article.previewImage.url,
+    coverFocusY: article.previewImage.coverFocusY,
     title: article.title,
-    subtitle: article.subtitle,
+    subtitle: article.extendedPreviewContent.subtitle,
     topics: article.topics.map((item) => item.name),
     topicCandidate: "",
   };

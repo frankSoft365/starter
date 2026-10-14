@@ -9,7 +9,7 @@ import {
 import ArticlePreviewImage from "../../ui/article/ArticlePreviewImage";
 import useOverflowHelper from "@/utils/overflowHelper";
 import { UserHoverLink } from "@/ui/ArticleAuthorInfo";
-import type { ArticleListItemVO } from "@/types/article";
+import type { ArticleListItemType } from "@/types/article";
 import { useProfileUser } from "../profile/ProfileUserContext";
 import { useRouter } from "@tanstack/react-router";
 import { Route as articleDetailRoute } from "@/routes/_app/article.$articleId";
@@ -37,19 +37,17 @@ export default function ActivityListItem({
     window.open(url, "_blank", "noopener,noreferrer");
   }
 
-  function postToArticleListItemVO(post: Post) {
-    const article: ArticleListItemVO = {
+  function postToArticleListItemType(post: Post) {
+    const article: ArticleListItemType = {
       id: post.id,
-      authorId: post.creator?.id ?? "",
-      authorName: post.creator?.username ?? "",
-      authorAvatar: post.creator?.avatar ?? "",
-      publishTime: post.publishAt,
+      creator: post.creator,
       title: post.title ?? "",
-      subtitle: post.extendedPreviewContent.subtitle,
-      coverImage: post.previewImage?.url,
-      coverFocusY: post.previewImage?.coverFocusY ?? 0.5,
-      likeCount: post.clapCount ?? 0,
-      responseNum: post.responseCount ?? 0,
+      extendedPreviewContent: post.extendedPreviewContent,
+      previewImage: post.previewImage ?? { url: "", coverFocusY: 0.5 },
+      publishAt: post.publishAt,
+
+      clapCount: post.clapCount ?? 0,
+      responseCount: post.responseCount ?? 0,
 
       repostCount: post.repostCount,
       isCollected: post.isCollected,
@@ -110,7 +108,8 @@ export default function ActivityListItem({
           </span>
         </div>
         {/* the parent comment */}
-        {userActivity.post.extendedPreviewContent.isFullContent && (
+        {userActivity.post.id !==
+          userActivity.post.responseRootPost.post.id && (
           <div
             className="flex flex-col gap-2 cursor-pointer"
             onClick={() =>
@@ -156,10 +155,8 @@ export default function ActivityListItem({
           <div className="w-1/10">
             {userActivity.post.responseRootPost.post.previewImage?.url ? (
               <ArticlePreviewImage
-                url={userActivity.post.responseRootPost.post.previewImage?.url}
-                coverFocusY={
+                imageMetaData={
                   userActivity.post.responseRootPost.post.previewImage
-                    ?.coverFocusY ?? 0.5
                 }
               />
             ) : (
@@ -170,7 +167,10 @@ export default function ActivityListItem({
           </div>
           {/* article title */}
           <span className="font-bold">
-            {handleOverflow(userActivity.post.responseRootPost.post.title, 75)}
+            {handleOverflow(
+              userActivity.post.responseRootPost.post.title ?? "",
+              75,
+            )}
           </span>
         </div>
       </div>
@@ -178,7 +178,7 @@ export default function ActivityListItem({
   ) : (
     // the relative article (detail info)
     <ArticleListItem
-      article={postToArticleListItemVO(userActivity.post)}
+      article={postToArticleListItemType(userActivity.post)}
       articleResultStatus={articleResultStatus}
       activityInfo={<UserInfo />}
     />

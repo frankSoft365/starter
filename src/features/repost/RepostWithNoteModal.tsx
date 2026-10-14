@@ -2,7 +2,7 @@ import { REPOST_WITH_NOTE_MODAL_ID } from "@/constants/modal";
 import Avatar from "@/ui/Avatar";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
-import type { ArticleListItemVO, ArticleVO } from "@/types/article";
+import type { ArticleDetail, ArticlePreview } from "@/types/article";
 import { useEffect, useState } from "react";
 import {
   getRepostNoteStatus,
@@ -21,7 +21,7 @@ export default function RepostWithNoteModal({
   setBtnState,
   invalidateList = false,
 }: {
-  article: ArticleVO | ArticleListItemVO;
+  article: ArticleDetail | ArticlePreview;
   repostState: RepostState;
   setBtnState?: React.Dispatch<
     React.SetStateAction<"idle" | "rotatingP" | "rotatingN" | "reposted">

@@ -1,4 +1,4 @@
-import type { ArticleListItemVO } from "@/types/article";
+import type { ArticlePreview } from "@/types/article";
 import type { CursorPage } from "@/types/comment";
 import type { DeleteRequest } from "@/types/DeleteRequest";
 import type {
@@ -12,7 +12,7 @@ export async function getReadingHistoryList({
 }: {
   params: ReadingHistoryQuery;
 }) {
-  return request.post<ReadingHistoryQuery, CursorPage<ArticleListItemVO>>(
+  return request.post<ReadingHistoryQuery, CursorPage<ArticlePreview>>(
     "/reading-history/list",
     params,
   );

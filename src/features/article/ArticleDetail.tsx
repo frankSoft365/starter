@@ -20,15 +20,20 @@ import FollowButton from "../follow/FollowButton";
 import { useSaveReadingHistory } from "../readingHistory/readingHistory";
 import { useCommentAreaScroll } from "./commentScroll";
 import CommentPublishInput from "./CommentPublishInput";
-import type { ArticleResult, ArticleVO, OperationList } from "@/types/article";
+import type {
+  ArticleDetail,
+  ArticleDetailType,
+  ArticleResult,
+  OperationList,
+} from "@/types/article";
 import type { BlockNoteEditor } from "@blocknote/core";
 import { useRepostState } from "../repost/repost";
 import RepostButton from "../repost/RepostButton";
 import CommentButton from "./CommentButton";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { batchQueryCountOrViewerEdge } from "@/services/apiArticle";
 
-export default function ArticleDetail() {
+export default function ArticleDetailPage() {
   const { articleId } = articleRoute.useParams();
   const editor = useCreateBlockNote();
   const {
@@ -51,7 +56,7 @@ export default function ArticleDetail() {
     case "success":
       return (
         <ArticleDetailContent
-          article={processedArticle.article}
+          oldArticle={processedArticle.article}
           title={processedArticle.title}
           editor={editor}
         />
@@ -60,25 +65,25 @@ export default function ArticleDetail() {
 }
 
 function ArticleDetailContent({
-  article,
+  oldArticle,
   title,
   editor,
 }: {
-  article: ArticleVO;
+  oldArticle: ArticleDetail;
   title: string;
   editor: BlockNoteEditor;
 }) {
   const { t } = useTranslation();
   const user = useAtomValue(userAtom);
-  const isOwnStory = article?.authorId === user?.id;
+  const isOwnStory = oldArticle.creator.id === user?.id;
   const meneButtonColor = isOwnStory ? "#adadad" : "#676565";
 
   // reading history save
-  useSaveReadingHistory(article.id);
+  useSaveReadingHistory(oldArticle.id);
 
   const isLogin = useAtomValue(isLoginAtom);
-  const { data: isLiked } = useLikeStatus(article.id, isLogin);
-  const { toggleLike, isLiking } = useLikeArticle(article.id);
+  const { data: isLiked } = useLikeStatus(oldArticle.id, isLogin);
+  const { toggleLike, isLiking } = useLikeArticle(oldArticle.id);
 
   // scroll to comment area
   const { commentRef, scrollToComments } = useCommentAreaScroll();
@@ -86,19 +91,18 @@ function ArticleDetailContent({
   // repost feature
   // 查询当前用户是否转发
   const { data: repostState, status: repostStateStatus } = useRepostState(
-    article.id,
+    oldArticle.id,
   );
 
-  const articleIds = [article.id];
+  const articleIds = [oldArticle.id];
 
-  const queryClient = useQueryClient();
   const operationList: OperationList["operationList"] = articleIds.flatMap(
     (articleId) => [
       { operationName: "RepostCountQuery", articleId },
       { operationName: "CollectionBaseQuery", articleId },
     ],
   );
-  const { status: articleResultStatus } = useQuery({
+  const { data, status: articleResultStatus } = useQuery({
     queryKey: ["batch-query-count-or-viewer-edge", articleIds],
     queryFn: async () => {
       const results = await batchQueryCountOrViewerEdge({
@@ -114,24 +118,16 @@ function ArticleDetailContent({
           viewerEdge: result.viewerEdge ?? previous?.viewerEdge,
         });
       }
-      queryClient.setQueryData(
-        ["get-article", article.id],
-        (old: { title: string; article: ArticleVO }) => {
-          const newArticle = {
-            ...article,
-            isCollected:
-              resultsByArticleId.get(article.id)?.viewerEdge
-                ?.collectionsConnection.hasCollected ?? false,
-          };
-          return {
-            ...old,
-            article: newArticle,
-          };
-        },
-      );
       return resultsByArticleId;
     },
   });
+
+  const article: ArticleDetailType = {
+    ...oldArticle,
+    isCollected:
+      data?.get(oldArticle.id)?.viewerEdge?.collectionsConnection
+        .hasCollected ?? false,
+  };
 
   return (
     <>
@@ -153,17 +149,17 @@ function ArticleDetailContent({
             <div className="flex items-center gap-2">
               {/* Author info */}
               <ArticleAuthorInfo
-                authorId={article.authorId}
-                authorAvatar={article.authorAvatar}
-                authorName={article.authorName}
-                publishTime={article.publishTime}
+                authorId={article.creator.id}
+                authorAvatar={article.creator.avatar ?? ""}
+                authorName={article.creator.username}
+                publishTime={article.publishAt}
                 className="text-sm"
               />
               {/* 'follow' button */}
               <SignedIn>
                 <CurrentUser
-                  authorId={article.authorId}
-                  fallback={<FollowButton userId={article.authorId} />}
+                  authorId={article.creator.id}
+                  fallback={<FollowButton userId={article.creator.id} />}
                 />
               </SignedIn>
             </div>
@@ -179,7 +175,7 @@ function ArticleDetailContent({
                   data-tip={
                     isOwnStory
                       ? t("btn.clapIsOwn")
-                      : t("btn.clap", { count: article.likeCount })
+                      : t("btn.clap", { count: article.clapCount })
                   }
                 >
                   <button
@@ -193,13 +189,13 @@ function ArticleDetailContent({
                       color={isLiked ? "#676565" : meneButtonColor}
                       weight={isLiked ? "fill" : "light"}
                     />
-                    {!isOwnStory && article.likeCount}
+                    {!isOwnStory && article.clapCount}
                   </button>
                 </div>
                 {/* comment button */}
                 <CommentButton
                   scrollToComments={scrollToComments}
-                  responseNum={article.responseNum}
+                  responseNum={article.responseCount}
                 />
                 {/* repost button */}
                 {repostStateStatus === "success" ? (
@@ -231,7 +227,7 @@ function ArticleDetailContent({
                 {/* more button */}
                 <MoreButton
                   isOwnStory={isOwnStory}
-                  authorId={article.authorId}
+                  authorId={article.creator.id}
                   articleId={article.id}
                 />
               </div>
@@ -254,13 +250,9 @@ function ArticleDetailContent({
         </SignedOut>
         <SignedIn>
           {/* write your comment */}
-          <CommentPublishInput
-            articleId={article.id}
-            article={article}
-            commentRef={commentRef}
-          />
+          <CommentPublishInput article={article} commentRef={commentRef} />
           {/* comment list */}
-          <CommentList articleId={article.id} authorId={article.authorId} />
+          <CommentList articleId={article.id} authorId={article.creator.id} />
         </SignedIn>
       </div>
     </>

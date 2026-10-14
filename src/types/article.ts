@@ -35,47 +35,6 @@ export type ArticlePublishPreview = {
   coverImage: string[];
 };
 
-export type ArticleListItemVO = {
-  id: string;
-  authorId: string;
-  authorName: string;
-  authorAvatar: string;
-  publishTime: Date;
-  title: string;
-  subtitle: string;
-  coverImage?: string;
-  /** vertical focus point returned by backend, range 0-1 (0 top, 1 bottom) */
-  coverFocusY: number;
-
-  likeCount: number;
-  responseNum: number;
-
-  repostCount?: number;
-  isCollected?: boolean;
-};
-
-export type ArticleVO = {
-  id: string;
-  title: string;
-  subtitle: string | null;
-  coverImage: string | null;
-  coverFocusY: number;
-  content: string;
-
-  topics: TopicInArticleVO[];
-
-  likeCount: number;
-  responseNum: number;
-
-  authorId: string;
-  authorAvatar: string;
-  authorName: string;
-  publishTime: string;
-
-  repostCount?: number;
-  isCollected?: boolean;
-};
-
 export type HomeArticleListRequest = {
   lastCreatedAt: Date | null;
   lastId: string | null;
@@ -104,4 +63,51 @@ export type ArticleResult = {
   id: string;
   repostCount?: number;
   viewerEdge?: ArticleViewerEdge;
+};
+
+export type Creator = {
+  id: string;
+  avatar: string | null;
+  username: string;
+};
+
+export type PreviewContent =
+  | {
+      isFullContent: true;
+      subtitle: null;
+    }
+  | {
+      isFullContent: false;
+      subtitle: string;
+    };
+
+export type ImageMetaData = {
+  url: string | null;
+  coverFocusY: number;
+};
+
+export type ArticlePreview = {
+  id: string;
+  creator: Creator;
+  title: string;
+  extendedPreviewContent: PreviewContent;
+  previewImage: ImageMetaData;
+  publishAt: Date;
+
+  clapCount: number;
+  responseCount: number;
+};
+
+export type ArticleListItemType = ArticlePreview & {
+  repostCount?: number;
+  isCollected?: boolean;
+};
+
+export type ArticleDetail = ArticlePreview & {
+  content: string;
+  topics: TopicInArticleVO[];
+};
+
+export type ArticleDetailType = ArticleDetail & {
+  isCollected: boolean;
 };

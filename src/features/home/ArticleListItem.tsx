@@ -6,7 +6,7 @@ import {
   ThumbsDownIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
-import type { ArticleListItemVO } from "@/types/article";
+import type { ArticleListItemType } from "@/types/article";
 import { useTranslation } from "react-i18next";
 import { formatLargeNumber } from "@/utils/number";
 import { useAtomValue } from "jotai";
@@ -38,7 +38,7 @@ export default function ArticleListItem({
   activityInfo,
 }: {
   index?: number;
-  article: ArticleListItemVO;
+  article: ArticleListItemType;
   onRemoveFromList?: () => void;
   articleResultStatus?: "error" | "success" | "pending";
   activityInfo?: React.ReactNode;
@@ -49,8 +49,6 @@ export default function ArticleListItem({
   const user = useAtomValue(userAtom);
   const { handleOverflow } = useOverflowHelper();
   const [isRemovingFromHistory, setIsRemovingFromHistory] = useState(false);
-
-  const isOwnStory = user ? article.authorId === user.id : false;
 
   // derived state for rendering of
   // trash button (remove from reading history button)
@@ -83,6 +81,8 @@ export default function ArticleListItem({
     );
   }
 
+  const isOwnStory = user ? article.creator.id === user.id : false;
+
   return (
     <div
       onClick={() => {
@@ -108,7 +108,7 @@ export default function ArticleListItem({
         }}
         className={`list-row min-h-56 cursor-pointer grid-cols-5 md:grid-cols-7 transition-opacity duration-500 ${isRemovingFromHistory ? "opacity-0" : "opacity-100"}`}
       >
-        {article.coverImage ? (
+        {article.previewImage.url ? (
           <>
             <div className="flex flex-col gap-1 justify-between col-span-3 md:col-span-5">
               {/* activity user info */}
@@ -116,10 +116,10 @@ export default function ArticleListItem({
               {/* user info */}
               {!isActivityPath && (
                 <ArticleAuthorInfo
-                  authorId={article.authorId}
-                  authorAvatar={article.authorAvatar}
-                  authorName={article.authorName}
-                  publishTime={article.publishTime}
+                  authorId={article.creator.id}
+                  authorAvatar={article.creator.avatar ?? ""}
+                  authorName={article.creator.username}
+                  publishTime={article.publishAt}
                   className="text-xs md:text-sm"
                 />
               )}
@@ -128,17 +128,23 @@ export default function ArticleListItem({
                 <p className="text-lg/tight md:text-2xl/tight font-sans font-bold text-wrap mt-1 mb-2.5">
                   {article.title}
                 </p>
-                <p className="text-sm/tight md:text-base/tight text-base-content/70 font-sans font-light text-wrap">
-                  {handleOverflow(article.subtitle, 118)}
-                </p>
+                {/* subtitle */}
+                {!article.extendedPreviewContent.isFullContent && (
+                  <p className="text-sm/tight md:text-base/tight text-base-content/70 font-sans font-light text-wrap">
+                    {handleOverflow(
+                      article.extendedPreviewContent.subtitle,
+                      118,
+                    )}
+                  </p>
+                )}
               </div>
               {/* user info */}
               {isActivityPath && (
                 <ArticleAuthorInfo
-                  authorId={article.authorId}
-                  authorAvatar={article.authorAvatar}
-                  authorName={article.authorName}
-                  publishTime={article.publishTime}
+                  authorId={article.creator.id}
+                  authorAvatar={article.creator.avatar ?? ""}
+                  authorName={article.creator.username}
+                  publishTime={article.publishAt}
                   className="text-xs md:text-sm"
                 />
               )}
@@ -152,22 +158,22 @@ export default function ArticleListItem({
                   <div className="flex flex-row gap-3">
                     <div
                       className="lg:tooltip"
-                      data-tip={t("btn.clap", { count: article.likeCount })}
+                      data-tip={t("btn.clap", { count: article.clapCount })}
                     >
                       <span className="inline-flex items-center gap-0.5 text-sm font-light">
                         <HandsClappingIcon size={20} />
-                        {formatLargeNumber(article.likeCount)}
+                        {formatLargeNumber(article.clapCount)}
                       </span>
                     </div>
                     <div
                       className="lg:tooltip"
                       data-tip={t("btn.response", {
-                        count: article.responseNum,
+                        count: article.responseCount,
                       })}
                     >
                       <span className="inline-flex items-center gap-0.5 text-sm font-light">
                         <ChatCircleDotsIcon weight="duotone" size={20} />
-                        {article.responseNum}
+                        {article.responseCount}
                       </span>
                     </div>
                     <div
@@ -178,7 +184,7 @@ export default function ArticleListItem({
                     >
                       <span className="inline-flex items-center gap-0.5 text-sm font-light">
                         <ArrowsClockwiseIcon size={20} />
-                        {formatLargeNumber(article.repostCount ?? 9999)}
+                        {formatLargeNumber(article.repostCount ?? 0)}
                       </span>
                     </div>
                   </div>
@@ -245,7 +251,7 @@ export default function ArticleListItem({
                   {/* more button */}
                   <MoreButton
                     isOwnStory={isOwnStory}
-                    authorId={article.authorId}
+                    authorId={article.creator.id}
                     articleId={article.id}
                     onRemoveFromReadingHistory={() =>
                       setIsRemovingFromHistory(true)
@@ -256,10 +262,7 @@ export default function ArticleListItem({
               </div>
             </div>
             <div className="content-center col-start-4 col-end-6 md:col-start-6 md:col-end-8">
-              <ArticlePreviewImage
-                url={article.coverImage}
-                coverFocusY={article.coverFocusY}
-              />
+              <ArticlePreviewImage imageMetaData={article.previewImage} />
             </div>
           </>
         ) : (
@@ -270,10 +273,10 @@ export default function ArticleListItem({
               {/* user info */}
               {!isActivityPath && (
                 <ArticleAuthorInfo
-                  authorId={article.authorId}
-                  authorAvatar={article.authorAvatar}
-                  authorName={article.authorName}
-                  publishTime={article.publishTime}
+                  authorId={article.creator.id}
+                  authorAvatar={article.creator.avatar ?? ""}
+                  authorName={article.creator.username}
+                  publishTime={article.publishAt}
                   className="text-xs md:text-sm"
                 />
               )}
@@ -283,18 +286,21 @@ export default function ArticleListItem({
               <p className="text-lg/tight md:text-2xl/tight font-sans font-bold text-wrap mt-1 mb-2.5">
                 {article.title}
               </p>
-              <p className="text-sm/tight md:text-base/tight text-base-content/70 font-sans font-light text-wrap">
-                {handleOverflow(article.subtitle, 118)}
-              </p>
+              {/* subtitle */}
+              {!article.extendedPreviewContent.isFullContent && (
+                <p className="text-sm/tight md:text-base/tight text-base-content/70 font-sans font-light text-wrap">
+                  {handleOverflow(article.extendedPreviewContent.subtitle, 118)}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-1 justify-between col-span-3 md:col-span-5">
               {/* user info */}
               {isActivityPath && (
                 <ArticleAuthorInfo
-                  authorId={article.authorId}
-                  authorAvatar={article.authorAvatar}
-                  authorName={article.authorName}
-                  publishTime={article.publishTime}
+                  authorId={article.creator.id}
+                  authorAvatar={article.creator.avatar ?? ""}
+                  authorName={article.creator.username}
+                  publishTime={article.publishAt}
                   className="text-xs md:text-sm"
                 />
               )}
@@ -308,22 +314,22 @@ export default function ArticleListItem({
                   <div className="flex flex-row gap-3">
                     <div
                       className="lg:tooltip"
-                      data-tip={t("btn.clap", { count: article.likeCount })}
+                      data-tip={t("btn.clap", { count: article.clapCount })}
                     >
                       <span className="inline-flex items-center gap-0.5 text-sm font-light">
                         <HandsClappingIcon size={20} />
-                        {formatLargeNumber(article.likeCount)}
+                        {formatLargeNumber(article.clapCount)}
                       </span>
                     </div>
                     <div
                       className="lg:tooltip"
                       data-tip={t("btn.response", {
-                        count: article.responseNum,
+                        count: article.responseCount,
                       })}
                     >
                       <span className="inline-flex items-center gap-0.5 text-sm font-light">
                         <ChatCircleDotsIcon weight="duotone" size={20} />
-                        {article.responseNum}
+                        {article.responseCount}
                       </span>
                     </div>
                     <div
@@ -401,7 +407,7 @@ export default function ArticleListItem({
                   {/* more button */}
                   <MoreButton
                     isOwnStory={isOwnStory}
-                    authorId={article.authorId}
+                    authorId={article.creator.id}
                     articleId={article.id}
                     onRemoveFromReadingHistory={() =>
                       setIsRemovingFromHistory(true)

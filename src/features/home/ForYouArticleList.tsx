@@ -2,7 +2,10 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { getPublicHomeArticleList } from "@/services/apiArticle";
 import { useTranslation } from "react-i18next";
 import ArticleListSkeleton from "../../ui/article/ArticleListSkeleton";
-import type { HomeArticleListRequest } from "@/types/article";
+import type {
+  ArticleListItemType,
+  HomeArticleListRequest,
+} from "@/types/article";
 import { useEffect, useRef } from "react";
 import ArticleListItem from "./ArticleListItem";
 import { useBatchArticleResults } from "../article/useBatchArticleResults";
@@ -78,25 +81,23 @@ export default function ForYouArticleList() {
           <ul className="list bg-base-100">
             {data.pages
               .flatMap((page) => page.items)
-              .map((articleListItemVO, index) => {
-                const articleResult = articleResultsById.get(
-                  articleListItemVO.id,
-                );
+              .map((articlePreview, index) => {
+                const articleResult = articleResultsById.get(articlePreview.id);
                 return (
                   <ArticleListItem
                     index={index}
-                    key={articleListItemVO.id}
-                    article={{
-                      ...articleListItemVO,
-                      repostCount:
-                        articleResult?.repostCount ??
-                        articleListItemVO.repostCount,
-                      isCollected:
-                        articleResult?.viewerEdge?.collectionsConnection
-                          .hasCollected ?? articleListItemVO.isCollected,
-                    }}
+                    key={articlePreview.id}
+                    article={
+                      {
+                        ...articlePreview,
+                        repostCount: articleResult?.repostCount ?? 0,
+                        isCollected:
+                          articleResult?.viewerEdge?.collectionsConnection
+                            .hasCollected ?? false,
+                      } as ArticleListItemType
+                    }
                     articleResultStatus={
-                      articleResultStatusById.get(articleListItemVO.id) ??
+                      articleResultStatusById.get(articlePreview.id) ??
                       "pending"
                     }
                   />

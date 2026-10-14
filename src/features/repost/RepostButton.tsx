@@ -1,4 +1,4 @@
-import type { ArticleVO } from "@/types/article";
+import type { ArticleDetail } from "@/types/article";
 import RemoveNoteModal from "./RemoveNoteModal";
 import RepostWithNoteModal from "./RepostWithNoteModal";
 import type { RepostState } from "@/types/repost";
@@ -28,14 +28,14 @@ export default function RepostButton({
   article,
   repostState,
 }: {
-  article: ArticleVO;
+  article: ArticleDetail;
   repostState: RepostState;
 }) {
   const REPOST_WITH_NOTE_MODAL = `${REPOST_WITH_NOTE_MODAL_ID}_${article.id}`;
   const REMOVE_NOTE_OF_REPOST_MODAL = `${REMOVE_NOTE_OF_REPOST_MODAL_ID}_${article.id}`;
   const { t } = useTranslation();
   const user = useAtomValue(userAtom);
-  const isOwnStory = article.authorId === user?.id;
+  const isOwnStory = article.creator.id === user?.id;
   // 查询计数
   const { data: repostCount, isLoading } = useRepostCount([article.id]);
   const repostDisplayCount = repostCount?.get(article.id) ?? "--";

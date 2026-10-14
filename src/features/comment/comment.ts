@@ -23,7 +23,7 @@ import { toast } from "sonner";
 import type { ActiveReplyTarget } from "./CommentList";
 import { CreateCommentSchema, type CreateCommentForm } from "@/schemas/comment";
 import i18n from "@/i18n";
-import type { ArticleVO } from "@/types/article";
+import type { ArticleDetail } from "@/types/article";
 
 export function useGetInfiniteRootCommentList(articleId: string) {
   return useInfiniteQuery({
@@ -146,14 +146,14 @@ export function useAddComment(articleId: string) {
     },
     onSuccess: ({ newCommentView, rootId }) => {
       queryClient.setQueryData<
-        { title: string; article: ArticleVO } | undefined
+        { title: string; article: ArticleDetail } | undefined
       >(["get-article", articleId], (old) => {
         if (!old) return old;
         return {
           ...old,
           article: {
             ...old.article,
-            responseNum: old.article.responseNum + 1,
+            responseNum: old.article.responseCount + 1,
           },
         };
       });
