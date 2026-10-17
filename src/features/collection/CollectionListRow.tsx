@@ -43,8 +43,9 @@ function CoverTriptych({ covers }: { covers: ListCoverItemVO[] }) {
   const basis = ["basis-3/6", "basis-2/6", "basis-1/6"];
 
   return (
+    // h-34 保证竖形图片不过高
     <div
-      className="flex flex-row col-span-5 gap-1 md:gap-2"
+      className="flex flex-row h-34 col-span-5 gap-1 md:gap-2"
       onClick={(e) => e.stopPropagation()}
     >
       {[0, 1, 2].map((i) => {

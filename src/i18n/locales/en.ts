@@ -42,6 +42,8 @@ export default {
     repostCount_one: "{{count}} repost",
     repostCount_other: "{{count}} reposts",
     editArticle: "Edit story",
+    pinArticle: "Pin this article to your profile",
+    unpinArticle: "Unpin this article from your profile",
     deleteArticle: "Delete story",
   },
   badge: {

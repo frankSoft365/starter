@@ -5,9 +5,10 @@ import type {
   ArticleUpdateRequest,
   HomeArticleListRequest,
   OperationList,
-  ArticleResult,
   ArticlePreview,
   ArticleDetail,
+  OperationResult,
+  ArticleSetPinnedByCreatorAtRequest,
 } from "../types/article";
 import request from "../utils/request";
 import type { CursorPage } from "@/types/comment";
@@ -56,13 +57,24 @@ export async function deleteArticle(params: DeleteRequest) {
   return request.post<DeleteRequest, void>("/article/user/delete", params);
 }
 
-export async function batchQueryCountOrViewerEdge({
+export async function batchOperationRequest({
   params,
 }: {
   params: OperationList;
 }) {
-  return request.post<OperationList, ArticleResult[]>(
+  return request.post<OperationList, OperationResult[]>(
     "/article/articleResult",
+    params,
+  );
+}
+
+export async function articleSetPinnedByCreatorAt({
+  params,
+}: {
+  params: ArticleSetPinnedByCreatorAtRequest;
+}) {
+  return request.post<ArticleSetPinnedByCreatorAtRequest, void>(
+    "/article/pinByCreator",
     params,
   );
 }

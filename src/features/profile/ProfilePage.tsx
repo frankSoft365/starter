@@ -11,6 +11,9 @@ import CurrentUser from "@/ui/utils/CurrentUser";
 import FollowStats from "../follow/FollowStats";
 import FollowButton from "../follow/FollowButton";
 import ProfileTab from "./ProfileTab";
+import { useUserViewerEdge } from "../follow/follow";
+import { useAtomValue } from "jotai";
+import { userAtom } from "@/atoms/user";
 
 export default function ProfilePage({
   children,
@@ -18,11 +21,21 @@ export default function ProfilePage({
   children: React.ReactNode;
 }) {
   const { t } = useTranslation();
+
   const { userId } = profileTabRoute.useParams();
+  const currentUser = useAtomValue(userAtom);
+  const isOwnProfile = currentUser?.id === userId;
   const { user, isUserProfileLoading, isLoadingError, error } =
     useProfile(userId);
 
   const url = `${window.location.origin}/profile/${userId}`;
+
+  // isFollowing
+  const { userViewerEdge, userViewerEdgeStatus } = useUserViewerEdge(
+    userId,
+    !isOwnProfile,
+  );
+  const isFollowing = userViewerEdge?.user?.viewerEdge.isFollowing ?? false;
 
   if (isUserProfileLoading) {
     return <Loading />;
@@ -97,9 +110,17 @@ export default function ProfilePage({
           <CurrentUser
             authorId={userId}
             fallback={
-              <div className="inline-flex lg:hidden mb-3 w-full">
-                <FollowButton userId={userId} btnStyle="mx-auto w-11/12" />
-              </div>
+              userViewerEdgeStatus === "success" && (
+                <div className="inline-flex lg:hidden mb-3 w-full">
+                  <FollowButton
+                    userId={userId}
+                    currentUserId={currentUser?.id ?? ""}
+                    btnStyle="mx-auto w-11/12"
+                    isFollowing={isFollowing}
+                    followBtnStyle="special"
+                  />
+                </div>
+              )
             }
           />
           {/* profile menu */}
@@ -137,9 +158,16 @@ export default function ProfilePage({
         <CurrentUser
           authorId={userId}
           fallback={
-            <div className="mt-2">
-              <FollowButton userId={userId} />
-            </div>
+            userViewerEdgeStatus === "success" && (
+              <div className="mt-2">
+                <FollowButton
+                  userId={userId}
+                  currentUserId={currentUser?.id ?? ""}
+                  isFollowing={isFollowing}
+                  followBtnStyle="special"
+                />
+              </div>
+            )
           }
         />
       </div>

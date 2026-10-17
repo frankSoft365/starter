@@ -4,7 +4,7 @@ import { DotsThreeIcon, LockIcon } from "@phosphor-icons/react";
 import { Fragment, useRef, useState } from "react";
 import type { CollectionListDetailVO } from "@/types/collection";
 import { useToggleListPublic } from "./collection";
-import DeleteListModal from "../profile/DeleteListModal";
+import DeleteListModal from "./DeleteListModal";
 import EditListModal from "../profile/EditListModal";
 import CurrentUser from "@/ui/utils/CurrentUser";
 

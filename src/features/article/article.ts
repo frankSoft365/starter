@@ -1,18 +1,27 @@
 import {
+  articleSetPinnedByCreatorAt,
   deleteArticle,
   getArticleById,
   updateArticle,
 } from "@/services/apiArticle";
 import { getLikeBatchStatus, likeAction } from "@/services/apiLike";
 import type { BlockNoteEditor } from "@blocknote/core";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  type InfiniteData,
+} from "@tanstack/react-query";
 import { toast } from "sonner";
 import type {
   ArticleDetail,
   ArticlePublishPreview,
   ArticlePublishRequest,
+  ArticleSetPinnedByCreatorAtRequest,
+  ArticlePreview,
   ArticleUpdateRequest,
 } from "../../types/article";
+import type { CursorPage } from "@/types/comment";
 import { useSetAtom } from "jotai";
 import { editorPublishSignalAtom } from "../../atoms/editor";
 import { publishArticle } from "../../services/apiArticle";
@@ -238,4 +247,66 @@ export function useLikeArticle(articleId: string) {
   });
 
   return { toggleLike, isLiking };
+}
+
+export function useArticleSetPinnedByCreatorAt(authorId: string) {
+  const queryClient = useQueryClient();
+  const { mutate: handlePinArticle, isPending: isPinning } = useMutation({
+    mutationKey: ["article-set-pinned-by-creator-at"],
+    mutationFn: async ({
+      isPinned,
+      articleId,
+    }: {
+      isPinned: boolean;
+      articleId: string;
+    }) => {
+      const articleSetPinnedByCreatorAtRequest: ArticleSetPinnedByCreatorAtRequest =
+        {
+          isPinned,
+          articleId,
+        };
+      await articleSetPinnedByCreatorAt({
+        params: articleSetPinnedByCreatorAtRequest,
+      });
+      return isPinned;
+    },
+    onSuccess(isPinned, { articleId }) {
+      queryClient.setQueryData<InfiniteData<CursorPage<ArticlePreview>>>(
+        ["get-profile-my-article-list", authorId],
+        (old) => {
+          if (!old) {
+            return old;
+          }
+
+          const pinnedByCreatorAt = isPinned ? Date.now().toString() : "0";
+          return {
+            ...old,
+            pages: old.pages.map((page) => ({
+              ...page,
+              items: page.items.map((article) =>
+                article.id === articleId
+                  ? { ...article, pinnedByCreatorAt }
+                  : article,
+              ),
+            })),
+          };
+        },
+      );
+      toast.success(
+        isPinned
+          ? "This story has been pinned to your profile's homepage."
+          : "This story has been unpinned from your profile's homepage",
+      );
+    },
+    onError: (error) => {
+      toast.error(
+        error.message || "An error occurred while pinning the article.",
+      );
+    },
+  });
+
+  return {
+    handlePinArticle,
+    isPinning,
+  };
 }

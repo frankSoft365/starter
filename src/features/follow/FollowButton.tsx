@@ -1,95 +1,75 @@
 import { BellSlashIcon, CaretDownIcon } from "@phosphor-icons/react";
 import { useId, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { useFollowAction, useFollowStatus } from "./follow";
-
-export type FollowButtonStatus = {
-  isFollowing: boolean;
-  isPending: boolean;
-  isError: boolean;
-  onRetry: () => void;
-};
+import { useFollowAction } from "./follow";
 
 type FollowButtonProps = {
   userId: string;
+  currentUserId: string;
   btnStyle?: string;
-  pendingVariant?: "spinner" | "skeleton";
-  status?: FollowButtonStatus;
+  followBtnStyle?: "basic" | "special";
+  isFollowing: boolean;
 };
 
-function FollowButtonContent({
+export default function FollowButton({
   userId,
+  currentUserId,
   btnStyle = "",
-  pendingVariant = "spinner",
-  status,
-}: FollowButtonProps & { status: FollowButtonStatus }) {
+  followBtnStyle = "basic",
+  isFollowing,
+}: FollowButtonProps) {
   const { t } = useTranslation();
   const id = useId().replace(/:/g, "");
   const popoverId = `popover-follow-${id}`;
   const anchorName = `--anchor-follow-${id}`;
   const popoverRef = useRef<HTMLUListElement>(null);
-  const { toggleFollow, isFollowPending } = useFollowAction(userId);
-  const isPending = status.isPending || isFollowPending;
+  const { toggleFollow, isFollowPending } = useFollowAction(
+    userId,
+    currentUserId,
+  );
+
+  const style =
+    followBtnStyle === "basic"
+      ? "btn-outline"
+      : isFollowing
+        ? "btn-outline"
+        : "btn-neutral";
 
   const handleFollowClick = () => {
-    if (status.isFollowing) {
+    if (isFollowing) {
       return;
     }
 
     toggleFollow(1, {
-      onSuccess: () => popoverRef.current?.showPopover(),
+      onSuccess: () => {
+        popoverRef.current?.showPopover();
+      },
     });
   };
 
   const handleUnfollowClick = () => {
     toggleFollow(2, {
-      onSuccess: () => popoverRef.current?.hidePopover(),
+      onSuccess: () => {
+        popoverRef.current?.hidePopover();
+      },
     });
   };
-
-  if (status.isPending && pendingVariant === "skeleton") {
-    return (
-      <div
-        className={`skeleton h-8 w-24 rounded-full ${btnStyle}`}
-        aria-label={t("common.loading")}
-      ></div>
-    );
-  }
-
-  if (status.isError) {
-    return (
-      <button
-        type="button"
-        className={`btn btn-outline rounded-full min-w-24 ${btnStyle}`}
-        onClick={status.onRetry}
-      >
-        {t("common.retry")}
-      </button>
-    );
-  }
 
   return (
     <>
       <button
         type="button"
-        className={`btn rounded-full px-4 ${status.isFollowing ? "btn-outline" : "btn-neutral"} ${btnStyle}`}
+        className={`btn rounded-full ${style} ${btnStyle}`}
         style={{ anchorName }}
         aria-controls={popoverId}
-        popoverTarget={status.isFollowing ? popoverId : undefined}
-        disabled={isPending}
+        popoverTarget={isFollowing ? popoverId : undefined}
         onClick={handleFollowClick}
+        disabled={isFollowPending}
       >
-        {isPending ? (
-          <span
-            className="loading loading-spinner loading-sm"
-            aria-label={t("common.loading")}
-          ></span>
-        ) : (
-          <>
-            {t(status.isFollowing ? "btn.following" : "btn.follow")}
-            {status.isFollowing && <CaretDownIcon size={16} />}
-          </>
-        )}
+        <>
+          {t(isFollowing ? "btn.following" : "btn.follow")}
+          {isFollowing && <CaretDownIcon size={12} />}
+        </>
       </button>
       <ul
         ref={popoverRef}
@@ -102,52 +82,16 @@ function FollowButtonContent({
           <button
             type="button"
             className="text-red-600"
-            disabled={isFollowPending}
             onClick={handleUnfollowClick}
+            disabled={isFollowPending}
           >
-            {isFollowPending ? (
-              <span
-                className="loading loading-spinner loading-sm"
-                aria-label={t("common.loading")}
-              ></span>
-            ) : (
-              <>
-                <BellSlashIcon size={24} />
-                {t("btn.unfollow")}
-              </>
-            )}
+            <>
+              <BellSlashIcon size={24} />
+              {t("btn.unfollow")}
+            </>
           </button>
         </li>
       </ul>
     </>
   );
-}
-
-function FollowButtonWithStatusQuery(props: FollowButtonProps) {
-  const {
-    data: isFollowing,
-    isFetching,
-    isError,
-    retry,
-  } = useFollowStatus(props.userId, true);
-
-  return (
-    <FollowButtonContent
-      {...props}
-      status={{
-        isFollowing: isFollowing ?? false,
-        isPending: isFetching,
-        isError,
-        onRetry: () => void retry(),
-      }}
-    />
-  );
-}
-
-export default function FollowButton(props: FollowButtonProps) {
-  if (props.status) {
-    return <FollowButtonContent {...props} status={props.status} />;
-  }
-
-  return <FollowButtonWithStatusQuery {...props} />;
 }

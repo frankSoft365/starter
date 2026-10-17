@@ -6,14 +6,14 @@ import { useAddComment } from "../comment/comment";
 import FieldInfo from "@/ui/FieldInfo";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
-import type { ArticleDetailType } from "@/types/article";
+import type { ArticleDetail } from "@/types/article";
 import type { RefObject } from "react";
 
 export default function CommentPublishInput({
   article,
   commentRef,
 }: {
-  article: ArticleDetailType;
+  article: ArticleDetail;
   commentRef: RefObject<HTMLDivElement | null>;
 }) {
   const { t } = useTranslation();

@@ -12,7 +12,10 @@ import {
   toggleListPublic,
   updateCollectionList,
 } from "@/services/apiCollection";
-import type { CollectionListDetailVO } from "@/types/collection";
+import type {
+  ArticleCollectStatusVO,
+  CollectionListDetailVO,
+} from "@/types/collection";
 import type { CreateCollectionListForm } from "@/schemas/collection";
 
 export function useCollectionListsQuery(userId: string) {
@@ -48,17 +51,24 @@ export function useCreateCollectionList(articleId?: string) {
       }
       return listId;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["collection-lists"] });
       if (articleId) {
+        await queryClient.invalidateQueries({
+          predicate(query) {
+            const [key, articleIds] = query.queryKey;
+            return (
+              key === "batch-query-count-or-viewer-edge" &&
+              Array.isArray(articleIds) &&
+              articleIds.includes(articleId)
+            );
+          },
+        });
         // 用 remove 而非 invalidate：modal 关闭时 popover 无 active observer，
         // invalidate 只标记 stale 不删除数据，下次打开会先闪现旧 statusList。
         // remove 彻底删除缓存，下次打开走正常 loading 流程。
         queryClient.removeQueries({
           queryKey: ["article-collect-status", articleId],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["article-collected", articleId],
         });
       }
     },
@@ -69,10 +79,28 @@ export function useAddArticleToDefaultList(articleId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => addArticleToList(articleId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["article-collected", articleId],
-      });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          predicate(query) {
+            const key = query.queryKey;
+            const articleIds = key[1];
+            return (
+              key[0] === "batch-query-count-or-viewer-edge" &&
+              Array.isArray(articleIds) &&
+              articleIds.includes(articleId)
+            );
+          },
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["article-collect-status", articleId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["collection-list-articles"],
+        }),
+        queryClient.invalidateQueries({ queryKey: ["collection-list"] }),
+        queryClient.invalidateQueries({ queryKey: ["collection-lists"] }),
+      ]);
     },
   });
 }
@@ -90,18 +118,63 @@ export function useAddArticleToList() {
       articleId: string;
       listId: string;
     }) => addArticleToList(articleId, listId),
+    onMutate: async (variables) => {
+      const { articleId, listId } = variables;
+      await queryClient.cancelQueries({
+        queryKey: ["article-collect-status", articleId],
+        exact: true,
+      });
+      const previousData = queryClient.getQueryData<ArticleCollectStatusVO[]>([
+        "article-collect-status",
+        articleId,
+      ]);
+
+      queryClient.setQueryData<ArticleCollectStatusVO[]>(
+        ["article-collect-status", articleId],
+        (old) => {
+          if (!old) return old;
+
+          const newArticleCollectStatusVO = old.map(
+            (articleCollectStatusVO) => {
+              if (articleCollectStatusVO.listId === listId) {
+                return {
+                  ...articleCollectStatusVO,
+                  isCollected: true,
+                };
+              }
+              return articleCollectStatusVO;
+            },
+          );
+
+          return newArticleCollectStatusVO;
+        },
+      );
+
+      return { previousData };
+    },
     onSuccess: (_data, { articleId }) => {
       queryClient.invalidateQueries({
-        queryKey: ["article-collect-status", articleId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["article-collected", articleId],
+        predicate(query) {
+          const key = query.queryKey;
+          const articleIds = key[1];
+          return (
+            key[0] === "batch-query-count-or-viewer-edge" &&
+            Array.isArray(articleIds) &&
+            articleIds.includes(articleId)
+          );
+        },
       });
       queryClient.invalidateQueries({ queryKey: ["collection-list-articles"] });
       queryClient.invalidateQueries({ queryKey: ["collection-list"] });
       queryClient.invalidateQueries({ queryKey: ["collection-lists"] });
     },
-    onError: (err) => {
+    onError: (err, variables, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(
+          ["article-collect-status", variables.articleId],
+          context.previousData,
+        );
+      }
       toast.error(err.message);
     },
   });
@@ -112,6 +185,7 @@ export function useAddArticleToList() {
  */
 export function useRemoveArticleFromList() {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: ({
       articleId,
@@ -120,18 +194,61 @@ export function useRemoveArticleFromList() {
       articleId: string;
       listId: string;
     }) => removeArticleFromList(articleId, listId),
+    onMutate: async (variables) => {
+      const { articleId, listId } = variables;
+      await queryClient.cancelQueries({
+        queryKey: ["article-collect-status", articleId],
+        exact: true,
+      });
+      const previousStatusData = queryClient.getQueryData<
+        ArticleCollectStatusVO[]
+      >(["article-collect-status", articleId]);
+
+      queryClient.setQueryData<ArticleCollectStatusVO[]>(
+        ["article-collect-status", articleId],
+        (old) => {
+          if (!old) return old;
+
+          const newArticleCollectStatusVO = old.map(
+            (articleCollectStatusVO) => {
+              if (articleCollectStatusVO.listId === listId) {
+                return {
+                  ...articleCollectStatusVO,
+                  isCollected: false,
+                };
+              }
+              return articleCollectStatusVO;
+            },
+          );
+          return newArticleCollectStatusVO;
+        },
+      );
+
+      return { previousStatusData };
+    },
     onSuccess: (_data, { articleId }) => {
       queryClient.invalidateQueries({
-        queryKey: ["article-collect-status", articleId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["article-collected", articleId],
+        predicate(query) {
+          const key = query.queryKey;
+          const articleIds = key[1];
+          return (
+            key[0] === "batch-query-count-or-viewer-edge" &&
+            Array.isArray(articleIds) &&
+            articleIds.includes(articleId)
+          );
+        },
       });
       queryClient.invalidateQueries({ queryKey: ["collection-list-articles"] });
       queryClient.invalidateQueries({ queryKey: ["collection-list"] });
       queryClient.invalidateQueries({ queryKey: ["collection-lists"] });
     },
-    onError: (err) => {
+    onError: (err, variables, context) => {
+      if (context?.previousStatusData) {
+        queryClient.setQueryData(
+          ["article-collect-status", variables.articleId],
+          context.previousStatusData,
+        );
+      }
       toast.error(err.message);
     },
   });
@@ -154,9 +271,6 @@ export function useRemoveArticlesFromList() {
       articleIds.forEach((articleId) => {
         queryClient.invalidateQueries({
           queryKey: ["article-collect-status", articleId],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["article-collected", articleId],
         });
       });
       queryClient.invalidateQueries({ queryKey: ["collection-list-articles"] });

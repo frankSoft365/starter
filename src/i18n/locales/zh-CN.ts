@@ -42,6 +42,8 @@ export default {
     repostCount_one: "{{count}} 转发",
     repostCount_other: "{{count}} 转发",
     editArticle: "编辑文章",
+    pinArticle: "置顶到个人主页",
+    unpinArticle: "从个人主页取消置顶",
     deleteArticle: "删除文章",
   },
   badge: {

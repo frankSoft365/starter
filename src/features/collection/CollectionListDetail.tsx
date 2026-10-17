@@ -11,6 +11,7 @@ import type {
   ArticlePreview,
   ArticleResult,
   OperationList,
+  OperationResult,
 } from "@/types/article";
 import {
   useCollectionListArticlesQuery,
@@ -23,21 +24,24 @@ import CollectionInfo from "./CollectionInfo.tsx";
 import { Route as listDetailRoute } from "@/routes/_app/_protected/profile/$userId/lists.$listId";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
-import { batchQueryCountOrViewerEdge } from "@/services/apiArticle.ts";
+import { batchOperationRequest } from "@/services/apiArticle.ts";
 
 export function isDeletedArticle(article: ArticleListItemType): boolean {
   return !!article.id && !article.title;
 }
 
-function selectArticleResults(results: ArticleResult[]) {
+function selectArticleResults(results: OperationResult[]) {
   const resultsByArticleId = new Map<string, ArticleResult>();
-
   for (const result of results) {
-    const previous = resultsByArticleId.get(result.id);
-    resultsByArticleId.set(result.id, {
-      id: result.id,
-      repostCount: result.repostCount ?? previous?.repostCount,
-      viewerEdge: result.viewerEdge ?? previous?.viewerEdge,
+    if (!result.articleResult) {
+      continue;
+    }
+    const articleResult = result.articleResult;
+    const previous = resultsByArticleId.get(articleResult.id);
+    resultsByArticleId.set(articleResult.id, {
+      id: articleResult.id,
+      repostCount: articleResult.repostCount ?? previous?.repostCount,
+      viewerEdge: articleResult.viewerEdge ?? previous?.viewerEdge,
     });
   }
 
@@ -63,13 +67,13 @@ export default function CollectionListDetail() {
   const articleIds = articles?.map((article) => article.id) ?? [];
   const operationList: OperationList["operationList"] = articleIds.flatMap(
     (articleId) => [
-      { operationName: "RepostCountQuery", articleId },
-      { operationName: "CollectionBaseQuery", articleId },
+      { operationName: "RepostCountQuery", id: articleId },
+      { operationName: "CollectionBaseQuery", id: articleId },
     ],
   );
   const { data: articleResults, status: articleResultStatus } = useQuery({
     queryKey: ["batch-query-count-or-viewer-edge", articleIds],
-    queryFn: () => batchQueryCountOrViewerEdge({ params: { operationList } }),
+    queryFn: () => batchOperationRequest({ params: { operationList } }),
     select: selectArticleResults,
     enabled: articleIds.length > 0 && status !== "pending",
   });

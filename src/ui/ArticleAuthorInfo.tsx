@@ -1,6 +1,6 @@
 import { userAtom } from "@/atoms/user";
 import { useProfile } from "@/features/account/userProfile";
-import { useFollowAction, useFollowStatus } from "@/features/follow/follow";
+import { useFollowAction, useUserViewerEdge } from "@/features/follow/follow";
 import { Route as profileRoute } from "@/routes/_app/_protected/profile/$userId/_profile/index";
 import { getPublishDate } from "@/utils/dateHelper";
 import { Link } from "@tanstack/react-router";
@@ -51,24 +51,20 @@ function ArticleAuthorDropdown({ authorId }: { authorId: string }) {
     user,
     isUserProfileFetching,
     isLoadingError: isUserProfileError,
-    retryUserProfile,
   } = useProfile(authorId);
-  const {
-    data: isFollowing,
-    isFetching: isFollowStatusPending,
-    isError: isFollowStatusError,
-    retry: retryFollowStatus,
-  } = useFollowStatus(authorId, !isOwnProfile);
-  const { toggleFollow, isFollowPending } = useFollowAction(authorId);
-  const isPending = isUserProfileFetching || isFollowStatusPending;
-  const isError = isUserProfileError || (!isOwnProfile && isFollowStatusError);
+  // isFollowing
+  const { userViewerEdge, userViewerEdgeStatus } = useUserViewerEdge(
+    authorId,
+    !isOwnProfile,
+  );
+  const isFollowing = userViewerEdge?.user?.viewerEdge.isFollowing ?? false;
 
-  const retry = () => {
-    void retryUserProfile();
-    if (!isOwnProfile) {
-      void retryFollowStatus();
-    }
-  };
+  const { toggleFollow } = useFollowAction(authorId, currentUser?.id ?? "");
+  const isPending =
+    isUserProfileFetching ||
+    (!isOwnProfile && userViewerEdgeStatus === "pending");
+  const isError =
+    isUserProfileError || (!isOwnProfile && userViewerEdgeStatus === "error");
 
   return (
     <div className="absolute z-50 top-full left-1/2 -translate-x-1/2 pt-2">
@@ -83,9 +79,6 @@ function ArticleAuthorDropdown({ authorId }: { authorId: string }) {
         ) : isError ? (
           <div className="flex min-h-20 flex-col items-center justify-center gap-2">
             <span className="text-sm text-error">{t("common.error")}</span>
-            <button type="button" className="btn btn-sm" onClick={retry}>
-              {t("common.retry")}
-            </button>
           </div>
         ) : (
           user && (
@@ -105,17 +98,9 @@ function ArticleAuthorDropdown({ authorId }: { authorId: string }) {
                     <button
                       type="button"
                       className="btn btn-sm rounded-full btn-outline"
-                      disabled={isFollowPending}
                       onClick={() => toggleFollow(isFollowing ? 2 : 1)}
                     >
-                      {isFollowPending ? (
-                        <span
-                          className="loading loading-spinner loading-sm"
-                          aria-label={t("common.loading")}
-                        ></span>
-                      ) : (
-                        <>{t(isFollowing ? "btn.following" : "btn.follow")}</>
-                      )}
+                      {t(isFollowing ? "btn.following" : "btn.follow")}
                     </button>
                   }
                 />

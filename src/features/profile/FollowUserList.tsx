@@ -1,6 +1,7 @@
+import { userAtom } from "@/atoms/user";
 import FollowButton from "@/features/follow/FollowButton";
 import {
-  useFollowStatuses,
+  useBatchUserViewerEdges,
   useInfiniteFollowUserList,
 } from "@/features/follow/follow";
 import { Route as profileRoute } from "@/routes/_app/_protected/profile/$userId/_profile/index";
@@ -9,6 +10,7 @@ import type { UserVO } from "@/types/user";
 import Avatar from "@/ui/Avatar";
 import CurrentUser from "@/ui/utils/CurrentUser";
 import { Link } from "@tanstack/react-router";
+import { useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -34,6 +36,7 @@ export default function FollowUserList({
   type: FollowListType;
 }) {
   const { t } = useTranslation();
+  const currentUser = useAtomValue(userAtom);
   const {
     data,
     error,
@@ -51,15 +54,14 @@ export default function FollowUserList({
       .forEach((user) => userMap.set(user.id, user));
     return [...userMap.values()];
   }, [data]);
-  const {
-    data: followStatusMap = {},
-    isFetching: isFollowStatusFetching,
-    isError: isFollowStatusError,
-    retry: retryFollowStatus,
-  } = useFollowStatuses(
-    users.map((user) => user.id),
-    status === "success",
-  );
+
+  const targetUserIds =
+    data?.pages
+      .map((page) => [...new Set(page.items.map((user) => user.id))])
+      .filter((userIds) => userIds.length > 0) ?? [];
+  const { userViewerEdgeById, userViewerEdgeStatusById } =
+    useBatchUserViewerEdges(targetUserIds);
+
   const listBottomRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -139,17 +141,14 @@ export default function FollowUserList({
             <CurrentUser
               authorId={user.id}
               fallback={
-                <FollowButton
-                  userId={user.id}
-                  btnStyle="btn-sm"
-                  pendingVariant="skeleton"
-                  status={{
-                    isFollowing: followStatusMap[user.id] ?? false,
-                    isPending: isFollowStatusFetching,
-                    isError: isFollowStatusError,
-                    onRetry: () => void retryFollowStatus(),
-                  }}
-                />
+                userViewerEdgeStatusById.get(user.id) === "success" && (
+                  <FollowButton
+                    userId={user.id}
+                    currentUserId={currentUser?.id ?? ""}
+                    btnStyle="btn-sm"
+                    isFollowing={userViewerEdgeById.get(user.id) ?? false}
+                  />
+                )
               }
             />
           </div>

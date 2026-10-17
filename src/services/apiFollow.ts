@@ -1,19 +1,58 @@
-import type { FollowActionRequest, FollowBatchStatusRequest, FollowBatchStatusResponse, FollowListType, FollowUserListRequest, FollowUserListResponse } from "@/types/follow";
+import type {
+  Operation,
+  OperationList,
+  OperationResult,
+} from "@/types/article";
+import type {
+  FollowActionRequest,
+  FollowBatchStatusRequest,
+  FollowBatchStatusResponse,
+  FollowListType,
+  FollowUserListRequest,
+  FollowUserListResponse,
+} from "@/types/follow";
 import request from "@/utils/request";
 
 export async function getFollowBatchStatus(params: FollowBatchStatusRequest) {
-    return request.post<FollowBatchStatusRequest, FollowBatchStatusResponse>('/follow/batch-status', params);
+  return request.post<FollowBatchStatusRequest, FollowBatchStatusResponse>(
+    "/follow/batch-status",
+    params,
+  );
 }
 
 export async function updateFollow(params: FollowActionRequest) {
-    return request.post<FollowActionRequest, void>('/follow/action', params);
+  return request.post<FollowActionRequest, void>("/follow/action", params);
 }
 
-export async function getFollowUserList(type: FollowListType, params: FollowUserListRequest) {
-    const { lastCreatedAt, lastId, ...baseParams } = params;
-    const queryParams = lastCreatedAt && lastId
-        ? { ...baseParams, lastCreatedAt, lastId }
-        : baseParams;
+export async function getFollowUserList(
+  type: FollowListType,
+  params: FollowUserListRequest,
+) {
+  const { lastCreatedAt, lastId, ...baseParams } = params;
+  const queryParams =
+    lastCreatedAt && lastId
+      ? { ...baseParams, lastCreatedAt, lastId }
+      : baseParams;
 
-    return request.get<void, FollowUserListResponse>(`/follow/${type}`, { params: queryParams });
+  return request.get<void, FollowUserListResponse>(`/follow/${type}`, {
+    params: queryParams,
+  });
+}
+
+export async function getUserViewerEdge({ params }: { params: Operation }) {
+  return request.post<Operation, OperationResult>(
+    "/follow/userViewerEdge",
+    params,
+  );
+}
+
+export async function getBatchUserViewerEdges({
+  params,
+}: {
+  params: OperationList;
+}) {
+  return request.post<OperationList, OperationResult[]>(
+    "/follow/batchUserViewerEdges",
+    params,
+  );
 }

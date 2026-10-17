@@ -1,18 +1,24 @@
 import { useQueries } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
-import { userAtom } from "@/atoms/user";
-import { batchQueryCountOrViewerEdge } from "@/services/apiArticle";
-import type { ArticleResult, OperationList } from "@/types/article";
+import type {
+  ArticleResult,
+  OperationList,
+  OperationResult,
+} from "@/types/article";
+import { batchOperationRequest } from "@/services/apiArticle";
 
-function selectArticleResults(results: ArticleResult[]) {
+function selectArticleResults(results: OperationResult[]) {
   const resultsByArticleId = new Map<string, ArticleResult>();
 
   for (const result of results) {
-    const previous = resultsByArticleId.get(result.id);
-    resultsByArticleId.set(result.id, {
-      id: result.id,
-      repostCount: result.repostCount ?? previous?.repostCount,
-      viewerEdge: result.viewerEdge ?? previous?.viewerEdge,
+    if (!result.articleResult) {
+      continue;
+    }
+    const articleResult = result.articleResult;
+    const previous = resultsByArticleId.get(articleResult.id);
+    resultsByArticleId.set(articleResult.id, {
+      id: articleResult.id,
+      repostCount: articleResult.repostCount ?? previous?.repostCount,
+      viewerEdge: articleResult.viewerEdge ?? previous?.viewerEdge,
     });
   }
 
@@ -20,7 +26,6 @@ function selectArticleResults(results: ArticleResult[]) {
 }
 
 export function useBatchArticleResults(articleIdBatches: string[][]) {
-  const user = useAtomValue(userAtom);
   const seenArticleIds = new Set<string>();
   const uniqueArticleIdBatches = articleIdBatches
     .map((batch) =>
@@ -38,19 +43,14 @@ export function useBatchArticleResults(articleIdBatches: string[][]) {
     queries: uniqueArticleIdBatches.map((articleIds) => {
       const operationList: OperationList["operationList"] = articleIds.flatMap(
         (articleId) => [
-          { operationName: "RepostCountQuery", articleId },
-          { operationName: "CollectionBaseQuery", articleId },
+          { operationName: "RepostCountQuery", id: articleId },
+          { operationName: "CollectionBaseQuery", id: articleId },
         ],
       );
 
       return {
-        queryKey: [
-          "batch-query-count-or-viewer-edge",
-          user?.id ?? "anonymous",
-          articleIds,
-        ],
-        queryFn: () =>
-          batchQueryCountOrViewerEdge({ params: { operationList } }),
+        queryKey: ["batch-query-count-or-viewer-edge", articleIds],
+        queryFn: () => batchOperationRequest({ params: { operationList } }),
         select: selectArticleResults,
         enabled: operationList.length > 0,
       };

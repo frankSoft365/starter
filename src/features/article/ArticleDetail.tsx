@@ -22,7 +22,6 @@ import { useCommentAreaScroll } from "./commentScroll";
 import CommentPublishInput from "./CommentPublishInput";
 import type {
   ArticleDetail,
-  ArticleDetailType,
   ArticleResult,
   OperationList,
 } from "@/types/article";
@@ -31,7 +30,8 @@ import { useRepostState } from "../repost/repost";
 import RepostButton from "../repost/RepostButton";
 import CommentButton from "./CommentButton";
 import { useQuery } from "@tanstack/react-query";
-import { batchQueryCountOrViewerEdge } from "@/services/apiArticle";
+import { batchOperationRequest } from "@/services/apiArticle";
+import { useUserViewerEdge } from "../follow/follow";
 
 export default function ArticleDetailPage() {
   const { articleId } = articleRoute.useParams();
@@ -56,7 +56,7 @@ export default function ArticleDetailPage() {
     case "success":
       return (
         <ArticleDetailContent
-          oldArticle={processedArticle.article}
+          article={processedArticle.article}
           title={processedArticle.title}
           editor={editor}
         />
@@ -65,25 +65,25 @@ export default function ArticleDetailPage() {
 }
 
 function ArticleDetailContent({
-  oldArticle,
+  article,
   title,
   editor,
 }: {
-  oldArticle: ArticleDetail;
+  article: ArticleDetail;
   title: string;
   editor: BlockNoteEditor;
 }) {
   const { t } = useTranslation();
   const user = useAtomValue(userAtom);
-  const isOwnStory = oldArticle.creator.id === user?.id;
+  const isOwnStory = article.creator.id === user?.id;
   const meneButtonColor = isOwnStory ? "#adadad" : "#676565";
 
   // reading history save
-  useSaveReadingHistory(oldArticle.id);
+  useSaveReadingHistory(article.id);
 
   const isLogin = useAtomValue(isLoginAtom);
-  const { data: isLiked } = useLikeStatus(oldArticle.id, isLogin);
-  const { toggleLike, isLiking } = useLikeArticle(oldArticle.id);
+  const { data: isLiked } = useLikeStatus(article.id, isLogin);
+  const { toggleLike, isLiking } = useLikeArticle(article.id);
 
   // scroll to comment area
   const { commentRef, scrollToComments } = useCommentAreaScroll();
@@ -91,43 +91,48 @@ function ArticleDetailContent({
   // repost feature
   // 查询当前用户是否转发
   const { data: repostState, status: repostStateStatus } = useRepostState(
-    oldArticle.id,
+    article.id,
   );
 
-  const articleIds = [oldArticle.id];
+  const articleIds = [article.id];
 
   const operationList: OperationList["operationList"] = articleIds.flatMap(
-    (articleId) => [
-      { operationName: "RepostCountQuery", articleId },
-      { operationName: "CollectionBaseQuery", articleId },
-    ],
+    (articleId) => [{ operationName: "CollectionBaseQuery", id: articleId }],
   );
   const { data, status: articleResultStatus } = useQuery({
     queryKey: ["batch-query-count-or-viewer-edge", articleIds],
     queryFn: async () => {
-      const results = await batchQueryCountOrViewerEdge({
+      const results = await batchOperationRequest({
         params: { operationList },
       });
       const resultsByArticleId = new Map<string, ArticleResult>();
 
       for (const result of results) {
-        const previous = resultsByArticleId.get(result.id);
-        resultsByArticleId.set(result.id, {
-          id: result.id,
-          repostCount: result.repostCount ?? previous?.repostCount,
-          viewerEdge: result.viewerEdge ?? previous?.viewerEdge,
+        if (!result.articleResult) {
+          continue;
+        }
+        const articleResult = result.articleResult;
+        const previous = resultsByArticleId.get(articleResult.id);
+        resultsByArticleId.set(articleResult.id, {
+          id: articleResult.id,
+          repostCount: articleResult.repostCount ?? previous?.repostCount,
+          viewerEdge: articleResult.viewerEdge ?? previous?.viewerEdge,
         });
       }
       return resultsByArticleId;
     },
   });
 
-  const article: ArticleDetailType = {
-    ...oldArticle,
-    isCollected:
-      data?.get(oldArticle.id)?.viewerEdge?.collectionsConnection
-        .hasCollected ?? false,
-  };
+  // isFollowing
+  const { userViewerEdge, userViewerEdgeStatus } = useUserViewerEdge(
+    article.creator.id,
+    !isOwnStory,
+  );
+  const isFollowing = userViewerEdge?.user?.viewerEdge.isFollowing ?? false;
+
+  const isCollected =
+    data?.get(article.id)?.viewerEdge?.collectionsConnection.hasCollected ??
+    false;
 
   return (
     <>
@@ -146,7 +151,7 @@ function ArticleDetailContent({
             <h1 className="font-sans font-bold text-3xl/10 lg:text-5xl my-6">
               {title}
             </h1>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               {/* Author info */}
               <ArticleAuthorInfo
                 authorId={article.creator.id}
@@ -159,7 +164,16 @@ function ArticleDetailContent({
               <SignedIn>
                 <CurrentUser
                   authorId={article.creator.id}
-                  fallback={<FollowButton userId={article.creator.id} />}
+                  fallback={
+                    userViewerEdgeStatus === "success" && (
+                      <FollowButton
+                        userId={article.creator.id}
+                        currentUserId={user?.id ?? ""}
+                        btnStyle="btn-sm"
+                        isFollowing={isFollowing}
+                      />
+                    )
+                  }
                 />
               </SignedIn>
             </div>
@@ -169,7 +183,7 @@ function ArticleDetailContent({
             <div className="w-full h-px bg-gray-200 my-1"></div>
             <div className="flex flex-row items-center justify-between px-1 w-full">
               {/* left buttons */}
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-4 md:gap-6">
                 <div
                   className="lg:tooltip"
                   data-tip={
@@ -205,7 +219,7 @@ function ArticleDetailContent({
                 )}
               </div>
               {/* right buttons */}
-              <div className="flex flex-row gap-4">
+              <div className="flex flex-row gap-2 md:gap-4">
                 {/* save button */}
                 {articleResultStatus === "pending" && (
                   <button
@@ -219,7 +233,7 @@ function ArticleDetailContent({
                 {articleResultStatus === "success" && (
                   <SaveButton
                     articleId={article.id}
-                    initialIsCollected={article.isCollected ?? false}
+                    isCollected={isCollected}
                   />
                 )}
                 {/* share button */}

@@ -3,6 +3,7 @@ import {
   BookmarkIcon,
   ChatCircleDotsIcon,
   HandsClappingIcon,
+  PushPinIcon,
   ThumbsDownIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
@@ -29,6 +30,7 @@ import { isDeletedArticle } from "../collection/CollectionListDetail";
 import { Route as readingHistoryRoute } from "@/routes/_app/_protected/me/lists/reading-history";
 import { useDeleteHistoryItem } from "../readingHistory/readingHistory";
 import { Route as activityRoute } from "@/routes/_app/_protected/profile/$userId/_profile/activity";
+import { Route as profileHomeRoute } from "@/routes/_app/_protected/profile/$userId/_profile/index";
 
 export default function ArticleListItem({
   index,
@@ -57,6 +59,10 @@ export default function ArticleListItem({
   const isActivityPath = useRouterState({
     select: (state) =>
       state.matches.some((match) => match.routeId === activityRoute.id),
+  });
+  const isAuthorProfileHomeRoute = useRouterState({
+    select: (state) =>
+      state.matches.some((match) => match.routeId === profileHomeRoute.id),
   });
 
   const { handleDelete, isDeleting } = useDeleteHistoryItem();
@@ -111,6 +117,13 @@ export default function ArticleListItem({
         {article.previewImage.url ? (
           <>
             <div className="flex flex-col gap-1 justify-between col-span-3 md:col-span-5">
+              {isAuthorProfileHomeRoute &&
+                Number(article.pinnedByCreatorAt) !== 0 && (
+                  <div className="inline-flex gap-2 items-center mt-2 md:mt-4 mb-4 md:mb-6">
+                    <PushPinIcon size={16} />
+                    <span className="text-sm text-base-content/70">Pinned</span>
+                  </div>
+                )}
               {/* activity user info */}
               {isActivityPath && activityInfo}
               {/* user info */}
@@ -233,7 +246,7 @@ export default function ArticleListItem({
                     {articleResultStatus === "success" && (
                       <SaveButton
                         articleId={article.id}
-                        initialIsCollected={article.isCollected ?? false}
+                        isCollected={article.isCollected ?? false}
                       />
                     )}
                   </SignedIn>
@@ -253,6 +266,7 @@ export default function ArticleListItem({
                     isOwnStory={isOwnStory}
                     authorId={article.creator.id}
                     articleId={article.id}
+                    pinnedByCreatorAt={article.pinnedByCreatorAt}
                     onRemoveFromReadingHistory={() =>
                       setIsRemovingFromHistory(true)
                     }
@@ -268,6 +282,13 @@ export default function ArticleListItem({
         ) : (
           <div className="col-span-5 md:col-span-7 grid grid-cols-5 md:grid-cols-7 gap-x-4">
             <div className="flex flex-col gap-1 justify-between col-span-3 md:col-span-5">
+              {isAuthorProfileHomeRoute &&
+                Number(article.pinnedByCreatorAt) !== 0 && (
+                  <div className="inline-flex gap-2 items-center mt-2 md:mt-4 mb-4 md:mb-6">
+                    <PushPinIcon size={16} />
+                    <span className="text-sm text-base-content/70">Pinned</span>
+                  </div>
+                )}
               {/* activity user info */}
               {isActivityPath && activityInfo}
               {/* user info */}
@@ -389,7 +410,7 @@ export default function ArticleListItem({
                     {articleResultStatus === "success" && (
                       <SaveButton
                         articleId={article.id}
-                        initialIsCollected={article.isCollected ?? false}
+                        isCollected={article.isCollected ?? false}
                       />
                     )}
                   </SignedIn>
@@ -409,6 +430,7 @@ export default function ArticleListItem({
                     isOwnStory={isOwnStory}
                     authorId={article.creator.id}
                     articleId={article.id}
+                    pinnedByCreatorAt={article.pinnedByCreatorAt}
                     onRemoveFromReadingHistory={() =>
                       setIsRemovingFromHistory(true)
                     }

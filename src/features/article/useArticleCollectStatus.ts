@@ -15,15 +15,3 @@ export function useArticleCollectStatusQuery(
     enabled,
   });
 }
-
-// /**
-//  * 查询文章是否已被当前用户收藏（任意列表中）。
-//  * 挂载即请求，pending 时用于禁用收藏按钮。
-//  */
-// export function useIsArticleCollectedQuery(articleId: string, enabled = true) {
-//   return useQuery({
-//     queryKey: ["article-collected", articleId],
-//     queryFn: () => isArticleCollected(articleId),
-//     enabled,
-//   });
-// }

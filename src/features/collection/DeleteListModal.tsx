@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { useDeleteCollectionList } from "../collection/collection";
+import { useDeleteCollectionList } from "./collection";
 
 export default function DeleteListModal({
   listId,
@@ -50,7 +50,7 @@ export default function DeleteListModal({
           </button>
           <button
             type="button"
-            className="btn btn-error btn-sm md:btn-md rounded-full"
+            className="btn btn-error btn-sm md:btn-md text-base-100 rounded-full"
             disabled={isPending}
             onClick={() => {
               mutate(listId, {

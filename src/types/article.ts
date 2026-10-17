@@ -42,8 +42,8 @@ export type HomeArticleListRequest = {
 };
 
 export type Operation = {
-  operationName: "RepostCountQuery" | "CollectionBaseQuery";
-  articleId: string;
+  operationName: "RepostCountQuery" | "CollectionBaseQuery" | "UserViewerEdge";
+  id: string;
 };
 
 export type OperationList = {
@@ -96,6 +96,7 @@ export type ArticlePreview = {
 
   clapCount: number;
   responseCount: number;
+  pinnedByCreatorAt: string;
 };
 
 export type ArticleListItemType = ArticlePreview & {
@@ -110,4 +111,30 @@ export type ArticleDetail = ArticlePreview & {
 
 export type ArticleDetailType = ArticleDetail & {
   isCollected: boolean;
+  isFollowing: boolean;
+};
+
+export type UserViewerEdge = {
+  id: string;
+  isFollowing: boolean;
+};
+
+export type User = {
+  id: string;
+  viewerEdge: UserViewerEdge;
+};
+
+export type OperationResult =
+  | {
+      articleResult: ArticleResult;
+      user: undefined;
+    }
+  | {
+      articleResult: undefined;
+      user: User;
+    };
+
+export type ArticleSetPinnedByCreatorAtRequest = {
+  isPinned: boolean;
+  articleId: string;
 };

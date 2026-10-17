@@ -51,6 +51,8 @@ export default function ActivityListItem({
 
       repostCount: post.repostCount,
       isCollected: post.isCollected,
+
+      pinnedByCreatorAt: "0",
     };
     return article;
   }

@@ -1,6 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { changePassword, getCurrentUser, getSomeUser, updateUserProfile } from "@/services/apiUserProfile";
+import {
+  changePassword,
+  getCurrentUser,
+  getSomeUser,
+  updateUserProfile,
+} from "@/services/apiUserProfile";
 import { useSetAtom } from "jotai";
 import { isLoginAtom, userAtom } from "@/atoms/user";
 import { toast } from "sonner";
@@ -11,130 +16,141 @@ import { useUserLogout } from "../auth/userLogin";
 import i18n from "@/i18n";
 
 export function useUserProfile() {
-    const setUserInfo = useSetAtom(userAtom);
-    const setIsLogin = useSetAtom(isLoginAtom);
+  const setUserInfo = useSetAtom(userAtom);
+  const setIsLogin = useSetAtom(isLoginAtom);
 
-    const { data: user, isLoading: isUserProfileLoading, isError: isLoadingError } = useQuery({
-        queryKey: ['get-user-profile'],
-        queryFn: async () => {
-            const userInfo = await getCurrentUser();
-            setUserInfo(userInfo);
-            setIsLogin(true);
-            return userInfo;
-        }
-    })
+  const {
+    data: user,
+    isLoading: isUserProfileLoading,
+    isError: isLoadingError,
+  } = useQuery({
+    queryKey: ["get-user-profile"],
+    queryFn: async () => {
+      const userInfo = await getCurrentUser();
+      setUserInfo(userInfo);
+      setIsLogin(true);
+      return userInfo;
+    },
+  });
 
-    return ({
-        user,
-        isUserProfileLoading,
-        isLoadingError,
-    });
+  return {
+    user,
+    isUserProfileLoading,
+    isLoadingError,
+  };
 }
 
 export function useProfile(userId: string, enabled = true) {
-    const queryClient = useQueryClient();
-    const queryKey = ['get-profile', userId];
-    const {
-        data: user,
-        isLoading: isUserProfileLoading,
-        isFetching: isUserProfileFetching,
-        isError: isLoadingError,
-        error,
-    } = useQuery({
-        queryKey,
-        queryFn: async () => {
-            const userInfo = await getSomeUser(userId);
-            return userInfo;
-        },
-        enabled,
-    })
-    return ({
-        user,
-        isUserProfileLoading,
-        isUserProfileFetching,
-        isLoadingError,
-        error,
-        retryUserProfile: () => queryClient.invalidateQueries({ queryKey }),
-    });
+  const queryClient = useQueryClient();
+  const queryKey = ["get-profile", userId];
+  const {
+    data: user,
+    isLoading: isUserProfileLoading,
+    isFetching: isUserProfileFetching,
+    isError: isLoadingError,
+    error,
+  } = useQuery({
+    queryKey,
+    queryFn: async () => {
+      const userInfo = await getSomeUser(userId);
+      return userInfo;
+    },
+    enabled,
+    staleTime: 5 * 60 * 1000,
+  });
+  return {
+    user,
+    isUserProfileLoading,
+    isUserProfileFetching,
+    isLoadingError,
+    error,
+    retryUserProfile: () => queryClient.invalidateQueries({ queryKey }),
+  };
 }
 
 export function useUserUpdate(
-    user: UserVO,
-    setIsModalOpen: Dispatch<SetStateAction<boolean>>,
-    currentAvatarFile: File | null
+  user: UserVO,
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>,
+  currentAvatarFile: File | null,
 ) {
-    const [isRemoveAvatar, setIsRemoveAvatar] = useState(false);
+  const [isRemoveAvatar, setIsRemoveAvatar] = useState(false);
 
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-    const { uploadAvatar, isUploading } = useUploadAvatar(currentAvatarFile);
+  const { uploadAvatar, isUploading } = useUploadAvatar(currentAvatarFile);
 
-    const { isPending: isUpdating, mutate: handleUpdate } = useMutation({
-        mutationFn: async ({ username }: { username: string }) => {
-            let newUserName = '';
-            let newAvatarURL = '';
+  const { isPending: isUpdating, mutate: handleUpdate } = useMutation({
+    mutationFn: async ({ username }: { username: string }) => {
+      let newUserName = "";
+      let newAvatarURL = "";
 
-            if (username !== user.username) {
-                newUserName = username;
-            }
-            if (!newUserName && !currentAvatarFile && !isRemoveAvatar) {
-                throw new Error(i18n.t('settings.toast.nothingToUpdate'));
-            }
-            if (currentAvatarFile) {
-                const avatarURL = await uploadAvatar();
-                newAvatarURL = avatarURL;
-            }
-            let updateRequest: UserUpdateRequest | null = null;
-            if (isRemoveAvatar) {
-                updateRequest = {
-                    ...(newUserName && { username: newUserName }),
-                    image: '',
-                }
-            } else {
-                updateRequest = {
-                    ...(newUserName && { username: newUserName }),
-                    ...(newAvatarURL && { image: newAvatarURL })
-                }
-            }
-            await updateUserProfile(updateRequest);
-        },
-        onSuccess: () => {
-            toast.success(i18n.t('settings.toast.updateSuccess'));
-            queryClient.invalidateQueries({ queryKey: ['get-user-profile'] });
-            setIsModalOpen(false);
-        },
-        onError: (error) => {
-            toast.error(error.message);
-        }
-    })
-    return ({
-        isUpdating,
-        handleUpdate,
-        setIsRemoveAvatar,
-        isUploading
-    });
+      if (username !== user.username) {
+        newUserName = username;
+      }
+      if (!newUserName && !currentAvatarFile && !isRemoveAvatar) {
+        throw new Error(i18n.t("settings.toast.nothingToUpdate"));
+      }
+      if (currentAvatarFile) {
+        const avatarURL = await uploadAvatar();
+        newAvatarURL = avatarURL;
+      }
+      let updateRequest: UserUpdateRequest | null = null;
+      if (isRemoveAvatar) {
+        updateRequest = {
+          ...(newUserName && { username: newUserName }),
+          image: "",
+        };
+      } else {
+        updateRequest = {
+          ...(newUserName && { username: newUserName }),
+          ...(newAvatarURL && { image: newAvatarURL }),
+        };
+      }
+      await updateUserProfile(updateRequest);
+    },
+    onSuccess: () => {
+      toast.success(i18n.t("settings.toast.updateSuccess"));
+      queryClient.invalidateQueries({ queryKey: ["get-user-profile"] });
+      setIsModalOpen(false);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  return {
+    isUpdating,
+    handleUpdate,
+    setIsRemoveAvatar,
+    isUploading,
+  };
 }
 
 export function useChangePassword() {
-    const { userLogout } = useUserLogout();
+  const { userLogout } = useUserLogout();
 
-    const { isPending: isChanging, mutate: handleChangePassword } = useMutation({
-        mutationFn: async ({ currentPassword, newPassword }: { currentPassword: string, newPassword: string }) => {
-            if (currentPassword === newPassword) {
-                throw new Error(i18n.t('settings.toast.samePassword'));
-            }
-            await changePassword({ currentPassword, newPassword });
-        },
-        onSuccess: () => {
-            toast.success(i18n.t('settings.toast.passwordChanged'));
-            userLogout();
-        },
-        onError: (error) => {
-            toast.error(error.message);
-        }
-    })
-    return ({
-        isChanging,
-        handleChangePassword,
-    });
+  const { isPending: isChanging, mutate: handleChangePassword } = useMutation({
+    mutationFn: async ({
+      currentPassword,
+      newPassword,
+    }: {
+      currentPassword: string;
+      newPassword: string;
+    }) => {
+      if (currentPassword === newPassword) {
+        throw new Error(i18n.t("settings.toast.samePassword"));
+      }
+      await changePassword({ currentPassword, newPassword });
+    },
+    onSuccess: () => {
+      toast.success(i18n.t("settings.toast.passwordChanged"));
+      userLogout();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  return {
+    isChanging,
+    handleChangePassword,
+  };
 }
