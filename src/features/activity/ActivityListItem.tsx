@@ -10,20 +10,22 @@ import ArticlePreviewImage from "../../ui/article/ArticlePreviewImage";
 import useOverflowHelper from "@/utils/overflowHelper";
 import { UserHoverLink } from "@/ui/ArticleAuthorInfo";
 import type { ArticleListItemType } from "@/types/article";
-import { useProfileUser } from "../profile/ProfileUserContext";
 import { useRouter } from "@tanstack/react-router";
 import { Route as articleDetailRoute } from "@/routes/_app/article.$articleId";
 import ArticleListItem from "../home/ArticleListItem";
+import type { UserInfo } from "@/types/user";
 
 export default function ActivityListItem({
+  profileUser,
   userActivity,
   articleResultStatus,
 }: {
+  profileUser: UserInfo;
   userActivity: UserActivity;
   articleResultStatus?: "error" | "success" | "pending";
 }) {
   const { handleOverflow } = useOverflowHelper();
-  const user = useProfileUser();
+
   const responsePost = userActivity.responsePost;
   const router = useRouter();
 
@@ -61,16 +63,18 @@ export default function ActivityListItem({
     return (
       <div className="flex flex-row items-center justify-start gap-2">
         <Avatar
-          imageUrl={user?.image ?? ""}
-          username={user?.username ?? ""}
+          imageUrl={profileUser.avatar}
+          username={profileUser.username}
           size="xs"
         />
         <div className="text-xs flex flex-row items-center justify-start gap-1 opacity-65">
-          <span>{user?.username}</span>
+          <span>{profileUser.username}</span>
           <HandsClappingIcon size={16} weight="duotone" />
-          <span>Clapped</span>
-          <span>·</span>
-          <span>{getPublishDate(new Date(userActivity.occurredAt))}</span>
+          <p>
+            <span>Clapped</span>
+            <span className="mx-1">·</span>
+            <span>{getPublishDate(new Date(userActivity.occurredAt))}</span>
+          </p>
         </div>
       </div>
     );
@@ -87,11 +91,13 @@ export default function ActivityListItem({
             size="xs"
           />
           <div className="text-xs flex flex-row items-center justify-start gap-1 opacity-65">
-            <span>{responsePost.creator?.username}</span>
+            <p>{responsePost.creator?.username}</p>
             <ChatCircleIcon size={16} weight="duotone" />
-            <span>Responded</span>
-            <span>·</span>
-            <span>{getPublishDate(new Date(userActivity.occurredAt))}</span>
+            <p>
+              <span>Responded</span>
+              <span className="mx-1">·</span>
+              <span>{getPublishDate(new Date(userActivity.occurredAt))}</span>
+            </p>
           </div>
         </div>
         {/* the comment content */}

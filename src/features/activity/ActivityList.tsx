@@ -2,17 +2,18 @@ import { Route as activityRoute } from "@/routes/_app/_protected/profile/$userId
 import { useGetInfiniteActivityList } from "./activity";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useQueryClient } from "@tanstack/react-query";
 import ActivityListItem from "./ActivityListItem";
 import { useBatchArticleResults } from "../article/useBatchArticleResults";
 import type { UserActivity } from "@/types/activity";
+import { useUserProfileContainer } from "../profile/profile";
 
 type ActivityQueryType = "all" | "claps" | "responses";
 
 export default function ActivityList() {
   const { t } = useTranslation();
   const { userId } = activityRoute.useParams();
-  const queryClient = useQueryClient();
+  const { data: userInfo, status: userProfileStatus } =
+    useUserProfileContainer(userId);
 
   const [activityQueryType, setActivityQueryType] =
     useState<ActivityQueryType>("all");
@@ -85,19 +86,10 @@ export default function ActivityList() {
           <p className="text-red-500 text-xl">
             {t("common.error")}: {error.message}
           </p>
-          <button
-            onClick={() =>
-              queryClient.invalidateQueries({
-                queryKey: ["get-user-activities", userId, activityQueryType],
-              })
-            }
-            className="btn btn-sm btn-outline"
-          >
-            {t("common.retry")}
-          </button>
         </div>
       )}
       {status === "success" &&
+        userProfileStatus === "success" &&
         (data.pages.flatMap((page) => page.items).length > 0 ? (
           <ul className="list bg-base-100">
             {data.pages
@@ -117,6 +109,7 @@ export default function ActivityList() {
                 };
                 return (
                   <ActivityListItem
+                    profileUser={userInfo}
                     userActivity={
                       userActivity.activityType === "POST_CLAPPED"
                         ? postClappedTypeUserActivity

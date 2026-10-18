@@ -46,6 +46,10 @@ export async function getArticleById(id: string) {
   return request.get<void, ArticleDetail>(`/article/public/${id}`);
 }
 
+export async function getPrivateArticleDetailForEditById(id: string) {
+  return request.get<void, ArticleDetail>(`/article/update/detail/${id}`);
+}
+
 export async function updateArticle(params: ArticleUpdateRequest) {
   return request.post<ArticleUpdateRequest, void>(
     "/article/user/update",

@@ -4,6 +4,7 @@ const sizeMap = {
   sm: "w-8",
   md: "w-12",
   lg: "w-12",
+  xl: "w-22",
 };
 
 export default function Avatar({
@@ -15,7 +16,7 @@ export default function Avatar({
   imageUrl: string | undefined;
   hover?: boolean;
   username: string;
-  size?: "xxs" | "xs" | "sm" | "md" | "lg";
+  size?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl";
 }) {
   const hoverRingConfig =
     "hover:ring-2 ring-offset-2 ring-primary ring-offset-base-100";

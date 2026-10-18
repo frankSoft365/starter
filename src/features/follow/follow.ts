@@ -173,6 +173,19 @@ export function useFollowAction(targetUserId: string, currentUserId: string) {
       });
 
       queryClient.invalidateQueries({
+        queryKey: ["get-user-about", targetUserId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["get-user-about", currentUserId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["get-user-profile-container", targetUserId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["get-user-profile-container", currentUserId],
+      });
+
+      queryClient.invalidateQueries({
         queryKey: ["get-profile", targetUserId],
       });
       queryClient.invalidateQueries({

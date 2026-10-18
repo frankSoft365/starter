@@ -2,6 +2,7 @@ import {
   articleSetPinnedByCreatorAt,
   deleteArticle,
   getArticleById,
+  getPrivateArticleDetailForEditById,
   updateArticle,
 } from "@/services/apiArticle";
 import { getLikeBatchStatus, likeAction } from "@/services/apiLike";
@@ -159,6 +160,34 @@ export function useCurrentArticle(
         article,
       };
     },
+  });
+}
+
+export function usePrivateArticleDetailForEdit(
+  articleId: string,
+  editor: BlockNoteEditor,
+  detail = true,
+) {
+  return useQuery({
+    queryKey: ["get-article", articleId],
+    queryFn: async () => {
+      const article = await getPrivateArticleDetailForEditById(articleId);
+      const content = JSON.parse(article.content);
+      let title = "";
+      if (detail) {
+        title = getTitle(editor, content);
+        const [_headingBlock, ...bodyBlock] = content;
+        const body = bodyBlock;
+        editor.replaceBlocks(editor.document, body);
+      } else {
+        editor.replaceBlocks(editor.document, content);
+      }
+      return {
+        title,
+        article,
+      };
+    },
+    retry: false,
   });
 }
 

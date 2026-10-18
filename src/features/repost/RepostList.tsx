@@ -71,7 +71,7 @@ export default function RepostList() {
               .flatMap((page) => page.items)
               .map((item) => {
                 return (
-                  <RepostListItem key={item.post.id} repostListItem={item} />
+                  <RepostListItem key={item.repost.id} repostListItem={item} />
                 );
               })}
             <li

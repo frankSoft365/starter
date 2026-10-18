@@ -1,9 +1,7 @@
 import Avatar from "@/ui/Avatar";
-import { ProfileUserProvider } from "./ProfileUserContext";
 import { Link } from "@tanstack/react-router";
 import { DotsThreeIcon } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
-import { useProfile } from "../account/userProfile";
 import { Route as profileTabRoute } from "@/routes/_app/_protected/profile/$userId/_profile/route";
 import Loading from "@/ui/Loading";
 import { handleShareCopyLink } from "@/utils/copyHelper";
@@ -14,6 +12,8 @@ import ProfileTab from "./ProfileTab";
 import { useUserViewerEdge } from "../follow/follow";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
+import Show from "./Show";
+import { useUserProfileContainer } from "./profile";
 
 export default function ProfilePage({
   children,
@@ -23,10 +23,14 @@ export default function ProfilePage({
   const { t } = useTranslation();
 
   const { userId } = profileTabRoute.useParams();
+  const {
+    data: userInfo,
+    error: userProfileError,
+    status: userProfileStatus,
+  } = useUserProfileContainer(userId);
+
   const currentUser = useAtomValue(userAtom);
   const isOwnProfile = currentUser?.id === userId;
-  const { user, isUserProfileLoading, isLoadingError, error } =
-    useProfile(userId);
 
   const url = `${window.location.origin}/profile/${userId}`;
 
@@ -37,15 +41,13 @@ export default function ProfilePage({
   );
   const isFollowing = userViewerEdge?.user?.viewerEdge.isFollowing ?? false;
 
-  if (isUserProfileLoading) {
+  if (userProfileStatus === "pending") {
     return <Loading />;
   }
-  if (isLoadingError) {
+  if (userProfileStatus === "error") {
     return (
       <main className="flex items-center justify-center min-h-screen">
-        <div className="text-3xl text-red-600">
-          {error?.message || t("article.list.loadFailed")}
-        </div>
+        <div className="text-3xl text-red-600">{userProfileError.message}</div>
       </main>
     );
   }
@@ -62,18 +64,18 @@ export default function ProfilePage({
             <div className="flex py-5 gap-3 lg:px-2">
               <div className="inline-flex lg:hidden">
                 <Avatar
-                  imageUrl={user?.image ?? ""}
-                  username={user?.username ?? ""}
+                  imageUrl={userInfo.avatar}
+                  username={userInfo.username}
                 />
               </div>
               <div className="flex flex-col justify-start">
                 <div className="w-full text-xl lg:text-4xl lg:my-4 font-bold">
-                  {user?.username || t("profile.unknownUsername")}
+                  {userInfo.username}
                 </div>
                 <div className="lg:hidden">
                   <FollowStats
                     userId={userId}
-                    followerCount={user?.followerCount}
+                    followerCount={userInfo.socialStats.followerCount}
                     type="followers"
                     className="text-base-content/60"
                   />
@@ -126,22 +128,21 @@ export default function ProfilePage({
           {/* profile menu */}
           <ProfileTab />
           {/* outlet */}
-          <ProfileUserProvider user={user}>
-            <div className="w-full">{children}</div>
-          </ProfileUserProvider>
+          <div className="w-full px-2 md:px-0">{children}</div>
         </div>
       </div>
       {/* right lg-screen-show profile info */}
       <div className="hidden lg:inline-flex sticky top-0 self-start col-span-1 flex-col items-start p-10 gap-3">
+        <Show />
         <Avatar
-          imageUrl={user?.image ?? ""}
-          username={user?.username ?? ""}
-          size="lg"
+          imageUrl={userInfo.avatar}
+          username={userInfo.username}
+          size="xl"
         />
-        <p className="font-bold text-lg">{user?.username}</p>
+        <p className="font-medium text-md">{userInfo.username}</p>
         <FollowStats
           userId={userId}
-          followerCount={user?.followerCount}
+          followerCount={userInfo.socialStats.followerCount}
           type="followers"
           className="text-base-content/60"
         />

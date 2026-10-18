@@ -1,4 +1,5 @@
 import type { ArticlePreview } from "./article";
+import type { UserInfo } from "./user";
 
 export type RepostCount = {
   id: string;
@@ -47,14 +48,14 @@ export type UserRepostListQuery = {
   userId: string;
 };
 
-export type UserRepost = {
-  userId: string;
-  articleId: string;
+export type Repost = {
+  id: string;
   note: string | null;
-  createTime: Date;
+  repostedAt: Date;
+  user: UserInfo;
 };
 
 export type RepostListItem = {
-  repost: UserRepost;
+  repost: Repost;
   post: ArticlePreview;
 };

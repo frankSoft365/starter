@@ -3,7 +3,7 @@ import EditorComponent from "@/ui/EditorComponent";
 import Loading from "@/ui/Loading";
 import { useCreateBlockNote } from "@blocknote/react";
 import type { BlockNoteEditor } from "@blocknote/core";
-import { useUpdateArticle, useCurrentArticle } from "./article";
+import { useUpdateArticle, usePrivateArticleDetailForEdit } from "./article";
 import { useEffect, useRef, useState } from "react";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { editorUpdateSignalAtom } from "@/atoms/editor";
@@ -38,7 +38,7 @@ export default function ArticleEdit() {
     [],
   );
 
-  const articleQuery = useCurrentArticle(articleId, editor, false);
+  const articleQuery = usePrivateArticleDetailForEdit(articleId, editor, false);
 
   switch (articleQuery.status) {
     case "pending":

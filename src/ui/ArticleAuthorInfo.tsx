@@ -68,7 +68,7 @@ function ArticleAuthorDropdown({ authorId }: { authorId: string }) {
 
   return (
     <div className="absolute z-50 top-full left-1/2 -translate-x-1/2 pt-2">
-      <div className="w-56 min-h-28 rounded-box border border-base-300 bg-base-100 p-4 shadow-xl">
+      <div className="w-56 min-h-28 rounded-sm bg-base-100 p-4 shadow-xl">
         {isPending ? (
           <div className="flex min-h-20 items-center justify-center">
             <span

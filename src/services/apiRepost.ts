@@ -46,7 +46,7 @@ export async function removeNote({ params }: { params: RemoveNoteRequest }) {
   return request.post<RemoveNoteRequest, void>("/repost/removeNote", params);
 }
 
-export async function getRepostList({
+export async function userRepostsQuery({
   params,
 }: {
   params: UserRepostListQuery;

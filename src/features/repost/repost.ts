@@ -3,10 +3,10 @@ import {
   deleteRepost,
   editNote,
   getRepostCountByIds,
-  getRepostList,
   getRepostState,
   removeNote,
   repostAnArticle,
+  userRepostsQuery,
 } from "@/services/apiRepost";
 import type { CursorPageRequest } from "@/types/comment";
 import type { DeleteRequest } from "@/types/DeleteRequest";
@@ -371,7 +371,7 @@ export function useGetInfiniteRepostList(userId: string) {
   return useInfiniteQuery({
     queryKey: ["get-user-repost-list", userId],
     queryFn: async ({ pageParam }: { pageParam: CursorPageRequest }) => {
-      return await getRepostList({
+      return await userRepostsQuery({
         params: {
           ...pageParam,
           userId,
