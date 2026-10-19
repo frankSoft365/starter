@@ -3,15 +3,16 @@ import {
   GearIcon,
   NotePencilIcon,
   QuestionIcon,
+  ToggleLeftIcon,
 } from "@phosphor-icons/react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Route as meSettingsRoute } from "../routes/_app/_protected/me/settings";
-import { Route as profileRoute } from "../routes/_app/_protected/profile/$userId/_profile/index";
-import Avatar from "../ui/Avatar";
-import useOverflowHelper from "../utils/overflowHelper";
+import { Route as meSettingsRoute } from "../../routes/_app/_protected/me/settings";
+import { Route as profileRoute } from "../../routes/_app/_protected/profile/$userId/_profile/index";
+import Avatar from "../Avatar";
+import useOverflowHelper from "../../utils/overflowHelper";
 import { useAtomValue } from "jotai";
-import { isLoadingAtom, userAtom } from "../atoms/user";
-import { Route as LoginRoute } from "../routes/login";
+import { isLoadingAtom, userAtom } from "../../atoms/user";
+import { Route as LoginRoute } from "../../routes/login";
 import { toast } from "sonner";
 import { useUserLogout } from "@/features/auth/userLogin";
 import { useTranslation } from "react-i18next";
@@ -19,8 +20,9 @@ import i18n from "@/i18n";
 import { useState } from "react";
 import { totalUnreadCountAtom } from "@/atoms/notification";
 import { Route as notificationsRoute } from "@/routes/_app/_protected/me/notifications";
-import { Route as editorRoute } from "../routes/_app/_protected/editor";
+import { Route as editorRoute } from "../../routes/_app/_protected/editor";
 import { Route as HelpCenterRoute } from "@/routes/_protected/hc/index";
+import { APPEARANCE_MODAL_ID } from "@/constants/modal";
 
 export default function AvatarDropdown() {
   const { t } = useTranslation();
@@ -70,7 +72,7 @@ export default function AvatarDropdown() {
         )}
       </summary>
       {isOpen && (
-        <ul className="menu dropdown-content bg-base-100 rounded-box mt-1 p-2 shadow-sm">
+        <ul className="menu dropdown-content bg-base-100 rounded-xs mt-1 p-2 shadow-lg">
           {user && (
             <li className="list-row">
               <Link
@@ -119,6 +121,25 @@ export default function AvatarDropdown() {
               )}
             </a>
           </li>
+          {/* appearance settings */}
+          <li
+            onClick={() => {
+              (
+                document.getElementById(
+                  APPEARANCE_MODAL_ID,
+                ) as HTMLDialogElement
+              )?.showModal();
+            }}
+            className="list-row"
+          >
+            <a className="flex justify-start">
+              <ToggleLeftIcon size={24} weight="duotone" />
+              Appearance
+              <div className="badge badge-xs bg-base-300 badge-outline">
+                Beta
+              </div>
+            </a>
+          </li>
           {/* settings link */}
           <li
             onClick={() => {
@@ -145,7 +166,6 @@ export default function AvatarDropdown() {
               {t("btn.help")}
             </a>
           </li>
-
           {/* logout link */}
           <li
             onClick={() => {

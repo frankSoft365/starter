@@ -89,6 +89,9 @@ importers:
       tailwindcss:
         specifier: 4.2.2
         version: 4.2.2
+      theme-change:
+        specifier: ^3.0.4
+        version: 3.0.4
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -3491,6 +3494,9 @@ packages:
     resolution: {integrity: sha512-SNiDnXyHSrxVcIOtVbULzcTmniUiwcV7Nwdyj1twVubeTmbjoa8p69KKDpfkdoOavuM4/GRm1+ykI8qqnavHoA==}
     engines: {node: '>=10'}
     hasBin: true
+
+  theme-change@3.0.4:
+    resolution: {integrity: sha512-tPknw142u0yX7M63rXOU1gc2N3cw61iLUtuvh5OKxXTA4/B5SOXxOeS+JT8Ig14SCjs5T2rY41aLFDeTRclV5w==}
 
   throttle-debounce@3.0.1:
     resolution: {integrity: sha512-dTEWWNu6JmeVXY0ZYoPuH5cRIwc0MeGbJwah9KUNYSJwommQpCzTySTpEe8Gs1J23aeWEuAobe4Ag7EHVt/LOg==}
@@ -7804,6 +7810,8 @@ snapshots:
       acorn: 8.16.0
       commander: 2.20.3
       source-map-support: 0.5.21
+
+  theme-change@3.0.4: {}
 
   throttle-debounce@3.0.1: {}
 

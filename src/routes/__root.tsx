@@ -6,22 +6,31 @@ import { DevTools } from "jotai-devtools";
 import "jotai-devtools/styles.css";
 import Auth from "@/features/auth/Auth";
 import DeleteArticleModal from "@/features/article/DeleteArticleModal";
+import AppearanceModal from "@/ui/layout/AppearanceModal";
+import { useEffect } from "react";
+import { themeChange } from "theme-change";
 
 const queryClient = new QueryClient();
 
-const RootLayout = () => (
-  <>
-    <QueryClientProvider client={queryClient}>
-      <Auth>
-        <Outlet />
-        <Toaster position="top-center" richColors duration={2000} gap={28} />
-        <DeleteArticleModal />
-      </Auth>
-      <TanStackRouterDevtools />
-      <DevTools position="bottom-right" />
-    </QueryClientProvider>
-  </>
-);
+const RootLayout = () => {
+  useEffect(() => {
+    themeChange(false);
+  }, []);
+  return (
+    <>
+      <QueryClientProvider client={queryClient}>
+        <Auth>
+          <Outlet />
+          <Toaster position="top-center" richColors duration={2000} gap={28} />
+          <DeleteArticleModal />
+          <AppearanceModal />
+        </Auth>
+        <TanStackRouterDevtools />
+        <DevTools position="bottom-right" />
+      </QueryClientProvider>
+    </>
+  );
+};
 
 export const Route = createRootRoute({
   component: RootLayout,

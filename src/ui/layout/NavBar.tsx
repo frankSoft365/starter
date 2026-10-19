@@ -7,7 +7,7 @@ import { useLocation, useNavigate, useSearch } from "@tanstack/react-router";
 import SignedIn from "../utils/SignedIn";
 import SignedOut from "../utils/SignedOut";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import AvatarDropdown from "../AvatarDropdown";
+import AvatarDropdown from "./AvatarDropdown";
 import { Route as homeRoute } from "../../routes/_app/_home/index";
 import { Route as editorRoute } from "../../routes/_app/_protected/editor";
 import { Route as loginRoute } from "../../routes/login";

@@ -36,6 +36,7 @@
     "react-use": "^17.6.0",
     "sonner": "^2.0.7",
     "tailwindcss": "4.2.2",
+    "theme-change": "^3.0.4",
     "zod": "^4.4.3"
   },
   "devDependencies": {

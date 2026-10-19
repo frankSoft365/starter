@@ -27,32 +27,37 @@ function About() {
         <div className="w-full lg:w-2xl bg-base-100">
           {/* profile readme */}
           {userInfo.about ? (
-            <div className="p-4 font-serif text-xl">
-              Hi! I'm Andy (Andrew when I'm in trouble). I'm a full-time writer
-              and a breathwork facilitator. My mission is to write and breathe a
-              better world into existence. If you'd like to read more of my
-              in-depth work, I wrote a book. It's called The Joy of Breathing.
-            </div>
-          ) : isMyProfile ? (
-            <div className="py-18 px-8 bg-base-200">
-              <div className="md:w-2/3 flex flex-col items-center justify-around gap-4 mx-auto">
-                <p className="text-md font-medium text-center">
-                  Tell the world about yourself
-                </p>
-                <p className="text-xs text-base-content/70 text-center">
-                  Here’s where you can share more about yourself: your history,
-                  work experience, accomplishments, interests, dreams, and more.
-                  You can even add images and use rich text to personalize your
-                  bio.
-                </p>
-                <button className="btn btn-outline mt-2 font-medium rounded-full">
-                  Get started
-                </button>
+            <>
+              <div className="p-4 font-serif text-xl">
+                Hi! I'm Andy (Andrew when I'm in trouble). I'm a full-time
+                writer and a breathwork facilitator. My mission is to write and
+                breathe a better world into existence. If you'd like to read
+                more of my in-depth work, I wrote a book. It's called The Joy of
+                Breathing.
               </div>
-            </div>
+              <div className="w-full h-px bg-gray-200 mt-6 md:mt-12 mb-8"></div>
+            </>
+          ) : isMyProfile ? (
+            <>
+              <div className="py-18 px-8 bg-base-200">
+                <div className="md:w-2/3 flex flex-col items-center justify-around gap-4 mx-auto">
+                  <p className="text-md font-medium text-center">
+                    Tell the world about yourself
+                  </p>
+                  <p className="text-xs text-base-content/70 text-center">
+                    Here’s where you can share more about yourself: your
+                    history, work experience, accomplishments, interests,
+                    dreams, and more. You can even add images and use rich text
+                    to personalize your bio.
+                  </p>
+                  <button className="btn btn-outline mt-2 font-medium rounded-full">
+                    Get started
+                  </button>
+                </div>
+              </div>
+              <div className="w-full h-px bg-gray-200 mt-6 md:mt-12 mb-8"></div>
+            </>
           ) : null}
-
-          <div className="w-full h-px bg-gray-200 mt-6 md:mt-12 mb-8"></div>
 
           {/* info of account createAt, num of followers and followings */}
           <div>
