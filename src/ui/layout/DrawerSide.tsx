@@ -13,6 +13,7 @@ import { Route as profileRoute } from "../../routes/_app/_protected/profile/$use
 import { useTranslation } from "react-i18next";
 import { useAtomValue } from "jotai";
 import { isLoadingAtom, userAtom } from "@/atoms/user";
+import { themeAtom } from "@/atoms/theme";
 import { Route as libraryRoute } from "@/routes/_app/_protected/me/lists/index";
 
 export default function DrawerSide({
@@ -24,6 +25,7 @@ export default function DrawerSide({
   const navigate = useNavigate();
   const location = useLocation();
   const user = useAtomValue(userAtom);
+  const theme = useAtomValue(themeAtom);
   // user Auth info loading
   const isLoading = useAtomValue(isLoadingAtom);
   const isHomeRoute = location.pathname === homeRoute.to;
@@ -38,7 +40,7 @@ export default function DrawerSide({
   function ActiveIndicator({ isActive }: { isActive: boolean }) {
     return (
       <div
-        className={`w-0.5 h-6 mr-0.5 p-0 ${isActive ? "bg-black dark:bg-white" : "opacity-0"} shadow-2xl`}
+        className={`w-0.5 h-6 mr-0.5 p-0 ${isActive ? (theme === "dracula" ? "bg-white" : "bg-black") : "opacity-0"} shadow-2xl`}
       ></div>
     );
   }
