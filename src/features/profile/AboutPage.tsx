@@ -61,7 +61,7 @@ export default function AboutPage() {
       {userInfoStatus === "pending" && <Loading />}
       {userInfoStatus === "error" && error.message}
       {userInfoStatus === "success" && (
-        <div className="w-full lg:w-2xl bg-base-100">
+        <div className="w-full bg-base-100">
           {userInfo.about || isFromGetStarted ? (
             <div className="mb-4 mt-2">
               <AboutEditorArea

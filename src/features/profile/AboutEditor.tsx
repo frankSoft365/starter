@@ -11,7 +11,24 @@ import "@blocknote/mantine/style.css";
 import { useAtomValue } from "jotai";
 import { themeAtom } from "@/atoms/theme";
 
-const CustomMenuItems = ["Paragraph", "Image"];
+const CustomMenuItems = [
+  "Paragraph",
+  "Heading 1",
+  "Heading 2",
+  "Heading 3",
+  "Heading 4",
+  "Heading 5",
+  "Heading 6",
+  "Toggle Heading 1",
+  "Toggle Heading 2",
+  "Toggle Heading 3",
+  "Quote",
+  "Toggle List",
+  "Bullet List",
+  "Numbered List",
+  "Check List",
+  "Image",
+];
 
 // List containing all default Slash Menu Items, as well as our custom one.
 const getCustomSlashMenuItems = (

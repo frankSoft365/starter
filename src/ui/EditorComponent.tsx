@@ -19,7 +19,6 @@ export default function EditorComponent({
     <div className={editable ? "article-editor" : "article-readonly"}>
       <BlockNoteView
         editor={editor}
-        slashMenu={false}
         onChange={onChange}
         editable={editable}
         theme={theme === "dracula" ? "dark" : "light"}
