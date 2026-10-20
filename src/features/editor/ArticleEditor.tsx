@@ -11,9 +11,12 @@ import { buildArticlePreview, isEditorEmpty } from "../../utils/editorHelper";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as submissionRoute } from "../../routes/_app/_protected/submission";
 import EditorComponent from "../../ui/EditorComponent";
+import { EDITOR_DEFAULT } from "@/constants/draft";
+
+const DRAFT_KEY = "draft";
 
 export default function ArticleEditor() {
-  const { draft, setDraft, saveDraft } = useDraft();
+  const { draft, setDraft, saveDraft } = useDraft(DRAFT_KEY, EDITOR_DEFAULT);
   const { editor, handleEditorChange, resetEditor } = useEditor(
     draft,
     saveDraft,

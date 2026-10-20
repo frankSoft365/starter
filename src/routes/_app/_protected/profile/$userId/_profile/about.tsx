@@ -1,8 +1,8 @@
-import About from '@/features/profile/About'
-import { createFileRoute } from '@tanstack/react-router'
+import AboutPage from "@/features/profile/AboutPage";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  '/_app/_protected/profile/$userId/_profile/about',
+  "/_app/_protected/profile/$userId/_profile/about",
 )({
-  component: About,
-})
+  component: AboutPage,
+});

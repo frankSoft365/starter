@@ -3,6 +3,7 @@ import type {
   UserAboutQuery,
   UserProfileQuery,
   UserResult,
+  UserUpdateAboutRequest,
   UserUpdateRequest,
   UserVO,
 } from "../types/user";
@@ -40,5 +41,12 @@ export async function getUserProfile(userProfileQuery: UserProfileQuery) {
   return request.post<UserProfileQuery, UserResult>(
     "/user/profile/container",
     userProfileQuery,
+  );
+}
+
+export async function userUpdateAbout(req: UserUpdateAboutRequest) {
+  return request.post<UserUpdateAboutRequest, void>(
+    "/user/profile/about/update",
+    req,
   );
 }

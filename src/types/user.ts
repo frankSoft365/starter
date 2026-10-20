@@ -62,3 +62,7 @@ export type UserInfo = {
 export type UserResult = {
   userResult: UserInfo;
 };
+
+export type UserUpdateAboutRequest = {
+  about: string;
+};

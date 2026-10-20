@@ -22,7 +22,8 @@ export default function ProfileTab() {
   ];
 
   return (
-    <div role="tablist" className="tabs tabs-border w-full">
+    <div role="tablist" className="tabs relative tabs-border w-full">
+      <div className="w-full h-px bg-gray-200 absolute bottom-0"></div>
       {profileTabMap.map((item, index) => {
         return (
           <a

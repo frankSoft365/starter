@@ -1,10 +1,11 @@
 import { APPEARANCE_MODAL_ID } from "@/constants/modal";
+import { themeAtom } from "@/atoms/theme";
 import { CheckIcon, MoonIcon, SunIcon } from "@phosphor-icons/react";
-import { useState } from "react";
+import { useAtom } from "jotai";
 
 export default function AppearanceModal() {
-  const initialTheme = localStorage.getItem("theme");
-  const [theme, setTheme] = useState<string | null>(initialTheme);
+  const [theme, setTheme] = useAtom(themeAtom);
+  const isLightThemeSelected = theme === "light" || theme === null;
 
   return (
     <dialog id={APPEARANCE_MODAL_ID} className="modal">
@@ -29,14 +30,14 @@ export default function AppearanceModal() {
         <div className="w-full flex flex-col">
           <button
             onClick={() => setTheme("light")}
-            className={`btn rounded-b-none border-b-0  btn-xl font-normal text-sm justify-between ${theme === "light" ? "bg-base-300" : "bg-base-100"}`}
+            className={`btn rounded-b-none border-b-0 btn-xl font-normal text-sm justify-between ${isLightThemeSelected ? "bg-base-300" : "bg-base-100"}`}
             data-set-theme="light"
           >
             <span className="flex items-center gap-4">
               <SunIcon size={18} />
               Light
             </span>
-            {theme === "light" && <CheckIcon size={24} />}
+            {isLightThemeSelected && <CheckIcon size={24} />}
           </button>
           <button
             onClick={() => setTheme("dracula")}
@@ -46,7 +47,7 @@ export default function AppearanceModal() {
           >
             <span className="flex items-center gap-4">
               <MoonIcon size={18} />
-              Light
+              Dark
             </span>
             {theme === "dracula" && <CheckIcon size={24} />}
           </button>
