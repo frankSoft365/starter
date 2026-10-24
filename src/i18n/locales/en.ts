@@ -15,6 +15,7 @@ export default {
     done: "Done",
     resetToCenter: "Reset to center",
     save: "Save",
+    edit: "Edit",
     favorite: "Save",
     help: "Help",
     settings: "Settings",
@@ -45,6 +46,11 @@ export default {
     pinArticle: "Pin this article to your profile",
     unpinArticle: "Unpin this article from your profile",
     deleteArticle: "Delete story",
+
+    library: "Library",
+    followingNav: "Following",
+    clearHistory: "Clear history",
+    confirmClear: "Confirm and clear",
   },
   badge: {
     author: "Author",
@@ -80,8 +86,15 @@ export default {
     list: {
       loadFailed: "Failed to load article list.",
       empty: "Article not found.",
+      noMore: "No more articles.",
     },
     coverAlt: "cover image of article",
+    pinned: "Pinned",
+    toast: {
+      pinned: "This story has been pinned to your profile's homepage.",
+      unpinned: "This story has been unpinned from your profile's homepage.",
+      pinError: "An error occurred while pinning the article.",
+    },
     collect: {
       emptyList: "You have no collection lists yet. Create one!",
     },
@@ -92,6 +105,66 @@ export default {
     },
     notificationBell: {
       tooltip: "Notifications",
+    },
+  },
+  library: {
+    title: "Your library",
+    tab: {
+      yourLists: "Your lists",
+      readingHistory: "Reading history",
+    },
+  },
+  readingHistory: {
+    clearHint: "You can clear your reading history for a fresh start.",
+    clearTitle: "Clear reading history",
+    clearDescription:
+      "The stories that are cleared will no longer influence the recommendations that you receive in your feed or email digest",
+    empty: "No reading history yet.",
+    toast: {
+      cleared: "Reading history successfully cleared.",
+      clearError: "An error occurred while clearing the reading history.",
+      deleteError: "An error occurred while deleting the reading history.",
+    },
+  },
+  activity: {
+    action: {
+      clapped: "Clapped",
+      responded: "Responded",
+    },
+    filter: {
+      all: "All",
+      claps: "Claps",
+      responses: "Responses",
+    },
+  },
+  appearance: {
+    title: "Appearance",
+    betaTip:
+      "This feature is still in beta! You can read all stories across Medium in dark mode, but you might run into an occasional area on Medium that is still under dark mode construction.",
+    light: "Light",
+    dark: "Dark",
+  },
+  repost: {
+    you: "You",
+    reposted: "reposted",
+    viewReposts: "View reposts",
+    notePlaceholder: "Add a note...",
+    removeNoteTitle: "Remove your note?",
+    removeNoteDesc: "Your repost will stay, but the note will be deleted.",
+    deleteRepostTitle: "Delete repost with note",
+    deleteRepostDesc:
+      "Your repost with a note will be permanently deleted and removed from your profile. This action is not reversible.",
+    toast: {
+      reposted: "Article reposted.",
+      repostError: "An error occurred while reposting the article.",
+      deleted: "Repost deleted.",
+      deleteError: "An error occurred while deleting the repost.",
+      noteAdded: "Note added to repost.",
+      noteAddError: "An error occurred while adding note to repost.",
+      noteUpdated: "Note updated for repost.",
+      noteUpdateError: "An error occurred while updating note for repost.",
+      noteRemoved: "Note removed from repost.",
+      noteRemoveError: "An error occurred while deleting note from repost.",
     },
   },
   submission: {
@@ -237,6 +310,12 @@ export default {
     followersTitle: "Followers",
     followingTitle: "Following",
     memberSince: "Aedium member since {{date}}",
+    about: {
+      placeholder: "Tell the world about yourself",
+      getStartedDesc:
+        "Here’s where you can share more about yourself: your history, work experience, accomplishments, interests, dreams, and more. You can even add images and use rich text to personalize your bio.",
+      getStartedAction: "Get started",
+    },
     followList: {
       emptyFollowers: "No followers yet.",
       emptyFollowing: "Not following anyone yet.",

@@ -8,7 +8,7 @@ import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/user";
 import { useState } from "react";
 import { useCreateBlockNote } from "@blocknote/react";
-import { en } from "@blocknote/core/locales";
+import { en, zh } from "@blocknote/core/locales";
 import { uploadFile } from "../editor/editor";
 import { ABOUT_EDITOR_INIT } from "@/constants/draft";
 import AboutEditorArea from "./AboutEditorArea";
@@ -21,7 +21,7 @@ export default function AboutPage() {
   const currentUser = useAtomValue(userAtom);
   const isMyProfile = (currentUser && currentUser.id === userId) ?? false;
 
-  const locale = en;
+  const locale = i18n.resolvedLanguage?.startsWith("zh") ? zh : en;
   const editor = useCreateBlockNote({
     autofocus: "end",
     initialContent: ABOUT_EDITOR_INIT,
@@ -29,7 +29,7 @@ export default function AboutPage() {
       ...locale,
       placeholders: {
         ...locale.placeholders,
-        default: "Tell the world about yourself",
+        default: t("profile.about.placeholder"),
       },
     },
     uploadFile: uploadFile,
@@ -79,19 +79,16 @@ export default function AboutPage() {
                 <div className="mt-8 mb-6 md:mb-10 py-18 px-8 bg-base-200">
                   <div className="md:w-2/3 flex flex-col items-center justify-around gap-4 mx-auto">
                     <p className="text-md font-medium text-center">
-                      Tell the world about yourself
+                      {t("profile.about.placeholder")}
                     </p>
                     <p className="text-xs text-base-content/90 text-center">
-                      Here’s where you can share more about yourself: your
-                      history, work experience, accomplishments, interests,
-                      dreams, and more. You can even add images and use rich
-                      text to personalize your bio.
+                      {t("profile.about.getStartedDesc")}
                     </p>
                     <button
                       onClick={GoToEditorAreaFromGetStartedCard}
                       className="btn btn-outline mt-2 font-medium rounded-full"
                     >
-                      Get started
+                      {t("profile.about.getStartedAction")}
                     </button>
                   </div>
                 </div>

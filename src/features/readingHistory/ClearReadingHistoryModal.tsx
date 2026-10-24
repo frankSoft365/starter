@@ -1,7 +1,9 @@
 import { CLEAR_READING_HISTORY_MODAL_ID } from "@/constants/modal";
+import { useTranslation } from "react-i18next";
 import { useClearReadingHistory } from "./readingHistory";
 
 export default function ClearReadingHistoryModal() {
+  const { t } = useTranslation();
   const { isClearing, handleClear } = useClearReadingHistory();
 
   function handleConfirm() {
@@ -29,11 +31,10 @@ export default function ClearReadingHistoryModal() {
           </button>
         </form>
         <h1 className="text-center font-bold text-xl md:text-3xl">
-          Clear reading history
+          {t("readingHistory.clearTitle")}
         </h1>
         <p className="pt-2 pb-3 text-sm md:text-base text-base-content/60 text-center max-w-9/12">
-          The stories that are cleared will no longer influence the
-          recommendations that you receive in your feed or email digest
+          {t("readingHistory.clearDescription")}
         </p>
         <div className="modal-action justify-center items-center gap-2 md:gap-4">
           <form method="dialog">
@@ -42,7 +43,7 @@ export default function ClearReadingHistoryModal() {
               disabled={isClearing}
               className="btn btn-outline btn-sm md:btn-md rounded-full"
             >
-              Cancel
+              {t("btn.cancel")}
             </button>
           </form>
           <button
@@ -51,7 +52,7 @@ export default function ClearReadingHistoryModal() {
             className="btn btn-error btn-sm md:btn-md rounded-full text-base-100"
           >
             {isClearing && <span className="loading loading-spinner"></span>}
-            {!isClearing && "Confirm and clear"}
+            {!isClearing && t("btn.confirmClear")}
           </button>
         </div>
       </div>

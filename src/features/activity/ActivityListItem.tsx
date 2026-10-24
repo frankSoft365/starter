@@ -14,6 +14,7 @@ import { useRouter } from "@tanstack/react-router";
 import { Route as articleDetailRoute } from "@/routes/_app/article.$articleId";
 import ArticleListItem from "../home/ArticleListItem";
 import type { UserInfo } from "@/types/user";
+import { useTranslation } from "react-i18next";
 
 export default function ActivityListItem({
   profileUser,
@@ -25,6 +26,7 @@ export default function ActivityListItem({
   articleResultStatus?: "error" | "success" | "pending";
 }) {
   const { handleOverflow } = useOverflowHelper();
+  const { t } = useTranslation();
 
   const responsePost = userActivity.responsePost;
   const router = useRouter();
@@ -71,7 +73,7 @@ export default function ActivityListItem({
           <span>{profileUser.username}</span>
           <HandsClappingIcon size={16} weight="duotone" />
           <p>
-            <span>Clapped</span>
+            <span>{t("activity.action.clapped")}</span>
             <span className="mx-1">·</span>
             <span>{getPublishDate(new Date(userActivity.occurredAt))}</span>
           </p>
@@ -94,7 +96,7 @@ export default function ActivityListItem({
             <p>{responsePost.creator?.username}</p>
             <ChatCircleIcon size={16} weight="duotone" />
             <p>
-              <span>Responded</span>
+              <span>{t("activity.action.responded")}</span>
               <span className="mx-1">·</span>
               <span>{getPublishDate(new Date(userActivity.occurredAt))}</span>
             </p>

@@ -113,7 +113,7 @@ export default function DrawerSide({
                     size={24}
                     weight={isLibraryRoute ? "fill" : undefined}
                   />
-                  <span>Library</span>
+                  <span>{t("btn.library")}</span>
                 </button>
               </li>
               {/* List item : user profile */}
@@ -144,7 +144,7 @@ export default function DrawerSide({
                 <ActiveIndicator isActive={isLibraryRoute} />
                 <button className={`grow ${""}`} onClick={undefined}>
                   <UsersIcon size={24} weight={undefined} />
-                  <span>Following</span>
+                  <span>{t("btn.followingNav")}</span>
                 </button>
               </li>
             </>

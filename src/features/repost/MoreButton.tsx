@@ -60,7 +60,7 @@ export default function MoreButton({
             }}
           >
             <ArrowsClockwiseIcon size={24} />
-            {isReposted ? "Undo repost" : "Repost"}
+            {isReposted ? t("btn.undoRepost") : t("btn.repost")}
           </button>
         </li>
         
@@ -88,13 +88,13 @@ export default function MoreButton({
               <li>
                 <button>
                   <BookmarkIcon size={24} weight="light" />
-                  Save article
+                  {t("btn.saveArticle")}
                 </button>
               </li>
               <li>
                 <button>
                   <UsersIcon size={24} weight="light" />
-                  Unfollow @Franksoft
+                  {t("btn.unfollowUser", { username: "Franksoft" })}
                 </button>
               </li>
             </>
@@ -111,7 +111,7 @@ export default function MoreButton({
                   )?.showModal();
                 }}
               >
-                Add a note
+                {t("btn.addNote")}
               </button>
             </li>
           )}
@@ -126,7 +126,7 @@ export default function MoreButton({
                   )?.showModal();
                 }}
               >
-                Edit note
+                {t("btn.editNote")}
               </button>
             </li>
           )}
@@ -141,7 +141,7 @@ export default function MoreButton({
                   )?.showModal();
                 }}
               >
-                {"Remove note"}
+                {t("btn.removeNote")}
               </button>
             </li>
           )}
@@ -156,7 +156,7 @@ export default function MoreButton({
               }}
               className="text-red-600"
             >
-              Delete repost
+              {t("btn.deleteRepost")}
             </button>
           </li>
         </CurrentUser>

@@ -23,6 +23,7 @@ import {
 } from "@tanstack/react-query";
 import { type Dispatch, type SetStateAction } from "react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export function getRepostNoteStatus(repostState: RepostState) {
   const hasReposted = repostState.hasReposted;
@@ -62,6 +63,7 @@ export function useRepostAnArticle(
   >,
 ) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const repostStateKey = ["get-repost-state", articleId];
   const repostCountKey = ["get-batch-repostCount", [articleId]];
 
@@ -112,7 +114,7 @@ export function useRepostAnArticle(
       return { previousRepostState, previousRepostCount };
     },
     onSuccess() {
-      toast.success("Article reposted.");
+      toast.success(t("repost.toast.reposted"));
     },
     onError: (error, _variables, context) => {
       if (context?.previousRepostState) {
@@ -132,9 +134,7 @@ export function useRepostAnArticle(
       }
 
       setBtnState("idle");
-      toast.error(
-        error.message || "An error occurred while reposting the article.",
-      );
+      toast.error(error.message || t("repost.toast.repostError"));
     },
   });
 
@@ -152,6 +152,7 @@ export function useOptimisticDeleteRepost(
   const repostStateKey = ["get-repost-state", articleId];
   const repostCountKey = ["get-batch-repostCount", [articleId]];
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const { mutate: handleDelete, isPending: isDeleting } = useMutation({
     mutationKey: ["optimistic-delete-repost", articleId],
     mutationFn: async () => {
@@ -200,7 +201,7 @@ export function useOptimisticDeleteRepost(
       return { previousRepostState, previousRepostCount };
     },
     onSuccess() {
-      toast.success("repost deleted.");
+      toast.success(t("repost.toast.deleted"));
     },
     onError: (error, _variables, context) => {
       if (context?.previousRepostState) {
@@ -221,9 +222,7 @@ export function useOptimisticDeleteRepost(
 
       setBtnState("reposted");
 
-      toast.error(
-        error.message || "An error occurred while deleting the repost.",
-      );
+      toast.error(error.message || t("repost.toast.deleteError"));
     },
   });
 
@@ -234,6 +233,7 @@ export function useOptimisticDeleteRepost(
 }
 
 export function useDeleteRepost(articleId: string) {
+  const { t } = useTranslation();
   const { mutate: handleDelete, isPending: isDeleting } = useMutation({
     mutationKey: ["delete-repost", articleId],
     mutationFn: async () => {
@@ -241,12 +241,10 @@ export function useDeleteRepost(articleId: string) {
       await deleteRepost({ params: deleteRequest });
     },
     onSuccess() {
-      toast.success("repost deleted.");
+      toast.success(t("repost.toast.deleted"));
     },
     onError: (error) => {
-      toast.error(
-        error.message || "An error occurred while deleting the repost.",
-      );
+      toast.error(error.message || t("repost.toast.deleteError"));
     },
   });
 
@@ -263,6 +261,7 @@ export function useRepostAnArticleWithNote(
   >,
 ) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const repostStateKey = ["get-repost-state", articleId];
   const repostCountKey = ["get-batch-repostCount", [articleId]];
   const { mutate: handleRepostWithNote, isPending: isReposting } = useMutation({
@@ -282,13 +281,11 @@ export function useRepostAnArticleWithNote(
       setBtnState?.("reposted");
       queryClient.invalidateQueries({ queryKey: repostStateKey });
       queryClient.invalidateQueries({ queryKey: repostCountKey });
-      toast.success("Article reposted.");
+      toast.success(t("repost.toast.reposted"));
     },
     onError: (error) => {
       setBtnState?.("idle");
-      toast.error(
-        error.message || "An error occurred while reposting the article.",
-      );
+      toast.error(error.message || t("repost.toast.repostError"));
     },
   });
 
@@ -299,6 +296,7 @@ export function useRepostAnArticleWithNote(
 }
 
 export function useAddNote(articleId: string) {
+  const { t } = useTranslation();
   const { mutate: handleAddNote, isPending: isSaving } = useMutation({
     mutationKey: ["add-note-to-repost", articleId],
     mutationFn: async ({ note }: { note: string }) => {
@@ -306,12 +304,10 @@ export function useAddNote(articleId: string) {
       await addNote({ params: addNoteRequest });
     },
     onSuccess() {
-      toast.success("Note added to repost.");
+      toast.success(t("repost.toast.noteAdded"));
     },
     onError: (error) => {
-      toast.error(
-        error.message || "An error occurred while adding note to repost.",
-      );
+      toast.error(error.message || t("repost.toast.noteAddError"));
     },
   });
 
@@ -322,6 +318,7 @@ export function useAddNote(articleId: string) {
 }
 
 export function useEditNote(articleId: string) {
+  const { t } = useTranslation();
   const { mutate: handleEditNote, isPending: isEditing } = useMutation({
     mutationKey: ["edit-note-for-repost", articleId],
     mutationFn: async ({ note }: { note: string }) => {
@@ -329,12 +326,10 @@ export function useEditNote(articleId: string) {
       await editNote({ params: editNoteRequest });
     },
     onSuccess() {
-      toast.success("Note updated for repost.");
+      toast.success(t("repost.toast.noteUpdated"));
     },
     onError: (error) => {
-      toast.error(
-        error.message || "An error occurred while updating note for repost.",
-      );
+      toast.error(error.message || t("repost.toast.noteUpdateError"));
     },
   });
 
@@ -345,6 +340,7 @@ export function useEditNote(articleId: string) {
 }
 
 export function useRemoveNote(articleId: string) {
+  const { t } = useTranslation();
   const { mutate: handleRemoveNote, isPending: isRemoving } = useMutation({
     mutationKey: ["remove-note-from-repost", articleId],
     mutationFn: async () => {
@@ -352,12 +348,10 @@ export function useRemoveNote(articleId: string) {
       await removeNote({ params: removeNoteRequest });
     },
     onSuccess() {
-      toast.success("Note removed from repost.");
+      toast.success(t("repost.toast.noteRemoved"));
     },
     onError: (error) => {
-      toast.error(
-        error.message || "An error occurred while deleting note from repost.",
-      );
+      toast.error(error.message || t("repost.toast.noteRemoveError"));
     },
   });
 

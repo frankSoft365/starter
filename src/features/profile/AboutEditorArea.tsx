@@ -4,6 +4,7 @@ import { ABOUT_EDITOR_INIT } from "@/constants/draft";
 import { buildArticleOriginal, isEditorEmpty } from "@/utils/editorHelper";
 import { useUserUpdateAbout } from "./profile";
 import { useAtomValue } from "jotai";
+import { useTranslation } from "react-i18next";
 import { userAtom } from "@/atoms/user";
 
 export default function AboutEditorArea({
@@ -22,6 +23,7 @@ export default function AboutEditorArea({
   originalAbout: string;
 }) {
   const currentUser = useAtomValue(userAtom);
+  const { t } = useTranslation();
   const isMyProfile = (currentUser && currentUser.id === userId) ?? false;
   const { handleUpdateAbout, isSaving } = useUserUpdateAbout(userId);
   function leaveEditorArea() {
@@ -85,7 +87,7 @@ export default function AboutEditorArea({
             onClick={handleClickEdit}
             className="btn btn-outline rounded-full"
           >
-            Edit
+            {t("btn.edit")}
           </button>
         </div>
       )}
@@ -96,14 +98,14 @@ export default function AboutEditorArea({
               onClick={() => handleClickCancel(originalAbout)}
               className="btn btn-outline rounded-full"
             >
-              Cancel
+              {t("btn.cancel")}
             </button>
             <button
               disabled={isSaving}
               onClick={handleClickSave}
               className="btn ml-2 btn-neutral rounded-full"
             >
-              Save
+              {t("btn.save")}
             </button>
           </div>
         </div>

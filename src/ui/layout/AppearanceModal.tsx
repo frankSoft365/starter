@@ -2,9 +2,11 @@ import { APPEARANCE_MODAL_ID } from "@/constants/modal";
 import { themeAtom } from "@/atoms/theme";
 import { CheckIcon, MoonIcon, SunIcon } from "@phosphor-icons/react";
 import { useAtom } from "jotai";
+import { useTranslation } from "react-i18next";
 
 export default function AppearanceModal() {
   const [theme, setTheme] = useAtom(themeAtom);
+  const { t } = useTranslation();
   const isLightThemeSelected = theme === "light" || theme === null;
 
   return (
@@ -17,15 +19,13 @@ export default function AppearanceModal() {
           </button>
         </form>
         <h1 className="text-center font-medium text-xl">
-          Appearance
+          {t("appearance.title")}
           <div className="badge badge-xs ml-2 bg-base-300 badge-outline">
             Beta
           </div>
         </h1>
         <p className="text-sm text-center mt-2 mb-4">
-          This feature is still in beta! You can read all stories across Medium
-          in dark mode, but you might run into an occasional area on Medium that
-          is still under dark mode construction.
+          {t("appearance.betaTip")}
         </p>
         <div className="w-full flex flex-col">
           <button
@@ -35,7 +35,7 @@ export default function AppearanceModal() {
           >
             <span className="flex items-center gap-4">
               <SunIcon size={18} />
-              Light
+              {t("appearance.light")}
             </span>
             {isLightThemeSelected && <CheckIcon size={24} />}
           </button>
@@ -47,7 +47,7 @@ export default function AppearanceModal() {
           >
             <span className="flex items-center gap-4">
               <MoonIcon size={18} />
-              Dark
+              {t("appearance.dark")}
             </span>
             {theme === "dracula" && <CheckIcon size={24} />}
           </button>
@@ -57,7 +57,7 @@ export default function AppearanceModal() {
           <form method="dialog">
             {/* if there is a button, it will close the modal */}
             <button className="btn btn-neutral btn-sm md:btn-md rounded-full">
-              Done
+              {t("btn.done")}
             </button>
           </form>
         </div>

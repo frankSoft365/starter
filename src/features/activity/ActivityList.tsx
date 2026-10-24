@@ -71,9 +71,9 @@ export default function ActivityList() {
         }
         className="select mb-4 w-28 rounded-full"
       >
-        <option value={"all"}>All</option>
-        <option value={"claps"}>Claps</option>
-        <option value={"responses"}>Responses</option>
+        <option value={"all"}>{t("activity.filter.all")}</option>
+        <option value={"claps"}>{t("activity.filter.claps")}</option>
+        <option value={"responses"}>{t("activity.filter.responses")}</option>
       </select>
       {status === "pending" && (
         <div className="w-full p-6 m-auto flex items-center justify-center gap-2">

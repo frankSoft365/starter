@@ -3,9 +3,11 @@ import { DELETE_ARTICLE_MODAL_ID } from "@/constants/modal";
 import { useAtom } from "jotai";
 import { useDeleteArticle } from "./article";
 import { useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { Route as homeRoute } from "@/routes/_app/_home/index";
 
 export default function DeleteArticleModal() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [options, setOptions] = useAtom(deleteArticleModalAtom);
   const { isDeleting, handleDelete } = useDeleteArticle();
@@ -62,7 +64,7 @@ export default function DeleteArticleModal() {
               disabled={isDeleting}
               className="btn btn-outline btn-sm md:btn-md rounded-full"
             >
-              Cancel
+              {t("btn.cancel")}
             </button>
           </form>
           <button

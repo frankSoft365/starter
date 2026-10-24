@@ -14,6 +14,7 @@ import {
   type InfiniteData,
 } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import type {
   ArticleDetail,
   ArticlePublishPreview,
@@ -280,6 +281,7 @@ export function useLikeArticle(articleId: string) {
 
 export function useArticleSetPinnedByCreatorAt(authorId: string) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const { mutate: handlePinArticle, isPending: isPinning } = useMutation({
     mutationKey: ["article-set-pinned-by-creator-at"],
     mutationFn: async ({
@@ -322,15 +324,11 @@ export function useArticleSetPinnedByCreatorAt(authorId: string) {
         },
       );
       toast.success(
-        isPinned
-          ? "This story has been pinned to your profile's homepage."
-          : "This story has been unpinned from your profile's homepage",
+        isPinned ? t("article.toast.pinned") : t("article.toast.unpinned"),
       );
     },
     onError: (error) => {
-      toast.error(
-        error.message || "An error occurred while pinning the article.",
-      );
+      toast.error(error.message || t("article.toast.pinError"));
     },
   });
 

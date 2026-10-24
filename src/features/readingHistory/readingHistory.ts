@@ -15,6 +15,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 export function useSaveReadingHistory(articleId: string) {
@@ -62,18 +63,16 @@ export function useGetInfiniteReadingHistoryList() {
 
 export function useClearReadingHistory() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const { mutate: handleClear, isPending: isClearing } = useMutation({
     mutationKey: ["clear-reading-history"],
     mutationFn: clearAllReadingHistory,
     onSuccess() {
-      toast.success("Reading history successfully cleared.");
+      toast.success(t("readingHistory.toast.cleared"));
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
     },
     onError: (error) => {
-      toast.error(
-        error.message ||
-          "An error occurred while clearing the reading history.",
-      );
+      toast.error(error.message || t("readingHistory.toast.clearError"));
     },
   });
 
@@ -85,6 +84,7 @@ export function useClearReadingHistory() {
 
 export function useDeleteHistoryItem() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const { mutate: handleDelete, isPending: isDeleting } = useMutation({
     mutationKey: ["delete-reading-history-item"],
     mutationFn: async ({ articleId }: { articleId: string }) => {
@@ -95,9 +95,7 @@ export function useDeleteHistoryItem() {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
     },
     onError: (error) => {
-      toast.error(
-        error.message || "An error occurred while publishing the article.",
-      );
+      toast.error(error.message || t("readingHistory.toast.deleteError"));
     },
   });
 

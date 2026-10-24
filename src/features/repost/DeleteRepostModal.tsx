@@ -1,6 +1,7 @@
 import { DELETE_REPOST_MODAL_ID } from "@/constants/modal";
 import { useDeleteRepost } from "./repost";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 export default function DeleteRepostModal({
   articleId,
@@ -9,6 +10,7 @@ export default function DeleteRepostModal({
   articleId: string;
   userId: string;
 }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const MODAL_ID = `${DELETE_REPOST_MODAL_ID}_${articleId}`;
   function handleModalClose() {}
@@ -30,7 +32,7 @@ export default function DeleteRepostModal({
     <dialog id={MODAL_ID} className="modal" onClose={handleModalClose}>
       <div className="modal-box w-11/12 md:max-w-xl flex flex-col gap-2">
         <div className="flex w-full items-center justify-between">
-          <h1 className="font-bold text-xl">Delete repost with note</h1>
+          <h1 className="font-bold text-xl">{t("repost.deleteRepostTitle")}</h1>
           <form method="dialog">
             {/* if there is a button in form, it will close the modal */}
             <button
@@ -43,8 +45,7 @@ export default function DeleteRepostModal({
         </div>
 
         <p className="text-sm md:text-md text-base-content">
-          Your repost with a note will be permanently deleted and removed from
-          your profile. This action is not reversible.
+          {t("repost.deleteRepostDesc")}
         </p>
         <div className="modal-action justify-end items-center gap-2">
           <form method="dialog">
@@ -53,7 +54,7 @@ export default function DeleteRepostModal({
               disabled={isDeleting}
               className="btn btn-outline btn-sm md:btn-md rounded-full"
             >
-              Cancel
+              {t("btn.cancel")}
             </button>
           </form>
           <button
@@ -62,7 +63,7 @@ export default function DeleteRepostModal({
             className="btn btn-error btn-sm md:btn-md rounded-full text-base-100"
           >
             {isDeleting && <span className="loading loading-spinner"></span>}
-            {!isDeleting && "Delete"}
+            {!isDeleting && t("btn.delete")}
           </button>
         </div>
       </div>

@@ -62,13 +62,13 @@ export default function ReadingHistoryList() {
         data.pages.flatMap((page) => page.items).length > 0 && (
           <div className="w-full bg-base-200 flex gap-4 items-center justify-between py-6 px-5 my-6">
             <p className="text-xs md:text-sm">
-              You can clear your reading history for a fresh start.
+              {t("readingHistory.clearHint")}
             </p>
             <button
               onClick={clickClearReadingHistory}
               className="btn btn-xs md:btn-sm btn-error rounded-full text-base-300"
             >
-              Clear history
+              {t("btn.clearHistory")}
             </button>
           </div>
         )}
@@ -123,12 +123,14 @@ export default function ReadingHistoryList() {
                 <li className="list-row">{t("common.loadingMore")}</li>
               )}
               {!hasNextPage && (
-                <li className="list-row text-center h-24 p-5">没有更多了！</li>
+                <li className="list-row text-center h-24 p-5">
+                  {t("article.list.noMore")}
+                </li>
               )}
             </ul>
           ) : (
             <div className="h-48 text-base-content/60 text-center p-5">
-              没有更多了！
+              {t("readingHistory.empty")}
             </div>
           ))}
       </div>

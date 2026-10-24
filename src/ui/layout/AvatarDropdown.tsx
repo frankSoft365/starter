@@ -134,7 +134,7 @@ export default function AvatarDropdown() {
           >
             <a className="flex justify-start">
               <ToggleLeftIcon size={24} weight="duotone" />
-              Appearance
+              {t("appearance.title")}
               <div className="badge badge-xs bg-base-300 badge-outline">
                 Beta
               </div>

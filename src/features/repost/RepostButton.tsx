@@ -68,7 +68,7 @@ export default function RepostButton({
             {isLoading ? (
               <span className="text-sm text-base-content/60">--</span>
             ) : (
-              <div className="lg:tooltip" data-tip="View reposts">
+              <div className="lg:tooltip" data-tip={t("repost.viewReposts")}>
                 <span className="text-sm text-base-content/60 cursor-pointer">
                   {repostDisplayCount}
                 </span>
@@ -182,7 +182,7 @@ export default function RepostButton({
                   }}
                 >
                   <ArrowsClockwiseIcon size={24} />
-                  {isReposted ? "Undo repost" : "Repost"}
+                  {isReposted ? t("btn.undoRepost") : t("btn.repost")}
                 </button>
               </li>
               {repostNoteStatus.isRepostWithNote && (
@@ -197,7 +197,7 @@ export default function RepostButton({
                     }}
                   >
                     <NotePencilIcon size={24} />
-                    Repost with a note
+                    {t("btn.repostWithNote")}
                   </button>
                 </li>
               )}
@@ -213,7 +213,7 @@ export default function RepostButton({
                     }}
                   >
                     <NotePencilIcon size={24} />
-                    Add a note
+                    {t("btn.addNote")}
                   </button>
                 </li>
               )}
@@ -229,7 +229,7 @@ export default function RepostButton({
                     }}
                   >
                     <NotePencilIcon size={24} />
-                    {"Edit note"}
+                    {t("btn.editNote")}
                   </button>
                 </li>
               )}
@@ -245,7 +245,7 @@ export default function RepostButton({
                     }}
                   >
                     <XCircleIcon size={24} />
-                    {"Remove note"}
+                    {t("btn.removeNote")}
                   </button>
                 </li>
               )}
@@ -254,7 +254,7 @@ export default function RepostButton({
           {isLoading ? (
             <span className="text-sm text-base-content/60">--</span>
           ) : (
-            <div className="lg:tooltip" data-tip="View reposts">
+            <div className="lg:tooltip" data-tip={t("repost.viewReposts")}>
               <span
                 onClick={() => {
                   setShowSignal((pre) => pre + 1);

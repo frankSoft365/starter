@@ -121,7 +121,7 @@ export default function ArticleListItem({
                 Number(article.pinnedByCreatorAt) !== 0 && (
                   <div className="inline-flex gap-2 items-center mt-2 md:mt-4 mb-4 md:mb-6">
                     <PushPinIcon size={16} />
-                    <span className="text-sm text-base-content/70">Pinned</span>
+                    <span className="text-sm text-base-content/70">{t("article.pinned")}</span>
                   </div>
                 )}
               {/* activity user info */}
@@ -286,7 +286,7 @@ export default function ArticleListItem({
                 Number(article.pinnedByCreatorAt) !== 0 && (
                   <div className="inline-flex gap-2 items-center mt-2 md:mt-4 mb-4 md:mb-6">
                     <PushPinIcon size={16} />
-                    <span className="text-sm text-base-content/70">Pinned</span>
+                    <span className="text-sm text-base-content/70">{t("article.pinned")}</span>
                   </div>
                 )}
               {/* activity user info */}

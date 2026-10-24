@@ -9,12 +9,14 @@ import Avatar from "@/ui/Avatar";
 import { getPublishDate } from "@/utils/dateHelper";
 import MoreButton from "./MoreButton";
 import ShareButton from "../article/ShareButton";
+import { useTranslation } from "react-i18next";
 
 export default function RepostListItem({
   repostListItem,
 }: {
   repostListItem: RepostListItem;
 }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const currentUser = useAtomValue(userAtom);
 
@@ -38,7 +40,7 @@ export default function RepostListItem({
         {/* the basic info */}
         <div className="flex items-center text-base-content/65 text-xs md:text-sm">
           {repostListItem.repost.user.id === currentUser?.id ? (
-            <span>You</span>
+            <span>{t("repost.you")}</span>
           ) : (
             <div className="flex items-center gap-2">
               <Avatar
@@ -55,7 +57,7 @@ export default function RepostListItem({
           <div className="mx-1">
             <ArrowsClockwiseIcon size={18} />
           </div>
-          <span>reposted</span>
+          <span>{t("repost.reposted")}</span>
           <span className="mx-1">·</span>
           <span>
             {getPublishDate(new Date(repostListItem.repost.repostedAt))}

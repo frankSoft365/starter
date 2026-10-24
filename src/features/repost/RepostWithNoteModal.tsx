@@ -14,6 +14,7 @@ import type { RepostState } from "@/types/repost";
 import RepostArticlePreview from "./RepostArticlePreview";
 import NoteLengthProgress from "./NoteLengthProgress";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 export default function RepostWithNoteModal({
   article,
@@ -29,6 +30,7 @@ export default function RepostWithNoteModal({
   invalidateList?: boolean;
 }) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const repostStateKey = ["get-repost-state", article.id];
   const MODAL_ID = `${REPOST_WITH_NOTE_MODAL_ID}_${article.id}`;
   const user = useAtomValue(userAtom);
@@ -140,7 +142,7 @@ export default function RepostWithNoteModal({
               value={note}
               onChange={(e) => setNote(e.target.value)}
               type="text"
-              placeholder="Add a note..."
+              placeholder={t("repost.notePlaceholder")}
               className="w-full bg-base-100 text-sm text-base-content outline-none transition"
             />
             {/* article preview */}
@@ -158,7 +160,7 @@ export default function RepostWithNoteModal({
               className="btn btn-neutral btn-sm md:btn-md rounded-full"
             >
               {isReposting && <span className="loading loading-spinner"></span>}
-              {!isReposting && "Repost"}
+              {!isReposting && t("btn.repost")}
             </button>
           )}
           {repostNoteStatus.isAddNote && (
@@ -168,7 +170,7 @@ export default function RepostWithNoteModal({
               className="btn btn-neutral btn-sm md:btn-md rounded-full"
             >
               {isSaving && <span className="loading loading-spinner"></span>}
-              {!isSaving && "Save"}
+              {!isSaving && t("btn.save")}
             </button>
           )}
           {repostNoteStatus.isEditOrRemoveNote && (
@@ -178,7 +180,7 @@ export default function RepostWithNoteModal({
               className="btn btn-neutral btn-sm md:btn-md rounded-full"
             >
               {isEditing && <span className="loading loading-spinner"></span>}
-              {!isEditing && "Save"}
+              {!isEditing && t("btn.save")}
             </button>
           )}
         </div>
